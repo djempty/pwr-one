@@ -29,22 +29,37 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      padding-left: 3em;
+      position: absolute;
+      left: 4em;
+      top: 4em;
     }
     #header img {
-      width: 10%;
+      width: 160px;
+      height: auto;
       margin-bottom: 0.5em;
+      display: block;
     }
     #header p {
       margin: 0;
     }
-    @media (max-width: 768px) {
-      #header img {
-        width: 50% !important;
-      }
-      #header {
-        padding-left: 1.5em;
-      }
+    /* Tablet portrait */
+    @media screen and (max-width: 1680px) {
+      #header { left: 3.5em; top: 3.5em; }
+    }
+    /* Mobile landscape + tablet */
+    @media screen and (max-width: 736px) {
+      #header { left: 2em; top: 2em; }
+      #header img { width: 120px; }
+    }
+    /* Mobile portrait */
+    @media screen and (max-width: 480px) {
+      #header { left: 1.5em; top: 1.5em; }
+      #header img { width: 90px; }
+    }
+    /* Very small */
+    @media screen and (max-width: 360px) {
+      #header { left: 1.25em; top: 1.25em; }
+      #header img { width: 70px; }
     }
   </style>
 </head>
