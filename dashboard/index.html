@@ -1,0 +1,96 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mockup A — Cards + Trade Table</title>
+<style>
+:root{--bg:#0b0f14;--panel:#0f172a;--panel2:#0b1220;--border:#1f2a44;--text:#e5e7eb;--muted:#94a3b8;--good:#34d399;--bad:#fb7185;--accent:#22d3ee;--mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;--sans:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans)}
+header{padding:22px 26px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;gap:18px}
+.brandRow{display:flex;gap:14px;align-items:flex-start}
+.brandBlock{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.brandLogo{display:flex;align-items:flex-start}
+.brandLogo img{height:28px;width:auto;display:block;opacity:.95}
+h1{margin:0;font-size:18px;letter-spacing:.2px} .sub{color:var(--muted);font-size:12px;margin-top:6px}
+main{padding:18px 26px;display:grid;gap:14px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}}
+.card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:16px;padding:14px}
+.k{color:var(--muted);font-size:12px} .v{font-size:20px;margin-top:8px} .v.good{color:var(--good)} .v.bad{color:var(--bad)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.pill{border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
+.sectionTitle{font-weight:700;margin-bottom:10px}
+.layout{display:grid;gap:14px;grid-template-columns: 1.6fr 1fr}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}}
+.tableWrap{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:10px 8px;border-bottom:1px solid #13203a;vertical-align:top}
+th{color:var(--muted);font-weight:600;text-align:left}
+.bar{height:8px;border-radius:999px;background:#0b1220;border:1px solid #13203a;overflow:hidden}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--accent),#a7f3d0)}
+.small{font-size:11px;color:var(--muted)}
+</style></head>
+<body>
+<header>
+  <div class="brandRow">
+    <div class="brandBlock">
+      <div class="brandLogo">
+        <img src="pwr_logo.png" alt="pwr" />
+      </div>
+      <div>
+        <h1>Polymarket — Trading Dashboard</h1>
+        <div class="sub">Paper mode • Bankroll $10,000 • Last sync 08:12</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <span class="pill">Strategy: S1/S2/S3</span>
+    <span class="pill">Update: Daily</span>
+    <span class="pill">Risk: Low (arb-first)</span>
+  </div>
+</header>
+<main>
+  <section class="grid">
+    <div class="card"><div class="k">Balance</div><div class="v">$10,482</div><div class="small">+4.82% since start</div></div>
+    <div class="card"><div class="k">Today P/L</div><div class="v good">+$182</div><div class="small">12 trades • 83% win</div></div>
+    <div class="card"><div class="k">Open exposure</div><div class="v">$2,250</div><div class="small">3 positions</div></div>
+    <div class="card"><div class="k">Max drawdown</div><div class="v bad">-0.9%</div><div class="small">last 7 days</div></div>
+  </section>
+
+  <section class="layout">
+    <div class="card">
+      <div class="sectionTitle">Trades</div>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>Time</th><th>Market</th><th>Strat</th><th>Size</th><th>Entry</th><th>Exit</th><th>P/L</th></tr></thead>
+          <tbody>
+            <tr><td class="small">08:02</td><td>Will BTC be above $110k at 8:15?</td><td class="small">S1 MM</td><td>$250</td><td>0.47</td><td>0.51</td><td class="v good" style="font-size:12px">+$9.50</td></tr>
+            <tr><td class="small">07:48</td><td>Trump deport less than 250,000?</td><td class="small">S2 Box</td><td>$750</td><td>0.48/0.49</td><td>—</td><td class="small">locked</td></tr>
+            <tr><td class="small">07:31</td><td>Chiefs win?</td><td class="small">S2 Box</td><td>$600</td><td>0.44/0.53</td><td>—</td><td class="small">locked</td></tr>
+            <tr><td class="small">07:09</td><td>ETH above $5k at 7:15?</td><td class="small">S1 MM</td><td>$150</td><td>0.52</td><td>0.50</td><td class="v bad" style="font-size:12px">-$3.20</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle">Strategy performance</div>
+      <div style="display:grid;gap:12px">
+        <div>
+          <div class="row" style="justify-content:space-between"><div>S1 Market Making</div><div class="small">+2.1%</div></div>
+          <div class="bar"><div style="width:68%"></div></div>
+        </div>
+        <div>
+          <div class="row" style="justify-content:space-between"><div>S2 Box Arb</div><div class="small">+1.9%</div></div>
+          <div class="bar"><div style="width:61%"></div></div>
+        </div>
+        <div>
+          <div class="row" style="justify-content:space-between"><div>S3 Cross-venue</div><div class="small">+0.8%</div></div>
+          <div class="bar"><div style="width:28%"></div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px" class="small">
+        What you’d check daily: net P/L, win rate by strategy, and whether anything is bleeding from bad fills.
+      </div>
+    </div>
+  </section>
+</main>
+</body></html>
