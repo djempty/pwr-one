@@ -25,10 +25,25 @@
   <meta name="google-site-verification" content="P6yW6pmkKKyc05yb2u6N25O5zYfXAL9j3TFS4Te_vTA" />
 
   <style>
-    /* Mobile: make logo larger */
+    #header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-left: 3em;
+    }
+    #header img {
+      width: 20%;
+      margin-bottom: 0.5em;
+    }
+    #header p {
+      margin: 0;
+    }
     @media (max-width: 768px) {
       #header img {
-        width: 30% !important; /* larger than default 10% */
+        width: 50% !important;
+      }
+      #header {
+        padding-left: 1.5em;
       }
     }
   </style>
