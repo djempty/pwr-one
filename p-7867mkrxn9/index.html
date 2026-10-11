@@ -12,58 +12,37 @@
  float e(float x){return x*x*(3.-2.*x);}
  float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
  float h(float n){return fract(sin(n*127.1)*43758.5453);}
- const float GA=2.39996323;
- mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s, 0.,1.,0., s,0.,c);}
- mat3 rotX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0., 0.,c,s, 0.,-s,c);}
- // a coherent flow field: neighbours move together, like a murmuration
+ mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
+ mat3 rotX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}
  vec3 flow(vec3 p,float t){
    return vec3(sin(p.y*.7+t*.9)+sin(p.z*1.3+t*.6)+.5*sin(p.x*2.1-t*.4),
                sin(p.z*.8+t*.7)+sin(p.x*1.1+t*.5)+.5*sin(p.y*1.9+t*.3),
                sin(p.x*.6+t*.8)+sin(p.y*1.2+t*.4)+.5*sin(p.z*2.3-t*.5))*.5;
  }
- // the split globe, duplicated 2^k times; children placed on a golden-angle spiral (the hidden structure)
- // hierarchical split: every child starts exactly at its parent and drifts apart,
- // so no globe ever jumps to a new spot. Levels overlap, so there is no pause between splits.
- vec3 dirFor(float n,float l){
-   float a=n*GA+l*1.618, z=h(n*7.3+l*3.1)*2.-1.;
-   float r=sqrt(1.-z*z*.6);
-   return normalize(vec3(cos(a)*r, sin(a)*r, z*.6));
- }
- vec3 treePos(float lev){
-   vec3 p=vec3(0.);
-   for(int i=1;i<=10;i++){
-     float l=float(i);
-     float w=clamp((lev-(l-1.))/1.618,0.,1.);
-     if(w<=0.) break;
-     float node=floor(cid*pow(2.,l-1.));
-     float bit=mod(floor(cid*pow(2.,l)),2.)*2.-1.;
-     float d=2.9*pow(.80,l-1.);
-     p+=dirFor(node,l)*bit*d*w*w*(3.-2.*w)*1.0;
-   }
-   return p;
- }
  void main(){
   float x=mod(t,34.);
-  vec3 cool=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35);
-  vec3 ivory=vec3(.95,.94,.92), gold=vec3(.88,.70,.38);
-  vec3 cM=treePos(lev);
-  float amp0=win(12.5,16.,x)*(1.-win(28.,33.5,x));
-  cM+=flow(cM*.3,t*.5)*amp0*.6;
-  vec3 lM=rotX(.35)*rotY(t*.382)*loc*2.5/pow(1.4142,lev);
-  vec3 pM=cM+lM;
+  vec3 cool=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35), ivory=vec3(.95,.94,.92), gold=vec3(.88,.70,.38);
+  vec3 icon=rotX(.35)*rotY(t*.382)*loc*2.5;
+  // scatter: burst outward from the globe along each particle's own direction
+  vec3 dir=normalize(loc+vec3(h(seed)-.5,h(seed*2.)-.5,h(seed*3.)-.5)*.6);
+  vec3 burst=icon+rotX(.35)*rotY(t*.382)*dir*(3.5+h(seed*5.)*4.5);
+  // murmuration: one shared current carries the cloud as a flock
+  vec3 flock=burst*.8+flow(burst*.22,t*.7)*3.2;
+  flock.y*=.75;
   vec3 p=position;
-  p=mix(p,pB,win(2.,5.,x));          // community
-  p=mix(p,pM,win(6.5,9.5,x));        // the split globe forms and turns
-  p=mix(p,position,win(18.,30.,x));  // flock dissolves straight into the opening scatter
-  p+=flow(p*.55+seed*.3,t*1.2)*win(24.,30.,x)*(1.-win(30.,33.5,x))*1.8;
+  p=mix(p,pB,win(2.,5.,x));
+  p=mix(p,icon,win(5.5,8.5,x));
+  p=mix(p,burst,win(12.,15.,x));
+  p=mix(p,flock,win(14.5,19.,x));
+  p=mix(p,position,win(26.,33.,x));
   float sw=sin(t*.618+seed*6.283)*.05; p+=vec3(sw,sw*.618,-sw);
   vec3 col=cool;
   col=mix(col,ivory,win(2.,5.,x)*.5);
-  col=mix(col,side>.5?gold:ivory,win(6.5,9.5,x));
-  col=mix(col,cool,win(20.,31.,x));
+  col=mix(col,side>.5?gold:ivory,win(5.,8.5,x));
+  col=mix(col,cool,win(16.,26.,x));
   vC=col;
   vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv;
-  gl_PointSize=(1.1+seed*2.3)*px*(12./-mv.z); vA=.35+.65*seed;
+  gl_PointSize=(1.1+seed*2.3)*px*(12./max(-mv.z,.5)); vA=.35+.65*seed;
  }
 </script>
 <script id="fs" type="x-shader/x-fragment">
@@ -75,12 +54,10 @@ import * as THREE from 'three';
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
-/* STORY, 34 s seamless loop
-   0-3   scattered points of light: individuals
-   3-6   they gather into one sphere: community
-   6-12  the sphere becomes the split globe (golden section), turning slowly in 3D
-   12-21 it splits and doubles without pause, 1 to 1,024, moving like a murmuration
-   18-34 the flock flows straight back into the opening scatter, no hold */
+/* STORY (scatter version), 34 s seamless loop
+   0-3 scattered points | 3-6 gather into a sphere | 6-12 the split globe turns
+   12-15 its points burst outward | 15-26 they flow as one murmuration
+   26-34 the flock settles into the opening field */
 const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34.0, N=8000, KMAX=10;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=new THREE.WebGLRenderer({antialias:true});
@@ -124,7 +101,7 @@ const clock=new THREE.Clock();
 function frame(){
   const t=reduce?10:clock.getElapsedTime(), x=t%L;
   // continuous doubling from 12 s to 21 s, no holds between splits
-  const lev=x<12?0:11.6*Math.pow(Math.min(1,(x-12)/11),1.3);
+  const lev=0;
   mat.uniforms.t.value=t; mat.uniforms.lev.value=lev;
   const z=13-win(6,9,x)*2.2*(1-win(12,15,x))+lev*0.8*(1-win(22,32,x));
   cam.position.z+=(z-cam.position.z)*0.05;
