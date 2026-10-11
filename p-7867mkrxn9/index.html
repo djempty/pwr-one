@@ -26,22 +26,28 @@
    float M=pow(2.,k), j=floor(cid*M);
    float R=2.1*pow(k,.85);
    float r=R*sqrt((j+.5)/M), a=j*GA+k*.618+t*.0618*k;
-   vec3 c=vec3(cos(a)*r, sin(a)*r*.8, (h(j+k*13.)-.5)*k*1.1);
+   return vec3(cos(a)*r, sin(a)*r, (h(j+k*13.)-.5)*k*1.1);
+ }
+ vec3 markLoc(float k){
+   float M=pow(2.,k), j=floor(cid*M);
    float s=2.5/pow(1.4142,k);
-   return c+rotX(.35)*rotY(t*.382+j*.618)*loc*s;
+   return rotX(.35)*rotY(t*.382+j*.618)*loc*s;
  }
  void main(){
   float x=mod(t,34.);
   vec3 cool=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35);
   vec3 ivory=vec3(.95,.94,.92), gold=vec3(.88,.70,.38);
-  float k0=floor(lev), f=e(fract(lev));
-  vec3 pM=mix(markPos(k0),markPos(min(k0+1.,10.)),f);
+  float k0=floor(lev), f=fract(lev), k1=min(k0+1.,10.);
+  vec3 cM=mix(markPos(k0),markPos(k1),f);
+  vec3 lM=mix(markLoc(k0),markLoc(k1),f);
+  float amp0=win(12.5,16.,x)*(1.-win(28.,33.5,x));
+  cM+=flow(cM*.55,t*1.2)*amp0*1.8;
+  vec3 pM=cM+lM;
   vec3 p=position;
   p=mix(p,pB,win(2.,5.,x));          // community
   p=mix(p,pM,win(6.5,9.5,x));        // the split globe forms and turns
   p=mix(p,position,win(18.,30.,x));  // flock dissolves straight into the opening scatter
-  float amp=win(12.5,16.,x)*(1.-win(28.,33.5,x));
-  p+=flow(p*.55+seed*.3,t*1.2)*amp*1.8;
+  p+=flow(p*.55+seed*.3,t*1.2)*win(24.,30.,x)*(1.-win(30.,33.5,x))*1.8;
   float sw=sin(t*.618+seed*6.283)*.05; p+=vec3(sw,sw*.618,-sw);
   vec3 col=cool;
   col=mix(col,ivory,win(2.,5.,x)*.5);
@@ -67,7 +73,7 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
    6-12  the sphere becomes the split globe (golden section), turning slowly in 3D
    12-21 it splits and doubles without pause, 1 to 1,024, moving like a murmuration
    18-34 the flock flows straight back into the opening scatter, no hold */
-const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34.0, N=16000, KMAX=10;
+const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34.0, N=24000, KMAX=10;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
@@ -110,7 +116,7 @@ const clock=new THREE.Clock();
 function frame(){
   const t=reduce?10:clock.getElapsedTime(), x=t%L;
   // continuous doubling from 12 s to 21 s, no holds between splits
-  const lev=x<12?0:Math.min(KMAX,KMAX*Math.pow(Math.min(1,(x-12)/9),1.25));
+  const lev=x<12?0:KMAX*(1-Math.pow(1-Math.min(1,(x-12)/10),1.6));
   mat.uniforms.t.value=t; mat.uniforms.lev.value=lev;
   const z=13-win(6,9,x)*2.2*(1-win(12,15,x))+lev*0.8*(1-win(22,32,x));
   cam.position.z+=(z-cam.position.z)*0.05;
