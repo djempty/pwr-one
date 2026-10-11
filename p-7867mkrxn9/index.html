@@ -22,26 +22,34 @@
                sin(p.x*.6+t*.8)+sin(p.y*1.2+t*.4)+.5*sin(p.z*2.3-t*.5))*.5;
  }
  // the split globe, duplicated 2^k times; children placed on a golden-angle spiral (the hidden structure)
- vec3 markPos(float k){
-   float M=pow(2.,k), j=floor(cid*M);
-   float R=2.1*pow(k,.85);
-   float r=R*sqrt((j+.5)/M), a=j*GA+k*.618+t*.0618*k;
-   return vec3(cos(a)*r, sin(a)*r, (h(j+k*13.)-.5)*k*1.1);
+ // hierarchical split: every child starts exactly at its parent and drifts apart,
+ // so no globe ever jumps to a new spot. Levels overlap, so there is no pause between splits.
+ vec3 dirFor(float n,float l){
+   float a=n*GA+l*1.618, z=h(n*7.3+l*3.1)*2.-1.;
+   float r=sqrt(1.-z*z*.6);
+   return normalize(vec3(cos(a)*r, sin(a)*r, z*.6));
  }
- vec3 markLoc(float k){
-   float M=pow(2.,k), j=floor(cid*M);
-   float s=2.5/pow(1.4142,k);
-   return rotX(.35)*rotY(t*.382+j*.618)*loc*s;
+ vec3 treePos(float lev){
+   vec3 p=vec3(0.);
+   for(int i=1;i<=10;i++){
+     float l=float(i);
+     float w=clamp((lev-(l-1.))/1.618,0.,1.);
+     if(w<=0.) break;
+     float node=floor(cid*pow(2.,l-1.));
+     float bit=mod(floor(cid*pow(2.,l)),2.)*2.-1.;
+     float d=2.9*pow(.80,l-1.);
+     p+=dirFor(node,l)*bit*d*w*w*(3.-2.*w)*1.0;
+   }
+   return p;
  }
  void main(){
   float x=mod(t,34.);
   vec3 cool=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35);
   vec3 ivory=vec3(.95,.94,.92), gold=vec3(.88,.70,.38);
-  float k0=floor(lev), f=fract(lev), k1=min(k0+1.,10.);
-  vec3 cM=mix(markPos(k0),markPos(k1),f);
-  vec3 lM=mix(markLoc(k0),markLoc(k1),f);
+  vec3 cM=treePos(lev);
   float amp0=win(12.5,16.,x)*(1.-win(28.,33.5,x));
-  cM+=flow(cM*.55,t*1.2)*amp0*1.8;
+  cM+=flow(cM*.3,t*.5)*amp0*.6;
+  vec3 lM=rotX(.35)*rotY(t*.382)*loc*2.5/pow(1.4142,lev);
   vec3 pM=cM+lM;
   vec3 p=position;
   p=mix(p,pB,win(2.,5.,x));          // community
@@ -73,7 +81,7 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
    6-12  the sphere becomes the split globe (golden section), turning slowly in 3D
    12-21 it splits and doubles without pause, 1 to 1,024, moving like a murmuration
    18-34 the flock flows straight back into the opening scatter, no hold */
-const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34.0, N=24000, KMAX=10;
+const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34.0, N=8000, KMAX=10;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
@@ -116,7 +124,7 @@ const clock=new THREE.Clock();
 function frame(){
   const t=reduce?10:clock.getElapsedTime(), x=t%L;
   // continuous doubling from 12 s to 21 s, no holds between splits
-  const lev=x<12?0:KMAX*(1-Math.pow(1-Math.min(1,(x-12)/10),1.6));
+  const lev=x<12?0:11.6*Math.pow(Math.min(1,(x-12)/11),1.3);
   mat.uniforms.t.value=t; mat.uniforms.lev.value=lev;
   const z=13-win(6,9,x)*2.2*(1-win(12,15,x))+lev*0.8*(1-win(22,32,x));
   cam.position.z+=(z-cam.position.z)*0.05;
