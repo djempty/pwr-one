@@ -6,44 +6,57 @@
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head><body>
 <div class="mk"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,-5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,5.84)"/></svg>POLARITY</div>
-<script id="vs" type="x-shader/x-vertex">
- uniform float t,px,zs; attribute vec3 pB,loc,gc; attribute float seed,side,grp,gs;
+<script id="pvs" type="x-shader/x-vertex">
+ uniform float t,px,S; attribute vec3 pB,loc; attribute float seed,side;
  varying float vA; varying vec3 vC;
  float e(float x){return x*x*(3.-2.*x);}
  float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
  mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
  mat3 rotX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}
- vec3 flow(vec3 p,float t){
-   return vec3(sin(p.y*.7+t*.9)+sin(p.z*1.3+t*.6)+.5*sin(p.x*2.1-t*.4),
-               sin(p.z*.8+t*.7)+sin(p.x*1.1+t*.5)+.5*sin(p.y*1.9+t*.3),
-               sin(p.x*.6+t*.8)+sin(p.y*1.2+t*.4)+.5*sin(p.z*2.3-t*.5))*.5;
- }
+ vec3 flow(vec3 p,float t){return vec3(sin(p.y*.7+t*.9)+sin(p.z*1.3+t*.6),sin(p.z*.8+t*.7)+sin(p.x*1.1+t*.5),sin(p.x*.6+t*.8)+sin(p.y*1.2+t*.4))*.5;}
  void main(){
   float x=mod(t,34.);
-  vec3 cool=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35);
-  vec3 ivory=vec3(.95,.94,.92), gold=vec3(.88,.70,.38);
-  // every globe turns on its own tilted axis at its own speed
-  vec3 mp=(gc+rotX(.35+gs*.6)*rotY(t*(.25+gs*.35)+gs*6.283)*loc*2.5)*zs;
+  vec3 cool=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35), ivory=vec3(.95,.94,.92), gold=vec3(.88,.70,.38);
+  vec3 mp=rotX(.35)*rotY(t*.382)*loc*2.5;
   vec3 p=position;
-  if(grp>.5){ p=mix(p,pB,win(2.,5.,x)); p=mix(p,mp,win(5.5,8.5,x)); }
-  else      { p=mix(p,mp,win(3.,8.,x)); }
-  // as the camera pulls away, the field starts to flock
-  float amp=win(16.,23.,x)*(1.-win(28.,33.5,x));
-  p+=flow(p*.45+seed*.25,t*1.15)*amp*2.2;
-  p=mix(p,position,win(24.,33.,x));       // settles into the opening field: seamless loop
+  p=mix(p,pB,win(2.,5.,x)); p=mix(p,mp,win(5.5,8.5,x));
+  float back=win(27.,32.,x);
+  p=mix(p,position*S,back);
+  p+=flow(position*.35,t*.8)*S*.35*win(27.,30.,x)*(1.-win(31.,33.8,x));
   float sw=sin(t*.618+seed*6.283)*.05; p+=vec3(sw,sw*.618,-sw);
-  vec3 col=cool;
-  col=mix(col,ivory,win(2.,5.,x)*.5*grp);
-  col=mix(col,side>.5?gold:ivory,win(5.,8.5,x));
-  col=mix(col,cool,win(22.,31.,x));
-  vC=col;
+  vec3 col=cool; col=mix(col,ivory,win(2.,5.,x)*.5); col=mix(col,side>.5?gold:ivory,win(5.,8.5,x)); col=mix(col,cool,back); vC=col;
   vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv;
-  gl_PointSize=(1.1+seed*2.3)*px*(12./max(-mv.z,.5)); vA=.35+.65*seed;
+  float dz=-mv.z/mix(1.,S,back);
+  gl_PointSize=(1.1+seed*2.3)*px*(12./max(dz,.5));
+  vA=(.35+.65*seed)*(1.-.8*win(26.,28.5,x)*(1.-win(29.,32.,x)));
  }
 </script>
-<script id="fs" type="x-shader/x-fragment">
+<script id="pfs" type="x-shader/x-fragment">
  varying float vA; varying vec3 vC;
  void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragColor=vec4(vC,pow(1.-d*2.,1.618)*vA);}
+</script>
+<script id="gvs" type="x-shader/x-vertex">
+ uniform float cut,off,fogD; varying vec3 vN; varying float vSide,vF;
+ void main(){
+  vec3 p=position; float s=step(cut,p.x); vSide=s;
+  p+= s>.5? vec3(off*.6,-off,0.) : vec3(-off*.6,off,0.);
+  mat4 M=modelMatrix*instanceMatrix;
+  vN=normalize(mat3(M)*normal);
+  vec4 mv=viewMatrix*M*vec4(p,1.);
+  vF=exp(-(-mv.z)*fogD);
+  gl_Position=projectionMatrix*mv;
+ }
+</script>
+<script id="gfs" type="x-shader/x-fragment">
+ uniform float alpha; varying vec3 vN; varying float vSide,vF;
+ void main(){
+  if(vSide>.03&&vSide<.97) discard;
+  vec3 base=vSide>.5?vec3(.88,.70,.38):vec3(.95,.94,.92);
+  vec3 n=normalize(vN); float inner=gl_FrontFacing?1.:.45; if(!gl_FrontFacing) n=-n;
+  float d=max(dot(n,normalize(vec3(.5,.7,.6))),0.);
+  vec3 c=base*(.10+.75*d)*inner;
+  gl_FragColor=vec4(c*vF*alpha,1.);
+ }
 </script>
 <script type="module">
 import * as THREE from 'three';
@@ -53,64 +66,81 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 /* STORY, 34 s seamless loop
    0-3   scattered points of light: individuals
    3-6   they gather into one sphere: community
-   6-12  it becomes the split globe, turning slowly; other globes wait unseen in the dark
-   12-26 the camera pulls back, accelerating: more and more globes appear, each turning on its own
-   16-28 the field begins to move as one, a murmuration
-   24-34 it settles into the same scattered points of light we began with */
-const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34.0;
-const HERO=7000, NG=320, PER=30, N=HERO+NG*PER;
+   6-12  it becomes the split globe, turning like a planet
+   12-28 the camera pulls back, accelerating: other split globes emerge from the dark,
+         each at its own distance and tilt, each turning slowly. More, then thousands,
+         until they are too small to read as globes: only points of light.
+   20-32 the field drifts as one, a slow murmuration
+   27-34 it becomes the same scattered points of light we began with */
+const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34, N=12000, G=2600, ZMAX=900;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
 document.body.appendChild(renderer.domElement);
-const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x070d1a,0.022);
-const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,200);cam.position.set(0,0,13);
-const cut=-1+2/PHI, off=1/Math.pow(PHI,4);   // golden-section cut, pieces offset by r/phi^4
-function splitPoint(){
-  const u=Math.random()*2*Math.PI,v=Math.acos(2*Math.random()-1),sh=Math.random()<0.8?1-Math.random()*0.04:Math.cbrt(Math.random());
-  let x=sh*Math.sin(v)*Math.cos(u),y=sh*Math.sin(v)*Math.sin(u),z=sh*Math.cos(v);
-  if(Math.random()<0.18){x=cut+(Math.random()-.5)*0.01;const q=Math.sqrt(1-cut*cut)*Math.sqrt(Math.random()),w=Math.random()*2*Math.PI;y=q*Math.cos(w);z=q*Math.sin(w);}
-  const r=x>cut;return [x+(r?off*.6:-off*.6),y+(r?-off:off),z,r?1:0];
-}
-const A=new Float32Array(N*3),B=new Float32Array(N*3),LOC=new Float32Array(N*3),GC=new Float32Array(N*3),
-      S=new Float32Array(N),SD=new Float32Array(N),GR=new Float32Array(N),GS=new Float32Array(N);
-// field globe centres: random, kept behind and around the hero so none sits in front of the lens
-const centres=[];for(let j=0;j<NG;j++){let c;do{c=[(Math.random()-.5)*130,(Math.random()-.5)*80,-Math.random()*70-4];}while(Math.hypot(c[0],c[1])<6&&c[2]>-12);centres.push(c);}
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,5000);cam.position.set(0,0,13);
+const cut=-1+2/PHI, off=1/Math.pow(PHI,4);
+// --- hero particles ---
+const A=new Float32Array(N*3),B=new Float32Array(N*3),LOC=new Float32Array(N*3),S=new Float32Array(N),SD=new Float32Array(N);
 for(let i=0;i<N;i++){
   const r=6+Math.random()*8,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);
   A.set([r*Math.sin(p)*Math.cos(t),r*Math.sin(p)*Math.sin(t)*0.6,r*Math.cos(p)],i*3);
-  const sp=splitPoint(); LOC.set(sp.slice(0,3),i*3); SD[i]=sp[3]; S[i]=Math.random();
-  if(i<HERO){
-    const y=1-(i/(HERO-1))*2,rr=Math.sqrt(1-y*y),th=GA*i;
-    B.set([Math.cos(th)*rr*3.2,y*3.2,Math.sin(th)*rr*3.2],i*3);
-    GC.set([0,0,0],i*3); GR[i]=1; GS[i]=0.2;
-  } else {
-    const j=Math.floor((i-HERO)/PER); GC.set(centres[j],i*3); GR[i]=0;
-    GS[i]=((j*0.6180339887)%1);
-  }
+  const y=1-(i/(N-1))*2,rr=Math.sqrt(1-y*y),th=GA*i; B.set([Math.cos(th)*rr*3.2,y*3.2,Math.sin(th)*rr*3.2],i*3);
+  const u=Math.random()*2*Math.PI,v=Math.acos(2*Math.random()-1),sh=Math.random()<0.8?1-Math.random()*0.04:Math.cbrt(Math.random());
+  let gx=sh*Math.sin(v)*Math.cos(u),gy=sh*Math.sin(v)*Math.sin(u),gz=sh*Math.cos(v);
+  if(Math.random()<0.18){gx=cut+(Math.random()-.5)*0.01;const q=Math.sqrt(1-cut*cut)*Math.sqrt(Math.random()),w=Math.random()*2*Math.PI;gy=q*Math.cos(w);gz=q*Math.sin(w);}
+  const R=gx>cut; LOC.set([gx+(R?off*.6:-off*.6),gy+(R?-off:off),gz],i*3); SD[i]=R?1:0; S[i]=Math.random();
 }
-const g=new THREE.BufferGeometry();
-for(const [k,a,n] of [['position',A,3],['pB',B,3],['loc',LOC,3],['gc',GC,3],['seed',S,1],['side',SD,1],['grp',GR,1],['gs',GS,1]])
-  g.setAttribute(k,new THREE.BufferAttribute(a,n));
-const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
- uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()},zs:{value:1.5}},
- vertexShader:document.getElementById('vs').textContent,fragmentShader:document.getElementById('fs').textContent});
-const pts=new THREE.Points(g,mat);pts.frustumCulled=false;scene.add(pts);
-const dg=new THREE.BufferGeometry(),dp=new Float32Array(4500);for(let i=0;i<dp.length;i++)dp[i]=(Math.random()-.5)*60;
-dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
-scene.add(new THREE.Points(dg,new THREE.PointsMaterial({color:0x6d7f9e,size:0.03,transparent:true,opacity:0.3})));
+const pg=new THREE.BufferGeometry();
+for(const [k,a,n] of [['position',A,3],['pB',B,3],['loc',LOC,3],['seed',S,1],['side',SD,1]]) pg.setAttribute(k,new THREE.BufferAttribute(a,n));
+const pmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+ uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()},S:{value:1}},
+ vertexShader:document.getElementById('pvs').textContent,fragmentShader:document.getElementById('pfs').textContent});
+const parts=new THREE.Points(pg,pmat);parts.frustumCulled=false;scene.add(parts);
+// --- the field: thousands of solid split globes ---
+const gmat=new THREE.ShaderMaterial({side:THREE.DoubleSide,
+ uniforms:{cut:{value:cut},off:{value:off},fogD:{value:.12},alpha:{value:1}},
+ vertexShader:document.getElementById('gvs').textContent,fragmentShader:document.getElementById('gfs').textContent});
+const field=new THREE.InstancedMesh(new THREE.SphereGeometry(1,48,32),gmat,G);field.frustumCulled=false;scene.add(field);
+const base=[],q0=[],spd=[],scl=[];
+for(let i=0;i<G;i++){
+  const r=11*Math.exp(Math.random()*Math.log(ZMAX*0.85/11));          // log-spread: new globes at every scale
+  let d;do{d=new THREE.Vector3().randomDirection();}while(d.z>0.35);
+  base.push(d.multiplyScalar(r)); 
+  q0.push(new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.random()*Math.PI,Math.random()*Math.PI,Math.random()*Math.PI)));
+  spd.push((0.12+Math.random()*0.25)*(Math.random()<.5?-1:1)); scl.push(2.5*(0.85+Math.random()*0.3));
+}
+// points of light at the globe centres, for when they become too small to read
+const dpos=new Float32Array(G*3);const dg=new THREE.BufferGeometry();dg.setAttribute('position',new THREE.BufferAttribute(dpos,3));
+const dmat=new THREE.PointsMaterial({color:0xe8e2d4,size:2.2,sizeAttenuation:false,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false});
+const dots=new THREE.Points(dg,dmat);dots.frustumCulled=false;scene.add(dots);
 const comp=new EffectComposer(renderer);comp.addPass(new RenderPass(scene,cam));
-comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.85,0.618,0.0));
+comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.8,0.618,0.0));
 let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
 addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);comp.setSize(innerWidth,innerHeight);});
+const ease=x=>x*x*(3-2*x), win=(a,b,x)=>ease(Math.min(1,Math.max(0,(x-a)/(b-a))));
+const flow=(p,t,o)=>{o.set(Math.sin(p.y*.7+t*.9)+Math.sin(p.z*1.3+t*.6),Math.sin(p.z*.8+t*.7)+Math.sin(p.x*1.1+t*.5),Math.sin(p.x*.6+t*.8)+Math.sin(p.y*1.2+t*.4)).multiplyScalar(.5);return o;};
+const o=new THREE.Object3D(),Y=new THREE.Vector3(0,1,0),tq=new THREE.Quaternion(),fv=new THREE.Vector3(),sp=new THREE.Vector3();
 const clock=new THREE.Clock();
 function frame(){
   const t=reduce?10:clock.getElapsedTime(), x=t%L;
-  // zoom out = the world shrinks around a fixed camera; accelerating (quadratic in time)
-  const u=Math.min(1,Math.max(0,(x-12)/14)), zs=1.5*Math.pow(0.12,u*u);
-  mat.uniforms.t.value=t; mat.uniforms.zs.value=zs;
-  cam.position.x+=(mx*2-cam.position.x)*0.03; cam.position.y+=(-my*1.2-cam.position.y)*0.03;
-  cam.lookAt(0,0,0);
+  const u=Math.min(1,Math.max(0,(x-12)/16));
+  const z=x<12?13-win(6,9,x)*1.5:(13-1.5)*Math.exp(Math.log(ZMAX/11.5)*u*u);   // accelerating pull-back
+  const back=win(27,32,x);
+  pmat.uniforms.t.value=t; pmat.uniforms.S.value=z/13;
+  gmat.uniforms.fogD.value=0.12*13/z;                                          // the dark recedes as we pull back
+  gmat.uniforms.alpha.value=1-win(27,31,x);
+  dmat.opacity=win(22,26,x)*(1-win(28,32,x))*0.9;
+  const mur=win(20,26,x)*(1-win(30,33.5,x));
+  for(let i=0;i<G;i++){
+    flow(sp.copy(base[i]).multiplyScalar(1/110),t*.45,fv);
+    o.position.copy(base[i]).addScaledVector(fv,mur*z*0.06);
+    o.quaternion.copy(q0[i]).multiply(tq.setFromAxisAngle(Y,t*spd[i]));
+    o.scale.setScalar(scl[i]); o.updateMatrix(); field.setMatrixAt(i,o.matrix);
+    dpos[i*3]=o.position.x;dpos[i*3+1]=o.position.y;dpos[i*3+2]=o.position.z;
+  }
+  field.instanceMatrix.needsUpdate=true; dg.attributes.position.needsUpdate=true;
+  const k=z/13; cam.position.set(mx*2*k,-my*1.2*k,z); cam.lookAt(0,0,0);
   comp.render(); if(!reduce) requestAnimationFrame(frame);
 }
 frame();
