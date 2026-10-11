@@ -6,53 +6,55 @@
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head><body>
 <div class="mk"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,-5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,5.84)"/></svg>POLARITY</div>
-<script id="vs" type="x-shader/x-vertex">
- uniform float t,px,zs; attribute vec3 pB,loc,gc; attribute float seed,side,grp,gs,gsz;
+<script id="hvs" type="x-shader/x-vertex">
+ uniform float t,px,w; attribute vec3 pB,loc; attribute float seed,side;
  varying float vA; varying vec3 vC;
  float e(float x){return x*x*(3.-2.*x);}
  float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
  mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
  mat3 rotX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}
- vec3 flow(vec3 p,float t){
-   return vec3(sin(p.y*.7+t*.9)+sin(p.z*1.3+t*.6)+.5*sin(p.x*2.1-t*.4),
-               sin(p.z*.8+t*.7)+sin(p.x*1.1+t*.5)+.5*sin(p.y*1.9+t*.3),
-               sin(p.x*.6+t*.8)+sin(p.y*1.2+t*.4)+.5*sin(p.z*2.3-t*.5))*.5;
- }
  void main(){
   float x=mod(t,34.);
   vec3 cool=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35), ivory=vec3(.95,.94,.92), gold=vec3(.88,.70,.38);
-  // each globe: own tilt, own spin, like a planet
-  vec3 icon=gc+rotX(.35+gs*1.2)*rotY(t*(.18+gs*.3)+gs*6.283)*loc*2.5*gsz;
-  vec3 p; float a=1.;
-  if(grp>.5){
-    p=position; p=mix(p,pB,win(2.,5.,x)); p=mix(p,icon,win(5.5,8.5,x));
-    p*=zs;
-  } else {
-    p=icon*zs;
-    a=win(12.5,18.,x)*(1.-win(28.,32.5,x));
-  }
-  float mur=win(19.,25.,x)*(1.-win(29.,33.,x));
-  p+=flow(gc*.004+seed*.15+p*.05,t*.55)*mur*1.6;
-  if(grp>.5) p=mix(p,position,win(27.,33.,x));
-  float sw=sin(t*.618+seed*6.283)*.05; p+=vec3(sw,sw*.618,-sw);
-  vec3 col=cool; col=mix(col,ivory,win(2.,5.,x)*.5*grp);
-  col=mix(col,side>.5?gold:ivory,grp>.5?win(5.,8.5,x):1.);
-  col=mix(col,cool,win(23.,31.,x)); vC=col;
+  vec3 icon=rotX(.35)*rotY(t*.382)*loc*2.5;
+  vec3 p=position; p=mix(p,pB,win(2.,5.,x)); p=mix(p,icon,win(5.5,8.5,x));
+  p*=mix(1.,w,win(11.,12.5,x));
+  float sw=sin(t*.618+seed*6.283)*.05*(1.-win(11.,13.,x)); p+=vec3(sw,sw*.618,-sw);
+  vec3 col=cool; col=mix(col,ivory,win(2.,5.,x)*.5); col=mix(col,side>.5?gold:ivory,win(5.,8.5,x)); vC=col;
   vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv;
-  gl_PointSize=(1.1+seed*2.3)*px*(12./max(-mv.z,.5))*mix(1.,.7,1.-zs)*(grp>.5?1.:.85);
-  vA=(.35+.65*seed)*a;
+  gl_PointSize=(1.1+seed*2.3)*px*(12./max(-mv.z,.5));
+  vA=(.35+.65*seed)*(1.-win(22.,26.,x));
  }
 </script>
-<script id="fs" type="x-shader/x-fragment">
+<script id="pfs" type="x-shader/x-fragment">
  varying float vA; varying vec3 vC;
  void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragColor=vec4(vC,pow(1.-d*2.,1.618)*vA);}
 </script>
-<script id="svs" type="x-shader/x-vertex">
- uniform float px; attribute float sz; varying float vB;
- void main(){vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;gl_PointSize=sz*px;vB=.25+sz*.12;}
+<script id="fvs" type="x-shader/x-vertex">
+ uniform float px,op; attribute float seed; varying float vA; varying vec3 vC;
+ void main(){vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;
+  gl_PointSize=(1.1+seed*2.3)*px*(12./max(-mv.z,.5));
+  vC=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35); vA=(.35+.65*seed)*op;}
 </script>
-<script id="sfs" type="x-shader/x-fragment">
- varying float vB; void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragColor=vec4(vec3(.85,.86,.92),pow(1.-d*2.,2.)*vB);}
+<script id="gvs" type="x-shader/x-vertex">
+ uniform float cut,off; varying vec3 vN; varying float vSide,vF;
+ void main(){
+  vec3 p=position; float s=step(cut,p.x); vSide=s;
+  p+= s>.5? vec3(off*.6,-off,0.) : vec3(-off*.6,off,0.);
+  mat4 M=modelMatrix*instanceMatrix; vN=normalize(mat3(M)*normal);
+  vec4 mv=viewMatrix*M*vec4(p,1.);
+  vF=smoothstep(2.,9.,-mv.z);
+  gl_Position=projectionMatrix*mv;
+ }
+</script>
+<script id="gfs" type="x-shader/x-fragment">
+ uniform float op; varying vec3 vN; varying float vSide,vF;
+ void main(){
+  vec3 base=vSide>.5?vec3(.88,.70,.38):vec3(.95,.94,.92);
+  vec3 n=normalize(gl_FrontFacing?vN:-vN);
+  float d=max(dot(n,normalize(vec3(.5,.7,.6))),0.);
+  gl_FragColor=vec4(base*(.12+.8*d)*vF*op,1.);
+ }
 </script>
 <script type="module">
 import * as THREE from 'three';
@@ -61,78 +63,79 @@ import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 /* STORY, 34 s seamless loop
    0-3   scattered points of light            3-6  they gather into one sphere
-   6-12  the split globe turns slowly, distant stars of varied size behind it
-   12-28 the camera pulls back, accelerating: other split globes appear, a galaxy of them,
-         each its own size and tilt, each turning; with distance they become only points of light
-   19-31 the galaxy drifts as one, a slow murmuration
-   27-34 it becomes the same scattered points of light we began with */
-const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34;
-const HERO=7000, NG=640, PER=44, N=HERO+NG*PER;
+   6-12  the split globe turns slowly; far-off points of light behind it
+   12-30 the camera pulls back, accelerating. The globe shrinks into the distance and the far-off
+         points turn out to be globes too: 8,000 of them, each its own size and spin.
+         Every one sits exactly where a point of light sat in the opening scatter, so as the
+         camera keeps pulling back they shrink to points, drift in a murmuration,
+   30-34 and settle as the very field we started with. */
+const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34, N=8000, K=60;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
 document.body.appendChild(renderer.domElement);
-const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x070d1a,0.012);
-const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,400);cam.position.set(0,0,13);
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,3000);cam.position.set(0,0,13);
 const cut=-1+2/PHI, off=1/Math.pow(PHI,4);
-function splitPoint(){
-  const u=Math.random()*2*Math.PI,v=Math.acos(2*Math.random()-1),sh=Math.random()<0.8?1-Math.random()*0.04:Math.cbrt(Math.random());
-  let x=sh*Math.sin(v)*Math.cos(u),y=sh*Math.sin(v)*Math.sin(u),z=sh*Math.cos(v);
-  if(Math.random()<0.18){x=cut+(Math.random()-.5)*0.01;const q=Math.sqrt(1-cut*cut)*Math.sqrt(Math.random()),w=Math.random()*2*Math.PI;y=q*Math.cos(w);z=q*Math.sin(w);}
-  const r=x>cut;return [x+(r?off*.6:-off*.6),y+(r?-off:off),z,r?1:0];
-}
-// galaxy: golden spiral arms, tilted disc, density falling outward
-const centres=[],tilt=new THREE.Euler(-1.05,0,0.3),v=new THREE.Vector3();
-for(let j=0;j<NG;j++){
-  let c;
-  for(;;){
-    const r=9+Math.pow(Math.random(),0.7)*230, arm=j%3, th=Math.log(r/9)*2.2+arm*2.094+(Math.random()-.5)*0.9;
-    v.set(Math.cos(th)*r,(Math.random()-.5)*(10+r*0.08),Math.sin(th)*r).applyEuler(tilt);
-    if(v.z<9&&!(Math.hypot(v.x,v.y)<7&&v.z>-6)){c=[v.x,v.y,v.z];break;}
-  }
-  centres.push(c);
-}
-const A=new Float32Array(N*3),B=new Float32Array(N*3),LOC=new Float32Array(N*3),GC=new Float32Array(N*3),
-      S=new Float32Array(N),SD=new Float32Array(N),GR=new Float32Array(N),GS=new Float32Array(N),GZ=new Float32Array(N);
+const A=new Float32Array(N*3),B=new Float32Array(N*3),LOC=new Float32Array(N*3),S=new Float32Array(N),SD=new Float32Array(N);
 for(let i=0;i<N;i++){
   const r=6+Math.random()*8,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);
   A.set([r*Math.sin(p)*Math.cos(t),r*Math.sin(p)*Math.sin(t)*0.6,r*Math.cos(p)],i*3);
-  const sp=splitPoint(); LOC.set(sp.slice(0,3),i*3); SD[i]=sp[3]; S[i]=Math.random();
-  if(i<HERO){
-    const y=1-(i/(HERO-1))*2,rr=Math.sqrt(1-y*y),th=GA*i;
-    B.set([Math.cos(th)*rr*3.2,y*3.2,Math.sin(th)*rr*3.2],i*3);
-    GR[i]=1; GS[i]=0; GZ[i]=1;
-  } else {
-    const j=Math.floor((i-HERO)/PER); GC.set(centres[j],i*3); GR[i]=0;
-    GS[i]=(j*0.6180339887)%1; GZ[i]=0.55+((j*0.381966)%1)*0.75;
-  }
+  const y=1-(i/(N-1))*2,rr=Math.sqrt(1-y*y),th=GA*i; B.set([Math.cos(th)*rr*3.2,y*3.2,Math.sin(th)*rr*3.2],i*3);
+  const u=Math.random()*2*Math.PI,v=Math.acos(2*Math.random()-1),sh=Math.random()<0.8?1-Math.random()*0.04:Math.cbrt(Math.random());
+  let gx=sh*Math.sin(v)*Math.cos(u),gy=sh*Math.sin(v)*Math.sin(u),gz=sh*Math.cos(v);
+  if(Math.random()<0.18){gx=cut+(Math.random()-.5)*0.01;const q=Math.sqrt(1-cut*cut)*Math.sqrt(Math.random()),w=Math.random()*2*Math.PI;gy=q*Math.cos(w);gz=q*Math.sin(w);}
+  const R=gx>cut; LOC.set([gx+(R?off*.6:-off*.6),gy+(R?-off:off),gz],i*3); SD[i]=R?1:0; S[i]=Math.random();
 }
-const g=new THREE.BufferGeometry();
-for(const [k,a,n] of [['position',A,3],['pB',B,3],['loc',LOC,3],['gc',GC,3],['seed',S,1],['side',SD,1],['grp',GR,1],['gs',GS,1],['gsz',GZ,1]])
-  g.setAttribute(k,new THREE.BufferAttribute(a,n));
-const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
- uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()},zs:{value:1}},
- vertexShader:document.getElementById('vs').textContent,fragmentShader:document.getElementById('fs').textContent});
-const pts=new THREE.Points(g,mat);pts.frustumCulled=false;scene.add(pts);
-// distant stars of varied size
-const SN=900,sp=new Float32Array(SN*3),ss=new Float32Array(SN);
-for(let i=0;i<SN;i++){const d=new THREE.Vector3().randomDirection().multiplyScalar(80+Math.random()*120);if(d.z>0)d.z*=-1;sp.set([d.x,d.y,d.z],i*3);ss[i]=Math.pow(Math.random(),3)*4.5+0.6;}
-const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));sg.setAttribute('sz',new THREE.BufferAttribute(ss,1));
-scene.add(new THREE.Points(sg,new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,fog:false,
- uniforms:{px:{value:renderer.getPixelRatio()}},vertexShader:document.getElementById('svs').textContent,fragmentShader:document.getElementById('sfs').textContent})));
+// hero: the globe built from points of light
+const hg=new THREE.BufferGeometry();
+for(const [k,a,n] of [['position',A,3],['pB',B,3],['loc',LOC,3],['seed',S,1],['side',SD,1]]) hg.setAttribute(k,new THREE.BufferAttribute(a,n));
+const hmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+ uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()},w:{value:1}},
+ vertexShader:document.getElementById('hvs').textContent,fragmentShader:document.getElementById('pfs').textContent});
+const hero=new THREE.Points(hg,hmat);hero.frustumCulled=false;scene.add(hero);
+// the field: 8,000 split globes sitting where the opening points of light sit, magnified K times
+const gmat=new THREE.ShaderMaterial({side:THREE.DoubleSide,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+ uniforms:{cut:{value:cut},off:{value:off},op:{value:1}},
+ vertexShader:document.getElementById('gvs').textContent,fragmentShader:document.getElementById('gfs').textContent});
+const icons=new THREE.InstancedMesh(new THREE.SphereGeometry(1,22,14),gmat,N);icons.frustumCulled=false;scene.add(icons);
+const q0=[],spd=[],sz=[];
+for(let i=0;i<N;i++){q0.push(new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.random()*6.28,Math.random()*6.28,Math.random()*6.28)));
+  spd.push((0.15+Math.random()*0.3)*(Math.random()<.5?-1:1)); sz.push(0.04*(0.6+Math.random()*0.9)*(0.6+S[i]));}
+// points of light at the same spots, taking over as the globes become too small to read
+const fpos=new Float32Array(N*3);const fg=new THREE.BufferGeometry();
+fg.setAttribute('position',new THREE.BufferAttribute(fpos,3));fg.setAttribute('seed',new THREE.BufferAttribute(S,1));
+const fmat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+ uniforms:{px:{value:renderer.getPixelRatio()},op:{value:0}},
+ vertexShader:document.getElementById('fvs').textContent,fragmentShader:document.getElementById('pfs').textContent});
+const field=new THREE.Points(fg,fmat);field.frustumCulled=false;scene.add(field);
 const comp=new EffectComposer(renderer);comp.addPass(new RenderPass(scene,cam));
 comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.85,0.618,0.0));
 let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
 addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);comp.setSize(innerWidth,innerHeight);});
+const ease=x=>x*x*(3-2*x), win=(a,b,x)=>ease(Math.min(1,Math.max(0,(x-a)/(b-a))));
+const o=new THREE.Object3D(),Y=new THREE.Vector3(0,1,0),tq=new THREE.Quaternion();
 const clock=new THREE.Clock();
 function frame(){
   const t=reduce?10:clock.getElapsedTime(), x=t%L;
-  // pull-back: the world shrinks around the lens, slow then accelerating (cubic)
-  const u=Math.min(1,Math.max(0,(x-12)/16)), zs=Math.pow(0.025,u*u*u*0.6+u*u*0.4);
-  mat.uniforms.t.value=t; mat.uniforms.zs.value=zs;
-  scene.fog.density=0.012*Math.min(8,1/Math.max(zs,0.125))*0+0.012;
-  cam.position.x+=(mx*2-cam.position.x)*0.03; cam.position.y+=(-my*1.2-cam.position.y)*0.03;
-  cam.lookAt(0,0,0);
+  const u=Math.min(1,Math.max(0,(x-12)/18));
+  const w=Math.exp(Math.log(1/K)*Math.pow(u,2.2));          // world shrinks: slow, then accelerating
+  const M=K*w;                                               // field magnification: K at rest, 1 at the end
+  const mur=win(20,26,x)*(1-win(29,32.5,x));
+  hmat.uniforms.t.value=t; hmat.uniforms.w.value=w;
+  gmat.uniforms.op.value=1-win(22,28,x);
+  fmat.uniforms.op.value=win(20,27,x);
+  for(let i=0;i<N;i++){
+    const ax=A[i*3],ay=A[i*3+1],az=A[i*3+2];
+    const fx=Math.sin(ay*.7+t*.5)+Math.sin(az*1.3+t*.35),fy=Math.sin(az*.8+t*.4)+Math.sin(ax*1.1+t*.3),fz=Math.sin(ax*.6+t*.45)+Math.sin(ay*1.2+t*.25);
+    const px=(ax+fx*.6*mur)*M,py=(ay+fy*.6*mur)*M,pz=(az+fz*.6*mur)*M;
+    o.position.set(px,py,pz);
+    o.quaternion.copy(q0[i]).multiply(tq.setFromAxisAngle(Y,t*spd[i]));
+    o.scale.setScalar(sz[i]*M); o.updateMatrix(); icons.setMatrixAt(i,o.matrix);
+    fpos[i*3]=px;fpos[i*3+1]=py;fpos[i*3+2]=pz;
+  }
+  icons.instanceMatrix.needsUpdate=true; fg.attributes.position.needsUpdate=true;
+  cam.position.x+=(mx*2-cam.position.x)*0.03; cam.position.y+=(-my*1.2-cam.position.y)*0.03; cam.lookAt(0,0,0);
   comp.render(); if(!reduce) requestAnimationFrame(frame);
 }
 frame();
