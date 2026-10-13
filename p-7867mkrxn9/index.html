@@ -6,7 +6,7 @@
 @media(max-width:600px){.mk{left:21px;top:21px;font-size:11px;line-height:18px}.mk svg{width:18px;height:18px;margin-right:11px}}</style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head><body>
-<div class="mk"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,-5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,5.84)"/></svg>POLARITY</div>
+<div class="mk"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</div>
 <script id="vs" type="x-shader/x-vertex">
  uniform float t,px,lev; attribute vec3 pB,loc; attribute float seed,cid,side;
  varying float vA; varying vec3 vC;
@@ -79,7 +79,7 @@ for(let i=0;i<N;i++){
   const right=gx>cut;
   if(Math.random()<0.18){gx=cut+(Math.random()-.5)*0.01; const q=Math.sqrt(Math.max(0,1-cut*cut))*Math.sqrt(Math.random()),w=Math.random()*2*Math.PI; gy=q*Math.cos(w); gz=q*Math.sin(w);} // lit cut face
   const R2=gx>cut||(Math.abs(gx-cut)<0.006&&Math.random()<.5);
-  LOC.set([gx+(R2?off*0.6:-off*0.6),gy+(R2?-off:off),gz],i*3);
+  LOC.set([gx+(R2?off*0.6:-off*0.6),gy+(R2?off:-off),gz],i*3);
   SD[i]=R2?1:0; S[i]=Math.random(); C[i]=Math.random();
 }
 const g=new THREE.BufferGeometry();
