@@ -144,8 +144,17 @@ function frame(){
   mat.uniforms.t.value=t; mat.uniforms.lev.value=lev;
   const z=13-win(6,9,x)*2.2*(1-win(12,15,x))+lev*0.8*(1-win(22,32,x));
   cam.position.z+=(z-cam.position.z)*0.05;
-  cam.position.x+=(mx*2-cam.position.x)*0.03; cam.position.y+=(-my*1.2-cam.position.y)*0.03;
-  cam.lookAt(0,0,0);
+  // park the globe in the open space to the right of the copy block (desktop only)
+  const visH=2*Math.tan(cam.fov*Math.PI/360)*cam.position.z, visW=visH*cam.aspect;
+  let f=0.5;
+  if(innerWidth>900){
+    f=((525+innerWidth)/2)/innerWidth;                 // centre of gap: copy right edge -> viewport right
+    const halfNDC=2.9/(visW/2);                        // globe radius in NDC x
+    f=Math.min(f,Math.max(0.5,(1.92-halfNDC)/2));      // keep it off the right edge
+  }
+  const camX=-(2*f-1)*(visW/2);
+  cam.position.x+=((camX+mx*2)-cam.position.x)*0.03; cam.position.y+=(-my*1.2-cam.position.y)*0.03;
+  cam.lookAt(camX,0,0);
   comp.render(); if(!reduce) requestAnimationFrame(frame);
 }
 frame();
