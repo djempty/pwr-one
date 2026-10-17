@@ -9,6 +9,7 @@
 .navr span{margin-left:34px;transition:color .25s}
 .navr span:not(.btn):hover{color:#f8f4ef;cursor:default}
 .navr .btn{border:1px solid #b08d4f;color:#f8f4ef;padding:9px 21px;transition:background .25s,color .25s;cursor:default}
+.navr .hb{display:none}
 .navr .btn:hover{background:#b08d4f;color:#0e1f3c}
 .copy{position:fixed;left:55px;top:34%;width:470px;max-width:calc(100vw - 110px);color:#f8f4ef;z-index:2;font-family:Helvetica,Arial,sans-serif}
 .copy .k{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#b08d4f}
@@ -18,25 +19,29 @@
 .cta:hover{transform:translateY(-2px);box-shadow:0 8px 21px rgba(176,141,79,.35)}
 .ghost{display:inline-block;margin:21px 0 0 21px;color:#f8f4ef;font-size:13px;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #b08d4f;padding-bottom:4px;transition:color .25s,border-color .25s;cursor:default}
 .ghost:hover{color:#b08d4f;border-color:#f8f4ef}
+.btn2{display:none}
 .foot{position:fixed;left:55px;bottom:34px;color:#5d6a80;font-size:11px;letter-spacing:3px;z-index:2;font-family:Helvetica,Arial,sans-serif}
 @media(max-width:900px){.copy{width:calc(100vw - 110px)}}
 @media(max-width:600px){
   .navr{right:21px;top:21px}
-  .navr span:not(.btn){display:none}
-  .navr .btn{padding:7px 13px;font-size:11px;margin-left:0}
-  .copy{left:21px;top:30%;width:calc(100vw - 42px)}
-  .copy h1{font-size:34px;margin:13px 0 16px}
-  .copy p{font-size:14px;line-height:1.55}
-  .cta{padding:11px 21px;font-size:11px}
-  .ghost{display:block;margin:16px 0 0 0}
+  .navr span{display:none}
+  .navr .hb{display:block;font-size:22px;line-height:1;color:#f8f4ef;cursor:default;transition:color .25s}
+  .navr .hb:hover{color:#b08d4f}
+  .copy{left:21px;right:21px;top:62%;width:auto;max-width:none}
+  .copy h1{font-size:34px;margin:10px 0 13px}
+  .copy p{font-size:13px;line-height:1.6}
+  .cta{display:block;text-align:center;margin-top:21px;padding:14px;font-size:11px}
+  .ghost{display:none}
+  .btn2{display:block;text-align:center;margin-top:13px;padding:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;border:1px solid #b08d4f;color:#f8f4ef;transition:background .25s,color .25s;cursor:default}
+  .btn2:hover{background:#b08d4f;color:#0e1f3c}
   .foot{left:21px;bottom:21px;font-size:9px;letter-spacing:2px}
 }
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 <!-- navy-aligned-v10 --></head><body>
 <div class="mk"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</div>
-<div class="navr"><span>The Club</span><span>Approach</span><span>Membership</span><span class="btn">Member Login</span></div>
-<div class="copy"><div class="k">A private investment club</div><h1>Ego out.<br>Discipline in.</h1><p>A limited circle of members, one shared engine, and the patience to let structure do the work.</p><span class="cta">Membership Info</span><span class="ghost">Our approach</span></div>
+<div class="navr"><span>The Club</span><span>Approach</span><span>Membership</span><span class="btn">Member Login</span><span class="hb">&#9776;</span></div>
+<div class="copy"><div class="k">A private investment club</div><h1>Ego out.<br>Discipline in.</h1><p>A limited circle of members, one shared engine, and the patience to let structure do the work.</p><span class="cta">Membership Info</span><span class="ghost">Our approach</span><span class="btn2">Member Login</span></div>
 <div class="foot">BY INVITATION &middot; 40 MEMBERS MAX &middot; CANADA</div>
 
 <script id="vs" type="x-shader/x-vertex">
