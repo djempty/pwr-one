@@ -1,0 +1,146 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Polarity</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+<style>html,body{margin:0;height:100%;background:#070d1a;overflow:hidden}canvas{display:block;position:fixed;top:0;left:0;z-index:0}
+.mk{position:fixed;left:55px;top:34px;font-family:Helvetica,Arial,sans-serif;font-weight:700;letter-spacing:0;color:#f8f4ef;font-size:21px;line-height:1;z-index:2}
+.mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}
+@media(max-width:600px){.mk{left:21px;top:21px;font-size:21px;line-height:1}.mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}}
+.navr{position:fixed;right:55px;top:34px;z-index:2;color:#c7cedb;font-size:13px;letter-spacing:1px;font-family:Helvetica,Arial,sans-serif;display:flex;align-items:center}
+.navr span{margin-left:34px;transition:color .25s}
+.navr span:not(.btn):hover{color:#f8f4ef;cursor:default}
+.navr .btn{border:1px solid #b08d4f;color:#f8f4ef;padding:9px 21px;transition:background .25s,color .25s;cursor:default}
+.navr .btn:hover{background:#b08d4f;color:#0e1f3c}
+.copy{position:fixed;left:55px;top:34%;width:470px;max-width:calc(100vw - 110px);color:#f8f4ef;z-index:2;font-family:Helvetica,Arial,sans-serif}
+.copy .k{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#b08d4f}
+.copy h1{font-weight:700;font-size:52px;line-height:1.15;margin:16px 0 21px}
+.copy p{color:#a9b2c2;font-size:16px;line-height:1.62;margin:0}
+.cta{display:inline-block;margin-top:21px;background:#b08d4f;color:#0e1f3c;padding:13px 34px;font-size:13px;letter-spacing:2px;text-transform:uppercase;transition:transform .25s,box-shadow .25s;cursor:default}
+.cta:hover{transform:translateY(-2px);box-shadow:0 8px 21px rgba(176,141,79,.35)}
+.ghost{display:inline-block;margin:21px 0 0 21px;color:#f8f4ef;font-size:13px;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #b08d4f;padding-bottom:4px;transition:color .25s,border-color .25s;cursor:default}
+.ghost:hover{color:#b08d4f;border-color:#f8f4ef}
+.foot{position:fixed;left:55px;bottom:34px;color:#5d6a80;font-size:11px;letter-spacing:3px;z-index:2;font-family:Helvetica,Arial,sans-serif}
+@media(max-width:900px){.copy{width:calc(100vw - 110px)}}
+@media(max-width:600px){
+  .navr{right:21px;top:21px}
+  .navr span:not(.btn){display:none}
+  .navr .btn{padding:7px 13px;font-size:11px;margin-left:0}
+  .copy{left:21px;top:30%;width:calc(100vw - 42px)}
+  .copy h1{font-size:34px;margin:13px 0 16px}
+  .copy p{font-size:14px;line-height:1.55}
+  .cta{padding:11px 21px;font-size:11px}
+  .ghost{display:block;margin:16px 0 0 0}
+  .foot{left:21px;bottom:21px;font-size:9px;letter-spacing:2px}
+}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<!-- navy-aligned-v10 --></head><body>
+<div class="mk"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</div>
+<div class="navr"><span>The Club</span><span>Approach</span><span>Membership</span><span class="btn">Member Login</span></div>
+<div class="copy"><div class="k">A private investment club</div><h1>Ego out.<br>Discipline in.</h1><p>A limited circle of members, one shared engine, and the patience to let structure do the work.</p><span class="cta">Membership Info</span><span class="ghost">Our approach</span></div>
+<div class="foot">BY INVITATION &middot; 40 MEMBERS MAX &middot; CANADA</div>
+
+<script id="vs" type="x-shader/x-vertex">
+ uniform float t,px,lev; attribute vec3 pB,loc; attribute float seed,cid,side;
+ varying float vA; varying vec3 vC;
+ float e(float x){return x*x*(3.-2.*x);}
+ float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
+ float h(float n){return fract(sin(n*127.1)*43758.5453);}
+ mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
+ mat3 rotX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}
+ vec3 flow(vec3 p,float t){
+   return vec3(sin(p.y*.7+t*.9)+sin(p.z*1.3+t*.6)+.5*sin(p.x*2.1-t*.4),
+               sin(p.z*.8+t*.7)+sin(p.x*1.1+t*.5)+.5*sin(p.y*1.9+t*.3),
+               sin(p.x*.6+t*.8)+sin(p.y*1.2+t*.4)+.5*sin(p.z*2.3-t*.5))*.5;
+ }
+ void main(){
+  float x=mod(t,34.);
+  vec3 cool=mix(vec3(.973,.957,.937),vec3(.45,.58,.85),.35), ivory=vec3(.95,.94,.92), gold=vec3(.88,.70,.38);
+  vec3 icon=rotX(.35)*rotY(t*.382)*loc*2.5;
+  // scatter: burst outward from the globe along each particle's own direction
+  vec3 dir=normalize(loc+vec3(h(seed)-.5,h(seed*2.)-.5,h(seed*3.)-.5)*.6);
+  vec3 burst=icon+rotX(.35)*rotY(t*.382)*dir*(3.5+h(seed*5.)*4.5);
+  // murmuration: one shared current carries the cloud as a flock
+  vec3 flock=burst*.8+flow(burst*.22,t*.7)*3.2;
+  flock.y*=.75;
+  vec3 p=position;
+  p=mix(p,pB,win(2.,5.,x));
+  p=mix(p,icon,win(5.5,8.5,x));
+  p=mix(p,burst,win(12.,15.,x));
+  p=mix(p,flock,win(14.5,19.,x));
+  p=mix(p,position,win(26.,33.,x));
+  float sw=sin(t*.618+seed*6.283)*.05; p+=vec3(sw,sw*.618,-sw);
+  vec3 col=cool;
+  col=mix(col,ivory,win(2.,5.,x)*.5);
+  col=mix(col,side>.5?gold:ivory,win(5.,8.5,x));
+  col=mix(col,cool,win(16.,26.,x));
+  vC=col;
+  vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv;
+  gl_PointSize=(1.1+seed*2.3)*px*(12./max(-mv.z,.5)); vA=.35+.65*seed;
+ }
+</script>
+<script id="fs" type="x-shader/x-fragment">
+ varying float vA; varying vec3 vC;
+ void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragColor=vec4(vC,pow(1.-d*2.,1.618)*vA);}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+/* STORY (scatter version), 34 s seamless loop
+   0-3 scattered points | 3-6 gather into a sphere | 6-12 the split globe turns
+   12-15 its points burst outward | 15-26 they flow as one murmuration
+   26-34 the flock settles into the opening field */
+const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=34.0, N=8000, KMAX=10;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x070d1a,0.028);
+const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,150);cam.position.set(0,0,13);
+const A=new Float32Array(N*3),B=new Float32Array(N*3),LOC=new Float32Array(N*3),S=new Float32Array(N),C=new Float32Array(N),SD=new Float32Array(N);
+const cut=-1+2/PHI, off=1/Math.pow(PHI,4);   // cut at 61.8% of the diameter, pieces offset by r/phi^4
+for(let i=0;i<N;i++){
+  const r=6+Math.random()*8,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);
+  A.set([r*Math.sin(p)*Math.cos(t),r*Math.sin(p)*Math.sin(t)*0.6,r*Math.cos(p)],i*3);
+  const y=1-(i/(N-1))*2,rr=Math.sqrt(1-y*y),th=GA*i;
+  B.set([Math.cos(th)*rr*3.2,y*3.2,Math.sin(th)*rr*3.2],i*3);
+  // globe: mostly surface, some inner volume, so it reads as a solid split sphere
+  const u=Math.random()*2*Math.PI,v=Math.acos(2*Math.random()-1),sh=Math.random()<0.8?1-Math.random()*0.04:Math.cbrt(Math.random());
+  let gx=sh*Math.sin(v)*Math.cos(u),gy=sh*Math.sin(v)*Math.sin(u),gz=sh*Math.cos(v);
+  const right=gx>cut;
+  if(Math.random()<0.18){gx=cut+(Math.random()-.5)*0.01; const q=Math.sqrt(Math.max(0,1-cut*cut))*Math.sqrt(Math.random()),w=Math.random()*2*Math.PI; gy=q*Math.cos(w); gz=q*Math.sin(w);} // lit cut face
+  const R2=gx>cut||(Math.abs(gx-cut)<0.006&&Math.random()<.5);
+  LOC.set([gx+(R2?off*0.6:-off*0.6),gy+(R2?off:-off),gz],i*3);
+  SD[i]=R2?1:0; S[i]=Math.random(); C[i]=Math.random();
+}
+const g=new THREE.BufferGeometry();
+g.setAttribute('position',new THREE.BufferAttribute(A,3));g.setAttribute('pB',new THREE.BufferAttribute(B,3));
+g.setAttribute('loc',new THREE.BufferAttribute(LOC,3));g.setAttribute('seed',new THREE.BufferAttribute(S,1));
+g.setAttribute('cid',new THREE.BufferAttribute(C,1));g.setAttribute('side',new THREE.BufferAttribute(SD,1));
+const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+ uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()},lev:{value:0}},
+ vertexShader:document.getElementById('vs').textContent,fragmentShader:document.getElementById('fs').textContent});
+scene.add(new THREE.Points(g,mat));
+const dg=new THREE.BufferGeometry(),dp=new Float32Array(4500);for(let i=0;i<dp.length;i++)dp[i]=(Math.random()-.5)*60;
+dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
+scene.add(new THREE.Points(dg,new THREE.PointsMaterial({color:0x6d7f9e,size:0.03,transparent:true,opacity:0.3})));
+const comp=new EffectComposer(renderer);comp.addPass(new RenderPass(scene,cam));
+comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.85,0.618,0.0));
+let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);comp.setSize(innerWidth,innerHeight);});
+const ease=x=>x*x*(3-2*x), win=(a,b,x)=>ease(Math.min(1,Math.max(0,(x-a)/(b-a))));
+const clock=new THREE.Clock();
+function frame(){
+  const t=reduce?10:clock.getElapsedTime(), x=t%L;
+  // continuous doubling from 12 s to 21 s, no holds between splits
+  const lev=0;
+  mat.uniforms.t.value=t; mat.uniforms.lev.value=lev;
+  const z=13-win(6,9,x)*2.2*(1-win(12,15,x))+lev*0.8*(1-win(22,32,x));
+  cam.position.z+=(z-cam.position.z)*0.05;
+  cam.position.x+=(mx*2-cam.position.x)*0.03; cam.position.y+=(-my*1.2-cam.position.y)*0.03;
+  cam.lookAt(0,0,0);
+  comp.render(); if(!reduce) requestAnimationFrame(frame);
+}
+frame();
+</script></body></html>
