@@ -5,7 +5,7 @@
 </head><body>
 <script id="vs" type="x-shader/x-vertex">uniform float t; uniform float px;
 attribute vec3 helixA, helixB, codeA, codeB, scatterDir;
-attribute float seed, role, atomIdx, orbitAngle, orbitR;
+attribute float seed, role, atomIdx, orbitAngle, orbitR, tN, strandSign, isRung;
 varying float vA; varying vec3 vC;
 float e(float x){return x*x*(3.-2.*x);}
 float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
@@ -21,22 +21,41 @@ void main(){
   vec3 btc=vec3(.969,.576,.102), amber=vec3(1.,.78,.35), hot=vec3(1.,.95,.85), dim=vec3(.6,.33,.08);
 
   vec3 cloud=position;
-  vec3 helix=helixA;
+
+  // reconstruct the helix procedurally so we can derive the OPPOSITE strand position (for rungs)
+  // and rotate the whole rigid structure at the same rate as Polarity's split-logo: rotY(t*.382)
+  const float TURNS=4.5, HR=2.6, HH=18.0;
+  float ang = tN*TURNS*6.28318 + strandSign*3.14159;
+  float hx = cos(ang)*HR, hz = sin(ang)*HR, hy = (tN-0.5)*HH;
+  vec3 ownStrand = vec3(hx,hy,hz);
+  float angOpp = ang + 3.14159;
+  vec3 oppStrand = vec3(cos(angOpp)*HR, hy, sin(angOpp)*HR);
+
+  // rung points sit on the bar between the two strands at the same height; backbone points sit on
+  // their own strand with a touch of radial thickness so the tube reads as solid, not a thin line
+  float rungFrac = 0.15 + 0.7*fract(seed*7.0);
+  vec3 rungPos = mix(ownStrand, oppStrand, rungFrac);
+  vec3 thickOff = normalize(vec3(hx,0.,hz)) * (h(seed*9.1)-0.5)*0.35;
+  vec3 backbonePos = ownStrand + thickOff + vec3(0.,(h(seed*4.4)-0.5)*0.3,0.);
+  vec3 helixRigid = mix(backbonePos, rungPos, isRung);
+  helixRigid = rotY(t*0.382) * helixRigid;          // same angular rate as Polarity's icon rotation
+
+  vec3 helixB2 = rotY(t*0.382) * ownStrand;          // atom-center lattice point (rigid with the structure)
 
   float orbitAng = orbitAngle + t*(0.6+0.4*h(atomIdx*3.1));
   vec3 nucleusOff = (vec3(h(seed)-.5,h(seed*2.1)-.5,h(seed*3.7)-.5))*0.18;
   vec3 orbitOff = vec3(cos(orbitAng), sin(orbitAng)*0.6, sin(orbitAng*1.3+1.7))*orbitR;
   vec3 atomLocal = mix(nucleusOff, orbitOff, step(0.5, role));
-  vec3 atomExp = helixB + atomLocal;
+  vec3 atomExp = helixB2 + atomLocal;
 
-  vec3 burst = helixB + rotY(t*.2)*scatterDir*(3.0+h(seed*5.)*5.0);
+  vec3 burst = helixB2 + rotY(t*.2)*scatterDir*(3.0+h(seed*5.)*5.0);
   vec3 flock = burst*.75 + flow(burst*.22, t*.7)*3.0; flock.y*=.78;
 
   vec3 code = codeA;
   vec3 codeScroll = code + vec3(0., mod(code.y - t*2.2, 10.0) - code.y, 0.);
 
   vec3 p = cloud;
-  p = mix(p, helix,        win(3.,8.,x));
+  p = mix(p, helixRigid,   win(3.,8.,x));
   p = mix(p, atomExp,      win(13.,16.,x));
   p = mix(p, burst,        win(21.,24.,x));
   p = mix(p, flock,        win(23.,29.,x));
@@ -48,6 +67,7 @@ void main(){
   float sw=sin(t*.618+seed*6.283)*.04; p+=vec3(sw,sw*.618,-sw);
 
   vec3 col=btc;
+  col=mix(col, amber, isRung*.6);
   col=mix(col, hot, win(3.,8.,x)*.4);
   col=mix(col, step(0.5,role)>0.5?amber:hot, win(13.,16.,x));
   col=mix(col, dim, win(21.,24.,x)*.3);
@@ -63,7 +83,7 @@ void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragCol
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
-const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=55.0;
+const L=55.0;
 const ATOMS=200, PPA=40, N=ATOMS*PPA;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=new THREE.WebGLRenderer({antialias:true});
@@ -76,8 +96,8 @@ const POS=new Float32Array(N*3), HELA=new Float32Array(N*3), HELB=new Float32Arr
 const CODEA=new Float32Array(N*3), SCAT=new Float32Array(N*3);
 const SEED=new Float32Array(N), ROLE=new Float32Array(N), ATIDX=new Float32Array(N);
 const OANG=new Float32Array(N), ORAD=new Float32Array(N);
+const TN=new Float32Array(N), STRAND=new Float32Array(N), ISRUNG=new Float32Array(N);
 
-// code grid: build row lengths once (variable length lines, like a code editor)
 const CODE_ROWS=28, CODE_W=22, CODE_H=14;
 const rowLens=[];
 for(let r=0;r<CODE_ROWS;r++){
@@ -90,35 +110,32 @@ let pi=0;
 for(let a=0;a<ATOMS;a++){
   const strand = a%2===0 ? 0 : 1;
   const tN = a/ATOMS;
-  const turns = 6.5;
-  const ang = tN*turns*Math.PI*2 + (strand===1?Math.PI:0);
-  const helixR = 2.6;
-  const hy = (tN-0.5)*18;
-  const hx = Math.cos(ang)*helixR, hz = Math.sin(ang)*helixR;
 
-  // code grid cell for this atom
   const row = a % CODE_ROWS;
   const {indent,len} = rowLens[row];
   const colFrac = (Math.floor(a/CODE_ROWS) % ATOMS) / (ATOMS/CODE_ROWS);
-  const cx = -CODE_W/2 + indent + colFrac*len*(ATOMS/CODE_ROWS<1?1:1);
+  const cx = -CODE_W/2 + indent + colFrac*len;
   const cy = CODE_H/2 - row*(CODE_H/CODE_ROWS) - CODE_H/(CODE_ROWS*2);
 
   for(let k=0;k<PPA;k++){
     const i=pi++;
     const r=6+Math.random()*9, tth=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
     POS.set([r*Math.sin(ph)*Math.cos(tth), r*Math.sin(ph)*Math.sin(tth)*0.6, r*Math.cos(ph)], i*3);
-    HELA.set([hx,hy,hz], i*3);
-    HELB.set([hx,hy,hz], i*3); // atom center == helix compact position (same lattice point, expanded locally)
-    // code: spread this atom's points along a short segment of its row so it reads as a filled line
+    // helixA/helixB kept for attribute slot compatibility (actual helix geometry now rebuilt in-shader
+    // from tN/strandSign so the opposite-strand rung position can be derived procedurally)
+    HELA.set([0,0,0], i*3); HELB.set([0,0,0], i*3);
     const jitter=(k/PPA - 0.5)*0.9;
     CODEA.set([cx+jitter, cy + (Math.random()-0.5)*0.12, (Math.random()-0.5)*0.3], i*3);
     const dir = new THREE.Vector3(Math.random()-.5, Math.random()-.5, Math.random()-.5).normalize();
     SCAT.set([dir.x,dir.y,dir.z], i*3);
     SEED[i]=Math.random();
-    ROLE[i] = k<6 ? 0 : 1; // first ~6 points = nucleus, rest = orbiting
+    ROLE[i] = k<6 ? 0 : 1;              // 0=nucleus, 1=orbit (used for the atom-reveal phase)
     ATIDX[i]=a;
     OANG[i]=Math.random()*Math.PI*2;
     ORAD[i]= ROLE[i]>0.5 ? (0.35+Math.random()*0.45) : 0.0;
+    TN[i]=tN; STRAND[i]=strand;
+    // of the 40 points/atom: 6 nucleus, ~17 remain as backbone thickness, ~17 become rung connectors
+    ISRUNG[i] = (k>=6 && k<23) ? 1.0 : 0.0;
   }
 }
 
@@ -133,6 +150,9 @@ g.setAttribute('role',new THREE.BufferAttribute(ROLE,1));
 g.setAttribute('atomIdx',new THREE.BufferAttribute(ATIDX,1));
 g.setAttribute('orbitAngle',new THREE.BufferAttribute(OANG,1));
 g.setAttribute('orbitR',new THREE.BufferAttribute(ORAD,1));
+g.setAttribute('tN',new THREE.BufferAttribute(TN,1));
+g.setAttribute('strandSign',new THREE.BufferAttribute(STRAND,1));
+g.setAttribute('isRung',new THREE.BufferAttribute(ISRUNG,1));
 
 const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
  uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()}},
@@ -152,7 +172,6 @@ const clock=new THREE.Clock();
 function frame(){
   const t=reduce?10:clock.getElapsedTime(), x=t%L;
   mat.uniforms.t.value=t;
-  // camera scripting: orbit during helix hold, dolly in for the zoom-reveal, pull back out after, wide front-on for code
   const orbit = win(8,13,x);
   const zoomIn = win(13,16,x)*(1-win(21,24,x));
   const codeView = win(29,32,x)*(1-win(45,48,x));
