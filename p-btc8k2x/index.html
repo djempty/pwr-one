@@ -1,0 +1,171 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pwr.one</title>
+<style>html,body{margin:0;overflow:hidden;background:#050505}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+</head><body>
+<script id="vs" type="x-shader/x-vertex">uniform float t; uniform float px;
+attribute vec3 helixA, helixB, codeA, codeB, scatterDir;
+attribute float seed, role, atomIdx, orbitAngle, orbitR;
+varying float vA; varying vec3 vC;
+float e(float x){return x*x*(3.-2.*x);}
+float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
+float h(float n){return fract(sin(n*127.1)*43758.5453);}
+mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
+vec3 flow(vec3 p,float t){
+  return vec3(sin(p.y*.7+t*.9)+sin(p.z*1.3+t*.6)+.5*sin(p.x*2.1-t*.4),
+              sin(p.z*.8+t*.7)+sin(p.x*1.1+t*.5)+.5*sin(p.y*1.9+t*.3),
+              sin(p.x*.6+t*.8)+sin(p.y*1.2+t*.4)+.5*sin(p.z*2.3-t*.5))*.5;
+}
+void main(){
+  float x=mod(t,55.);
+  vec3 btc=vec3(.969,.576,.102), amber=vec3(1.,.78,.35), hot=vec3(1.,.95,.85), dim=vec3(.6,.33,.08);
+
+  vec3 cloud=position;
+  vec3 helix=helixA;
+
+  float orbitAng = orbitAngle + t*(0.6+0.4*h(atomIdx*3.1));
+  vec3 nucleusOff = (vec3(h(seed)-.5,h(seed*2.1)-.5,h(seed*3.7)-.5))*0.18;
+  vec3 orbitOff = vec3(cos(orbitAng), sin(orbitAng)*0.6, sin(orbitAng*1.3+1.7))*orbitR;
+  vec3 atomLocal = mix(nucleusOff, orbitOff, step(0.5, role));
+  vec3 atomExp = helixB + atomLocal;
+
+  vec3 burst = helixB + rotY(t*.2)*scatterDir*(3.0+h(seed*5.)*5.0);
+  vec3 flock = burst*.75 + flow(burst*.22, t*.7)*3.0; flock.y*=.78;
+
+  vec3 code = codeA;
+  vec3 codeScroll = code + vec3(0., mod(code.y - t*2.2, 10.0) - code.y, 0.);
+
+  vec3 p = cloud;
+  p = mix(p, helix,        win(3.,8.,x));
+  p = mix(p, atomExp,      win(13.,16.,x));
+  p = mix(p, burst,        win(21.,24.,x));
+  p = mix(p, flock,        win(23.,29.,x));
+  p = mix(p, codeScroll,   win(29.,32.,x));
+  p = mix(p, burst*1.1,    win(45.,48.,x));
+  p = mix(p, flock,        win(47.,53.,x));
+  p = mix(p, cloud,        win(53.,55.,x));
+
+  float sw=sin(t*.618+seed*6.283)*.04; p+=vec3(sw,sw*.618,-sw);
+
+  vec3 col=btc;
+  col=mix(col, hot, win(3.,8.,x)*.4);
+  col=mix(col, step(0.5,role)>0.5?amber:hot, win(13.,16.,x));
+  col=mix(col, dim, win(21.,24.,x)*.3);
+  col=mix(col, btc, win(29.,32.,x));
+  vC=col;
+
+  vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv;
+  gl_PointSize=(1.1+seed*2.1)*px*(12./max(-mv.z,.5)); vA=.35+.65*seed;
+}</script>
+<script id="fs" type="x-shader/x-fragment">varying float vA; varying vec3 vC;
+void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragColor=vec4(vC,pow(1.-d*2.,1.618)*vA);}</script>
+<script type="module">import * as THREE from 'three';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+const PHI=(1+Math.sqrt(5))/2, GA=Math.PI*(3-Math.sqrt(5)), L=55.0;
+const ATOMS=200, PPA=40, N=ATOMS*PPA;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x050505,0.024);
+const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,200);cam.position.set(0,0,18);
+
+const POS=new Float32Array(N*3), HELA=new Float32Array(N*3), HELB=new Float32Array(N*3);
+const CODEA=new Float32Array(N*3), SCAT=new Float32Array(N*3);
+const SEED=new Float32Array(N), ROLE=new Float32Array(N), ATIDX=new Float32Array(N);
+const OANG=new Float32Array(N), ORAD=new Float32Array(N);
+
+// code grid: build row lengths once (variable length lines, like a code editor)
+const CODE_ROWS=28, CODE_W=22, CODE_H=14;
+const rowLens=[];
+for(let r=0;r<CODE_ROWS;r++){
+  const indent = (Math.random()<0.3) ? Math.random()*3 : 0;
+  const len = 2 + Math.random()*(CODE_W-2-indent);
+  rowLens.push({indent, len});
+}
+
+let pi=0;
+for(let a=0;a<ATOMS;a++){
+  const strand = a%2===0 ? 0 : 1;
+  const tN = a/ATOMS;
+  const turns = 6.5;
+  const ang = tN*turns*Math.PI*2 + (strand===1?Math.PI:0);
+  const helixR = 2.6;
+  const hy = (tN-0.5)*18;
+  const hx = Math.cos(ang)*helixR, hz = Math.sin(ang)*helixR;
+
+  // code grid cell for this atom
+  const row = a % CODE_ROWS;
+  const {indent,len} = rowLens[row];
+  const colFrac = (Math.floor(a/CODE_ROWS) % ATOMS) / (ATOMS/CODE_ROWS);
+  const cx = -CODE_W/2 + indent + colFrac*len*(ATOMS/CODE_ROWS<1?1:1);
+  const cy = CODE_H/2 - row*(CODE_H/CODE_ROWS) - CODE_H/(CODE_ROWS*2);
+
+  for(let k=0;k<PPA;k++){
+    const i=pi++;
+    const r=6+Math.random()*9, tth=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+    POS.set([r*Math.sin(ph)*Math.cos(tth), r*Math.sin(ph)*Math.sin(tth)*0.6, r*Math.cos(ph)], i*3);
+    HELA.set([hx,hy,hz], i*3);
+    HELB.set([hx,hy,hz], i*3); // atom center == helix compact position (same lattice point, expanded locally)
+    // code: spread this atom's points along a short segment of its row so it reads as a filled line
+    const jitter=(k/PPA - 0.5)*0.9;
+    CODEA.set([cx+jitter, cy + (Math.random()-0.5)*0.12, (Math.random()-0.5)*0.3], i*3);
+    const dir = new THREE.Vector3(Math.random()-.5, Math.random()-.5, Math.random()-.5).normalize();
+    SCAT.set([dir.x,dir.y,dir.z], i*3);
+    SEED[i]=Math.random();
+    ROLE[i] = k<6 ? 0 : 1; // first ~6 points = nucleus, rest = orbiting
+    ATIDX[i]=a;
+    OANG[i]=Math.random()*Math.PI*2;
+    ORAD[i]= ROLE[i]>0.5 ? (0.35+Math.random()*0.45) : 0.0;
+  }
+}
+
+const g=new THREE.BufferGeometry();
+g.setAttribute('position',new THREE.BufferAttribute(POS,3));
+g.setAttribute('helixA',new THREE.BufferAttribute(HELA,3));
+g.setAttribute('helixB',new THREE.BufferAttribute(HELB,3));
+g.setAttribute('codeA',new THREE.BufferAttribute(CODEA,3));
+g.setAttribute('scatterDir',new THREE.BufferAttribute(SCAT,3));
+g.setAttribute('seed',new THREE.BufferAttribute(SEED,1));
+g.setAttribute('role',new THREE.BufferAttribute(ROLE,1));
+g.setAttribute('atomIdx',new THREE.BufferAttribute(ATIDX,1));
+g.setAttribute('orbitAngle',new THREE.BufferAttribute(OANG,1));
+g.setAttribute('orbitR',new THREE.BufferAttribute(ORAD,1));
+
+const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+ uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()}},
+ vertexShader:document.getElementById('vs').textContent,fragmentShader:document.getElementById('fs').textContent});
+scene.add(new THREE.Points(g,mat));
+
+const dg=new THREE.BufferGeometry(),dp=new Float32Array(4500);for(let i=0;i<dp.length;i++)dp[i]=(Math.random()-.5)*70;
+dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
+scene.add(new THREE.Points(dg,new THREE.PointsMaterial({color:0x3a2510,size:0.03,transparent:true,opacity:0.25})));
+
+const comp=new EffectComposer(renderer);comp.addPass(new RenderPass(scene,cam));
+comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.95,0.618,0.0));
+let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);comp.setSize(innerWidth,innerHeight);});
+const ease=x=>x*x*(3-2*x), win=(a,b,x)=>ease(Math.min(1,Math.max(0,(x-a)/(b-a))));
+const clock=new THREE.Clock();
+function frame(){
+  const t=reduce?10:clock.getElapsedTime(), x=t%L;
+  mat.uniforms.t.value=t;
+  // camera scripting: orbit during helix hold, dolly in for the zoom-reveal, pull back out after, wide front-on for code
+  const orbit = win(8,13,x);
+  const zoomIn = win(13,16,x)*(1-win(21,24,x));
+  const codeView = win(29,32,x)*(1-win(45,48,x));
+  let camR = 18 - zoomIn*12.5 - codeView*2.0;
+  let camAng = t*0.15*orbit + t*0.04*(1-orbit);
+  const camX = Math.sin(camAng)*camR*(1-codeView) + mx*1.5;
+  const camZ = Math.cos(camAng)*camR*(1-codeView) + (codeView*22);
+  const camY = -my*1.0 + codeView*0.0;
+  cam.position.x += (camX-cam.position.x)*0.05;
+  cam.position.y += (camY-cam.position.y)*0.05;
+  cam.position.z += (camZ-cam.position.z)*0.05;
+  cam.lookAt(0,0,0);
+  comp.render(); if(!reduce) requestAnimationFrame(frame);
+}
+frame();</script>
+</body></html>
