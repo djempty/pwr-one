@@ -5,7 +5,7 @@
 </head><body>
 <script id="vs" type="x-shader/x-vertex">uniform float t; uniform float px;
 attribute vec3 scatterDir, globePos;
-attribute float seed, tN, strandSign, isRung;
+attribute float seed;
 varying float vA; varying vec3 vC;
 float e(float x){return x*x*(3.-2.*x);}
 float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
@@ -17,54 +17,30 @@ vec3 flow(vec3 p,float tt){
               sin(p.x*.6+tt*.8)+sin(p.y*1.2+tt*.4)+.5*sin(p.z*2.3-tt*.5))*.5;
 }
 void main(){
-  float x=mod(t,50.);
-  vec3 btc=vec3(.969,.576,.102), amber=vec3(1.,.80,.38), hot=vec3(1.,.95,.85);
+  float x=mod(t,34.);
+  vec3 btc=vec3(.969,.576,.102), hot=vec3(1.,.95,.85);
 
   vec3 cloud=position;
+  vec3 globe=rotY(t*0.25)*globePos;
+  vec3 burst=globe*2.2+scatterDir*(4.0+h(seed*6.)*6.0);
+  vec3 flock=burst*.70+flow(burst*.20,t*.65)*3.4; flock.y*=.78;
 
-  // ---- angled DNA helix with true vanishing-point perspective ----
-  vec3 P0=vec3(-7.0,-5.0,6.0);      // near end, just off-frame bottom-left
-  vec3 P1=vec3(10.0,9.0,-45.0);     // far end, small, receding upper-right
-  vec3 A=normalize(P1-P0);
-  vec3 U=normalize(cross(A,vec3(0.,1.,0.)));
-  vec3 V=cross(A,U);
-  float ang = tN*6.0*6.28318 + strandSign*3.14159 + t*0.10;   // slow self-spin about its own axis
-  vec3 axisPt = mix(P0,P1,tN);
-  vec3 radial = (cos(ang)*U + sin(ang)*V)*2.8;
-  float rungFrac = 0.12 + 0.76*fract(seed*7.0);
-  vec3 rungPt = axisPt + radial*(1.0-2.0*rungFrac);
-  vec3 bonePt = axisPt + radial*(1.0+(h(seed*9.1)-0.5)*0.10) + A*((h(seed*4.4)-0.5)*0.35);
-  vec3 helix = mix(bonePt, rungPt, isRung);
-
-  // ---- globe (Polarity-style distribution, solid, slow spin) ----
-  vec3 globe = rotY(t*0.25)*globePos;
-
-  vec3 burstH = helix + scatterDir*(4.0+h(seed*5.)*6.0);
-  vec3 flockH = burstH*.70 + flow(burstH*.20, t*.7)*3.4; flockH.y*=.78;
-  vec3 burstG = globe*2.2 + scatterDir*(4.0+h(seed*6.)*6.0);
-  vec3 flockG = burstG*.70 + flow(burstG*.20, t*.65+11.0)*3.4; flockG.y*=.78;
-
-  vec3 p = cloud;
-  p = mix(p, helix,  win(3.,8.,x));
-  p = mix(p, burstH, win(20.,23.,x));
-  p = mix(p, flockH, win(22.,28.,x));
-  p = mix(p, globe,  win(28.,31.,x));
-  p = mix(p, burstG, win(38.,41.,x));
-  p = mix(p, flockG, win(40.,47.,x));
-  p = mix(p, cloud,  win(47.,50.,x));
+  vec3 p=cloud;
+  p=mix(p,globe,win(3.,8.,x));
+  p=mix(p,burst,win(18.,21.,x));
+  p=mix(p,flock,win(20.,27.,x));
+  p=mix(p,cloud,win(30.,34.,x));
 
   float sw=sin(t*.618+seed*6.283)*.03; p+=vec3(sw,sw*.618,-sw);
 
-  vec3 col=btc;
-  col=mix(col, amber, isRung*0.55*win(3.,8.,x));
-  col=mix(col, hot, win(28.,31.,x)*0.25);
+  vec3 col=mix(btc,hot,win(3.,8.,x)*0.25);
   vC=col;
 
   vec4 mv=modelViewMatrix*vec4(p,1.);
   gl_Position=projectionMatrix*mv;
   float dist=-mv.z;
   gl_PointSize=(1.1+seed*2.1)*px*(12./max(dist,.5));
-  float depthFade = 1.0 - smoothstep(20.0, 78.0, dist);
+  float depthFade=1.0-smoothstep(20.0,78.0,dist);
   vA=(.35+.65*seed)*(0.22+0.78*depthFade);
 }</script>
 <script id="fs" type="x-shader/x-fragment">varying float vA; varying vec3 vC;
@@ -82,16 +58,15 @@ void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragCol
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
-const L=50.0, N=8000, GR=3.2;
+const L=34.0, N=8000, GR=3.2;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
 document.body.appendChild(renderer.domElement);
 const scene=new THREE.Scene();
-const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,400);cam.position.set(0,0,16);
+const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,400);cam.position.set(0,0,14);
 
-const POS=new Float32Array(N*3), SCAT=new Float32Array(N*3), GLOBE=new Float32Array(N*3);
-const SEED=new Float32Array(N), TN=new Float32Array(N), STRAND=new Float32Array(N), ISRUNG=new Float32Array(N);
+const POS=new Float32Array(N*3), SCAT=new Float32Array(N*3), GLOBE=new Float32Array(N*3), SEED=new Float32Array(N);
 for(let i=0;i<N;i++){
   const r=6+Math.random()*9, th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
   POS.set([r*Math.sin(ph)*Math.cos(th), r*Math.sin(ph)*Math.sin(th)*0.6, r*Math.cos(ph)], i*3);
@@ -101,24 +76,17 @@ for(let i=0;i<N;i++){
   const sh=Math.random()<0.8 ? 1-Math.random()*0.04 : Math.cbrt(Math.random());
   GLOBE.set([sh*Math.sin(v)*Math.cos(u)*GR, sh*Math.sin(v)*Math.sin(u)*GR, sh*Math.cos(v)*GR], i*3);
   SEED[i]=Math.random();
-  TN[i]=i/(N-1);
-  STRAND[i]=i%2;
-  ISRUNG[i]= (i%5===0||i%5===1) ? 1.0 : 0.0;   // ~40% rungs, 60% backbone
 }
 const g=new THREE.BufferGeometry();
 g.setAttribute('position',new THREE.BufferAttribute(POS,3));
 g.setAttribute('scatterDir',new THREE.BufferAttribute(SCAT,3));
 g.setAttribute('globePos',new THREE.BufferAttribute(GLOBE,3));
 g.setAttribute('seed',new THREE.BufferAttribute(SEED,1));
-g.setAttribute('tN',new THREE.BufferAttribute(TN,1));
-g.setAttribute('strandSign',new THREE.BufferAttribute(STRAND,1));
-g.setAttribute('isRung',new THREE.BufferAttribute(ISRUNG,1));
 const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
  uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()}},
  vertexShader:document.getElementById('vs').textContent,fragmentShader:document.getElementById('fs').textContent});
 scene.add(new THREE.Points(g,mat));
 
-// ---- endless starfield, wide enough to fill the browser at every depth ----
 const SN=3000, SP=new Float32Array(SN*3), SS=new Float32Array(SN);
 for(let i=0;i<SN;i++){
   SP.set([(Math.random()-.5)*300,(Math.random()-.5)*180,-150+Math.random()*155], i*3);
@@ -139,13 +107,13 @@ addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProje
 const ease=x=>x*x*(3-2*x), win=(a,b,x)=>ease(Math.min(1,Math.max(0,(x-a)/(b-a))));
 const clock=new THREE.Clock();
 function frame(){
-  const t=reduce?12:clock.getElapsedTime(), x=t%L;
+  const t=reduce?6:clock.getElapsedTime(), x=t%L;
   mat.uniforms.t.value=t; smat.uniforms.uT.value=t;
-  const globeHold = win(28,31,x)*(1-win(38,41,x));
-  const camZ = 16 - globeHold*3.0;
-  cam.position.x += ((mx*1.2)-cam.position.x)*0.04;
-  cam.position.y += ((-my*0.8)-cam.position.y)*0.04;
-  cam.position.z += (camZ-cam.position.z)*0.03;
+  const hold=win(3,8,x)*(1-win(18,21,x));
+  const camZ=14-hold*1.5;
+  cam.position.x+=((mx*1.2)-cam.position.x)*0.04;
+  cam.position.y+=((-my*0.8)-cam.position.y)*0.04;
+  cam.position.z+=(camZ-cam.position.z)*0.03;
   cam.lookAt(0,0,0);
   comp.render(); if(!reduce) requestAnimationFrame(frame);
 }
