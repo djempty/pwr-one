@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   <title>pwr one</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <link href="assets/css/main.css" rel="stylesheet" />
-  <link href="favicon.ico/apple-icon-57x57.png" rel="apple-touch-icon" sizes="57x57" />
-  <link href="favicon.ico/apple-icon-60x60.png" rel="apple-touch-icon" sizes="60x60" />
-  <link href="favicon.ico/apple-icon-72x72.png" rel="apple-touch-icon" sizes="72x72" />
-  <link href="favicon.ico/apple-icon-76x76.png" rel="apple-touch-icon" sizes="76x76" />
-  <link href="favicon.ico/apple-icon-114x114.png" rel="apple-touch-icon" sizes="114x114" />
-  <link href="favicon.ico/apple-icon-120x120.png" rel="apple-touch-icon" sizes="120x120" />
-  <link href="favicon.ico/apple-icon-144x144.png" rel="apple-touch-icon" sizes="144x144" />
-  <link href="favicon.ico/apple-icon-152x152.png" rel="apple-touch-icon" sizes="152x152" />
-  <link href="favicon.ico/apple-icon-180x180.png" rel="apple-touch-icon" sizes="180x180" />
-  <link href="favicon.ico/android-icon-192x192.png" rel="icon" sizes="192x192" type="image/png" />
-  <link href="favicon.ico/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png" />
-  <link href="favicon.ico/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png" />
-  <link href="favicon.ico/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png" />
-  <link href="favicon.ico/manifest.json" rel="manifest" />
+  <link href="/assets/css/main.css" rel="stylesheet" />
+  <link href="/favicon.ico/apple-icon-57x57.png" rel="apple-touch-icon" sizes="57x57" />
+  <link href="/favicon.ico/apple-icon-60x60.png" rel="apple-touch-icon" sizes="60x60" />
+  <link href="/favicon.ico/apple-icon-72x72.png" rel="apple-touch-icon" sizes="72x72" />
+  <link href="/favicon.ico/apple-icon-76x76.png" rel="apple-touch-icon" sizes="76x76" />
+  <link href="/favicon.ico/apple-icon-114x114.png" rel="apple-touch-icon" sizes="114x114" />
+  <link href="/favicon.ico/apple-icon-120x120.png" rel="apple-touch-icon" sizes="120x120" />
+  <link href="/favicon.ico/apple-icon-144x144.png" rel="apple-touch-icon" sizes="144x144" />
+  <link href="/favicon.ico/apple-icon-152x152.png" rel="apple-touch-icon" sizes="152x152" />
+  <link href="/favicon.ico/apple-icon-180x180.png" rel="apple-touch-icon" sizes="180x180" />
+  <link href="/favicon.ico/android-icon-192x192.png" rel="icon" sizes="192x192" type="image/png" />
+  <link href="/favicon.ico/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png" />
+  <link href="/favicon.ico/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png" />
+  <link href="/favicon.ico/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png" />
+  <link href="/favicon.ico/manifest.json" rel="manifest" />
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="favicon.ico/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
@@ -32,13 +32,14 @@
       text-align: left;
     }
     #header img {
-      width: 160px;
+      width: 124px;
       height: auto;
       margin-bottom: 0.5em;
       display: block;
     }
     #header p {
       margin: 0;
+      font-size: 0.85em;
     }
     @media screen and (max-width: 736px) {
       #header img { width: 120px; }
@@ -50,12 +51,19 @@
       #header img { width: 70px; }
     }
   </style>
+  <style>
+    #bg{display:none!important}
+    body{background-color:#050505!important}
+    #pwrcanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;display:block}
+    #header{width:fit-content}
+  </style>
+  <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head>
 <body class="is-preload">
 
 <!-- Header -->
 <header id="header">
-  <img alt="PWR" src="images/logo.svg" width="10%" />
+  <img alt="PWR" src="/images/logo.svg" width="10%" />
   <p>Solutions for the digital age<span style="font-size: 1.5em; color: #f7931a;">.</span></p>
 </header>
 
@@ -68,6 +76,129 @@
 </footer>
 
 <!-- Scripts -->
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
+<canvas id="pwrcanvas"></canvas>
+<script id="vs" type="x-shader/x-vertex">uniform float t; uniform float px;
+attribute vec3 scatterDir, globePos;
+attribute float seed;
+varying float vA; varying vec3 vC;
+float e(float x){return x*x*(3.-2.*x);}
+float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
+float h(float n){return fract(sin(n*127.1)*43758.5453);}
+mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
+vec3 flow(vec3 p,float tt){
+  return vec3(sin(p.y*.7+tt*.9)+sin(p.z*1.3+tt*.6)+.5*sin(p.x*2.1-tt*.4),
+              sin(p.z*.8+tt*.7)+sin(p.x*1.1+tt*.5)+.5*sin(p.y*1.9+tt*.3),
+              sin(p.x*.6+tt*.8)+sin(p.y*1.2+tt*.4)+.5*sin(p.z*2.3-tt*.5))*.5;
+}
+void main(){
+  float x=mod(t,34.);
+  vec3 btc=vec3(.969,.576,.102), hot=vec3(1.,.95,.85);
+
+  vec3 cloud=position;
+  vec3 globe=rotY(t*0.25)*globePos;
+  vec3 burst=globe*2.2+scatterDir*(4.0+h(seed*6.)*6.0);
+  vec3 flock=burst*.70+flow(burst*.20,t*.65)*3.4; flock.y*=.78;
+
+  vec3 p=cloud;
+  p=mix(p,globe,win(3.,8.,x));
+  p=mix(p,burst,win(18.,21.,x));
+  p=mix(p,flock,win(20.,27.,x));
+  p=mix(p,cloud,win(30.,34.,x));
+
+  float sw=sin(t*.618+seed*6.283)*.03; p+=vec3(sw,sw*.618,-sw);
+
+  vec3 col=mix(btc,hot,win(3.,8.,x)*0.25);
+  vC=col;
+
+  vec4 mv=modelViewMatrix*vec4(p,1.);
+  gl_Position=projectionMatrix*mv;
+  float dist=-mv.z;
+  gl_PointSize=(1.1+seed*2.1)*px*(12./max(dist,.5));
+  float depthFade=1.0-smoothstep(20.0,78.0,dist);
+  vA=(.35+.65*seed)*(0.22+0.78*depthFade);
+}</script>
+<script id="fs" type="x-shader/x-fragment">varying float vA; varying vec3 vC;
+void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragColor=vec4(vC,pow(1.-d*2.,1.618)*vA);}</script>
+<script id="svs" type="x-shader/x-vertex">uniform float uT, uPx; attribute float sseed; varying float sA;
+void main(){
+  vec4 mv=modelViewMatrix*vec4(position,1.); gl_Position=projectionMatrix*mv;
+  float tw=0.7+0.3*sin(uT*0.5+sseed*30.0);
+  gl_PointSize=(0.6+sseed*1.8)*uPx*(60./max(-mv.z,1.));
+  sA=(0.25+0.6*sseed)*tw;
+}</script>
+<script id="sfs" type="x-shader/x-fragment">varying float sA;
+void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;gl_FragColor=vec4(vec3(1.,0.93,0.82),pow(1.-d*2.,2.0)*sA);}</script>
+<script type="module">
+import * as THREE from 'three';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+const L=34.0, N=8000, GR=3.2;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canvas=document.getElementById('pwrcanvas');
+const renderer=new THREE.WebGLRenderer({antialias:true,canvas:canvas,alpha:false});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight,false);
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.1,400);cam.position.set(0,0,14);
+const POS=new Float32Array(N*3),SCAT=new Float32Array(N*3),GLOBE=new Float32Array(N*3),SEED=new Float32Array(N);
+for(let i=0;i<N;i++){
+  const r=6+Math.random()*9,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+  POS.set([r*Math.sin(ph)*Math.cos(th),r*Math.sin(ph)*Math.sin(th)*0.6,r*Math.cos(ph)],i*3);
+  const d=new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize();
+  SCAT.set([d.x,d.y,d.z],i*3);
+  const u=Math.random()*2*Math.PI,v=Math.acos(2*Math.random()-1);
+  const sh=Math.random()<0.8?1-Math.random()*0.04:Math.cbrt(Math.random());
+  GLOBE.set([sh*Math.sin(v)*Math.cos(u)*GR,sh*Math.sin(v)*Math.sin(u)*GR,sh*Math.cos(v)*GR],i*3);
+  SEED[i]=Math.random();
+}
+const g=new THREE.BufferGeometry();
+g.setAttribute('position',new THREE.BufferAttribute(POS,3));
+g.setAttribute('scatterDir',new THREE.BufferAttribute(SCAT,3));
+g.setAttribute('globePos',new THREE.BufferAttribute(GLOBE,3));
+g.setAttribute('seed',new THREE.BufferAttribute(SEED,1));
+const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+ uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()}},
+ vertexShader:document.getElementById('vs').textContent,fragmentShader:document.getElementById('fs').textContent});
+scene.add(new THREE.Points(g,mat));
+const SN=3000,SP=new Float32Array(SN*3),SS=new Float32Array(SN);
+for(let i=0;i<SN;i++){SP.set([(Math.random()-.5)*300,(Math.random()-.5)*180,-150+Math.random()*155],i*3);SS[i]=Math.random();}
+const sg=new THREE.BufferGeometry();
+sg.setAttribute('position',new THREE.BufferAttribute(SP,3));
+sg.setAttribute('sseed',new THREE.BufferAttribute(SS,1));
+const smat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+ uniforms:{uT:{value:0},uPx:{value:renderer.getPixelRatio()}},
+ vertexShader:document.getElementById('svs').textContent,fragmentShader:document.getElementById('sfs').textContent});
+scene.add(new THREE.Points(sg,smat));
+const comp=new EffectComposer(renderer);comp.addPass(new RenderPass(scene,cam));
+comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.9,0.618,0.0));
+let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false);comp.setSize(innerWidth,innerHeight);});
+const ease=x=>x*x*(3-2*x),win=(a,b,x)=>ease(Math.min(1,Math.max(0,(x-a)/(b-a))));
+const hdr=document.getElementById('header');
+const clock=new THREE.Clock();
+function frame(){
+  const t=reduce?6:clock.getElapsedTime(),x=t%L;
+  mat.uniforms.t.value=t;smat.uniforms.uT.value=t;
+  const hold=win(3,8,x)*(1-win(18,21,x));
+  const camZ=14-hold*1.5;
+  // park the globe in the open space to the RIGHT of the pwr.one header block
+  const visH=2*Math.tan(cam.fov*Math.PI/360)*Math.abs(cam.position.z), visW=visH*cam.aspect;
+  let f=0.5;
+  if(innerWidth>900){
+    const cr=hdr?hdr.getBoundingClientRect().right:innerWidth*0.33;
+    f=((cr+innerWidth)/2)/innerWidth;
+    const halfNDC=GR/(visW/2);
+    f=Math.min(f,Math.max(0.5,(1.92-halfNDC)/2));
+  }
+  const camX=-(2*f-1)*(visW/2);
+  cam.position.x+=((camX+mx*1.2)-cam.position.x)*0.03;
+  cam.position.y+=((-my*0.8)-cam.position.y)*0.03;
+  cam.position.z+=(camZ-cam.position.z)*0.03;
+  cam.lookAt(camX,0,0);
+  comp.render(); if(!reduce) requestAnimationFrame(frame);
+}
+frame();
+</script>
 </body>
 </html>
