@@ -12,3 +12,7 @@
 /p-btc8k2x/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store
+
+/p-home-preview/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
