@@ -37,6 +37,22 @@
   .btn2:hover{background:#b08d4f;color:#0e1f3c}
   .foot{left:21px;right:21px;bottom:21px;font-size:9px;letter-spacing:2px}
 }
+@media(orientation:landscape) and (max-height:500px){
+  .mk{left:28px;top:14px;font-size:17px}
+  .mk svg{width:26px;height:26px;vertical-align:-6px;margin-right:14px}
+  .navr{right:28px;top:14px;height:auto;font-size:11px;letter-spacing:.8px}
+  .navr span{display:block;margin-left:22px}
+  .navr .hb{display:none}
+  .navr .btn{padding:5px 13px}
+  .copy{left:28px;right:auto;top:72px;width:min(400px,54vw);max-width:none}
+  .copy .k{font-size:10px;letter-spacing:2.5px}
+  .copy h1{font-size:30px;line-height:1.12;margin:8px 0 8px}
+  .copy p{font-size:12.5px;line-height:1.5}
+  .cta{display:inline-block;width:auto;text-align:left;margin-top:13px;padding:8px 21px;font-size:11px;letter-spacing:1.5px}
+  .ghost{display:inline-block;margin:13px 0 0 13px;font-size:11px;letter-spacing:1.5px;padding-bottom:3px}
+  .btn2{display:none}
+  .foot{left:auto;right:28px;bottom:12px;font-size:9px;letter-spacing:2px}
+}
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 <!-- navy-aligned-v10 --></head><body>
@@ -147,8 +163,9 @@ function frame(){
   // park the globe in the open space to the right of the copy block (desktop only)
   const visH=2*Math.tan(cam.fov*Math.PI/360)*cam.position.z, visW=visH*cam.aspect;
   let f=0.5;
-  if(innerWidth>900){
-    f=((525+innerWidth)/2)/innerWidth;                 // centre of gap: copy right edge -> viewport right
+  const ls=innerWidth>innerHeight&&innerHeight<=500;
+  if(innerWidth>900||ls){
+    f=(((ls?28+Math.min(400,innerWidth*.54):525)+innerWidth)/2)/innerWidth;                 // centre of gap: copy right edge -> viewport right
     const halfNDC=2.9/(visW/2);                        // globe radius in NDC x
     f=Math.min(f,Math.max(0.5,(1.92-halfNDC)/2));      // keep it off the right edge
   }
