@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Member Login · Polarity</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="theme-color" content="#0e1f3c">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#0e1f3c;color:#f8f4ef;font-family:Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;padding:max(34px,env(safe-area-inset-top)) max(55px,env(safe-area-inset-right)) max(34px,env(safe-area-inset-bottom)) max(55px,env(safe-area-inset-left))}
+a{color:inherit}
+:focus-visible{outline:2px solid #b08d4f;outline-offset:3px}
+.mk{display:inline-flex;align-items:center;align-self:flex-start;text-decoration:none;font-weight:700;letter-spacing:0;font-size:21px;line-height:1;color:#f8f4ef}
+.mk svg{width:34px;height:34px;margin-right:21px;flex:none}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:34px 0}
+.card{width:100%;max-width:377px}
+.k{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#b08d4f}
+h1{font-weight:700;font-size:40px;line-height:1.15;margin:13px 0 8px;letter-spacing:0}
+.sub{margin:0 0 34px;color:rgba(248,244,239,.618);font-size:15px;line-height:1.62}
+.f{margin-bottom:21px}
+label{display:block;margin-bottom:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(248,244,239,.618)}
+input{width:100%;display:block;border:1px solid rgba(248,244,239,.382);border-radius:0;background:rgba(248,244,239,.07);color:#f8f4ef;font:inherit;font-size:16px;padding:13px 13px;-webkit-appearance:none;appearance:none}
+input:focus{border-color:#b08d4f;outline:2px solid #b08d4f;outline-offset:0}
+.row{display:flex;justify-content:flex-end;margin:-8px 0 21px}
+.row a,.alt a{font-size:13px;color:#f8f4ef;text-decoration:none;border-bottom:1px solid #b08d4f;padding-bottom:3px;transition:color .382s}
+.row a:hover,.alt a:hover{color:#b08d4f}
+button{width:100%;background:#b08d4f;border:1px solid #b08d4f;border-radius:0;color:#0e1f3c;padding:13px 34px;font:inherit;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .382s,color .382s}
+button:hover{background:transparent;color:#f8f4ef}
+.demo{min-height:21px;margin:13px 0 0;font-size:13px;line-height:1.5;color:#b08d4f;text-align:center}
+.alt{margin:34px 0 0;padding-top:21px;border-top:1px solid rgba(248,244,239,.07);font-size:13px;line-height:1.8;color:rgba(248,244,239,.618);text-align:center}
+.foot{color:rgba(248,244,239,.382);font-size:11px;letter-spacing:3px}
+@media(max-width:600px){
+  body{padding:max(21px,env(safe-area-inset-top)) max(21px,env(safe-area-inset-right)) max(21px,env(safe-area-inset-bottom)) max(21px,env(safe-area-inset-left))}
+  h1{font-size:34px}
+  .foot{font-size:9px;letter-spacing:2px}
+}
+@media(orientation:landscape) and (max-height:500px){
+  body{padding:max(13px,env(safe-area-inset-top)) max(21px,env(safe-area-inset-right)) max(13px,env(safe-area-inset-bottom)) max(21px,env(safe-area-inset-left))}
+  .mk{font-size:17px}.mk svg{width:26px;height:26px;margin-right:13px}
+  main{padding:13px 0}
+  .card{max-width:610px;display:grid;grid-template-columns:1fr 1fr;column-gap:34px;align-items:center}
+  .head{grid-column:1}.form{grid-column:2}
+  h1{font-size:30px;margin:8px 0 8px}
+  .sub{margin:0;font-size:13px}
+  .f{margin-bottom:13px}
+  input{padding:8px 13px}
+  .row{margin:-5px 0 13px}
+  .alt{margin-top:13px;padding-top:13px}
+  .foot{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
+<main><div class="card">
+<div class="head"><div class="k">Private Investment Club</div><h1>Member Login</h1><p class="sub">Sign in to your member portal.</p></div>
+<div class="form"><form id="f" novalidate>
+<div class="f"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="username" inputmode="email" required></div>
+<div class="f"><label for="pw">Password</label><input id="pw" name="password" type="password" autocomplete="current-password" required></div>
+<div class="row"><a href="#" id="forgot">Forgot password?</a></div>
+<button type="submit">Sign in</button>
+<p class="demo" id="demo" role="status" aria-live="polite"></p>
+</form>
+<p class="alt">Membership by invitation only. <a href="../">Request access</a></p></div>
+</div></main>
+<div class="foot">MEMBERSHIP BY INVITATION ONLY</div>
+<script>
+(function(){var d=document.getElementById('demo'),m='Demo only. Nothing is sent or stored.';
+document.getElementById('f').addEventListener('submit',function(e){e.preventDefault();d.textContent=m});
+document.getElementById('forgot').addEventListener('click',function(e){e.preventDefault();d.textContent=m});})();
+</script></body></html>
