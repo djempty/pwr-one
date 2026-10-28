@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Welcome · Polarity</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="theme-color" content="#0e1f3c">
+<style>
+*{box-sizing:border-box}
+:root{--navy:#0e1f3c;--cream:#f8f4ef;--gold:#b08d4f;--green:#3c876c;--ink:#0e1f3c;--mute:rgba(14,31,60,.618);--line:rgba(14,31,60,.1);--side:280px}
+html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.mk{position:fixed;left:55px;top:34px;display:inline-block;font-weight:700;letter-spacing:0;font-size:21px;line-height:1;color:#f8f4ef;z-index:5}
+.mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}
+.side{position:fixed;left:0;top:0;bottom:0;width:var(--side);background:var(--navy);padding:calc(55px + 34px + 34px) 0 max(34px,env(safe-area-inset-bottom));display:flex;flex-direction:column;z-index:1}
+.nav{display:flex;flex-direction:column;gap:8px;padding:0 21px 0 21px}
+.nav a{display:block;padding:13px 21px 13px 21px;font-size:15px;color:rgba(248,244,239,.618);border-left:2px solid transparent}
+.nav a[aria-current]{background:rgba(248,244,239,.08);color:#f8f4ef;border-left-color:var(--gold)}
+.who{margin-top:auto;padding:0 55px;font-size:13px;line-height:1.5;color:#f8f4ef}
+.who span{display:block;font-size:11px;color:rgba(248,244,239,.382)}
+.bar{display:none}
+.tabs{display:none}
+main{margin-left:var(--side);padding:max(34px,env(safe-area-inset-top)) max(55px,env(safe-area-inset-right)) 55px 55px;max-width:calc(var(--side) + 1100px)}
+.k{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:400;font-size:40px;line-height:1.15;margin:13px 0 34px;letter-spacing:0}
+.grid{display:grid;grid-template-columns:1.618fr 1fr;gap:21px;align-items:start}
+.col{display:grid;gap:21px}
+.card{background:#fff;border:1px solid var(--line);padding:21px 21px}
+.lbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mute)}
+.big{font-size:55px;font-weight:700;line-height:1.1;margin:13px 0 8px;letter-spacing:0}
+.delta{font-size:13px;color:var(--mute)}.up{color:var(--green)}
+.rng{display:flex;gap:21px;margin:21px 0 13px;font-size:11px;letter-spacing:2px}
+.rng button{all:unset;cursor:pointer;color:rgba(14,31,60,.382);padding:3px 0}
+.rng button[aria-pressed=true]{color:var(--ink);font-weight:700}
+.chart{position:relative;padding-left:34px}
+.chart svg{display:block;width:100%;height:233px;overflow:visible}
+.ax{position:absolute;left:0;top:0;height:233px;width:30px;font-size:9px;color:rgba(14,31,60,.382)}
+.ax i{position:absolute;right:0;font-style:normal;transform:translateY(-50%)}
+.nav2{font-size:28px;font-weight:700;margin:13px 0 8px;letter-spacing:0}
+.vote{border-left:3px solid var(--gold)}
+.vote p{margin:13px 0 13px;font-size:15px;font-weight:700;line-height:1.4}
+.vr{display:flex;align-items:center;gap:13px;font-size:13px;color:var(--mute)}
+.btn{background:var(--navy);color:#f8f4ef;border:1px solid var(--navy);border-radius:0;font:inherit;font-size:13px;padding:8px 21px;cursor:pointer}
+.act{margin-top:8px}
+.act div{display:flex;justify-content:space-between;padding:13px 0;font-size:13px;border-bottom:1px solid var(--line)}
+.act div:last-child{border-bottom:0;padding-bottom:0}
+@media(hover:hover) and (pointer:fine){
+ .nav a:not([aria-current]):hover{color:#f8f4ef}
+ .btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+ .rng button:hover{color:var(--ink)}
+}
+@media(max-width:900px){
+ :root{--side:0px}
+ .side{display:none}
+ .bar{display:block;position:absolute;left:0;right:0;top:0;height:calc(34px + 34px + 21px);background:var(--navy)}
+ main{margin:0;padding:calc(34px + 34px + 21px + 21px) max(21px,env(safe-area-inset-right)) calc(55px + env(safe-area-inset-bottom)) max(21px,env(safe-area-inset-left))}
+ .grid{grid-template-columns:1fr}
+ .tabs{display:flex;position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:0 max(8px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(8px,env(safe-area-inset-left));z-index:4}
+ .tabs a{flex:1;text-align:center;padding:21px 0;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(14,31,60,.382)}
+ .tabs a[aria-current]{color:var(--ink);font-weight:700}
+ .big{font-size:40px}
+ h1{font-size:34px;margin-bottom:21px}
+ .chart svg,.ax{height:144px}
+ .cx{display:none}
+}
+@media(max-width:600px){.mk{left:21px;top:21px}.bar{height:76px}main{padding-top:calc(76px + 21px)}}
+@media(orientation:landscape) and (max-height:500px){
+ .mk{left:max(28px,env(safe-area-inset-left));top:14px;font-size:17px}.mk svg{width:26px;height:26px;vertical-align:-6px;margin-right:14px}
+ .bar{height:54px}
+ main{padding-top:calc(54px + 13px);padding-bottom:calc(55px + env(safe-area-inset-bottom))}
+ h1{font-size:28px;margin:8px 0 13px}
+ .grid{grid-template-columns:1.618fr 1fr}
+ .big{font-size:34px;margin:8px 0 5px}
+ .rng{margin:13px 0 8px}
+ .chart svg,.ax{height:55px}
+ .tabs a{padding:13px 0}
+ .cx,.ax{display:none}
+ .chart{padding-left:0}
+}
+</style></head><body>
+<a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
+<div class="bar"></div>
+<aside class="side"><nav class="nav" aria-label="Member">
+<a href="#" aria-current="page">Overview</a><a href="#">Performance</a><a href="#">Deposits &amp; Redemptions</a><a href="#">Votes</a><a href="#">Documents</a><a href="#">Assistant</a><a href="#">Settings</a></nav>
+<div class="who">J. Morrison<span>Member since 2026</span></div></aside>
+<main>
+<div class="k">Sunday, October 11</div><h1>Good morning, James</h1>
+<div class="grid">
+<section class="card" aria-label="Capital account"><div class="lbl">Your capital account</div>
+<div class="big">$128,406.42</div>
+<div class="delta"><span class="up">▲ $2,690.18 (+2.14%)</span> this month<span class="cx"> · 3.21% of club</span></div>
+<div class="rng" role="group" aria-label="Range"><button aria-pressed="true" data-r="1M">1M</button><button aria-pressed="false" data-r="3M">3M</button><button aria-pressed="false" data-r="YTD">YTD</button><button aria-pressed="false" data-r="ALL">ALL</button></div>
+<div class="chart"><div class="ax" aria-hidden="true"><i style="top:0">100</i><i style="top:21.4%">78.6</i><i style="top:38.2%">61.8</i><i style="top:50%">50</i><i style="top:61.8%">38.2</i><i style="top:76.4%">23.6</i><i style="top:100%">0</i></div>
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="Capital account value chart (sample data)">
+<g stroke="rgba(14,31,60,.12)" stroke-width="1" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"><line x1="0" x2="100" y1="0" y2="0" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="50" y2="50" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="76.4" y2="76.4" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="100" y2="100" vector-effect="non-scaling-stroke"/></g>
+<path id="area" d="M0.0 99.7 L1.7 97.8 L3.4 98.6 L5.1 95.6 L6.8 92.7 L8.5 98.1 L10.2 100.0 L11.9 94.0 L13.6 95.5 L15.3 96.6 L16.9 86.4 L18.6 85.9 L20.3 80.0 L22.0 80.4 L23.7 78.1 L25.4 82.9 L27.1 79.4 L28.8 73.2 L30.5 73.1 L32.2 69.6 L33.9 67.7 L35.6 74.5 L37.3 69.5 L39.0 67.9 L40.7 70.4 L42.4 75.7 L44.1 67.7 L45.8 66.9 L47.5 62.6 L49.2 56.8 L50.8 54.4 L52.5 49.5 L54.2 52.8 L55.9 49.3 L57.6 51.4 L59.3 45.8 L61.0 42.0 L62.7 49.9 L64.4 54.9 L66.1 57.2 L67.8 48.2 L69.5 48.5 L71.2 45.8 L72.9 48.0 L74.6 46.5 L76.3 46.7 L78.0 47.1 L79.7 43.8 L81.4 41.0 L83.1 34.2 L84.7 31.8 L86.4 26.3 L88.1 22.9 L89.8 18.1 L91.5 18.7 L93.2 26.0 L94.9 21.3 L96.6 16.1 L98.3 12.7 L100.0 14.6 L100 100 L0 100Z" fill="rgba(176,141,79,.1)"/>
+<g stroke="#b08d4f" stroke-width="1.2"><line x1="0" x2="100" y1="38.2" y2="38.2" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="61.8" y2="61.8" vector-effect="non-scaling-stroke"/></g>
+<path id="line" d="M0.0 99.7 L1.7 97.8 L3.4 98.6 L5.1 95.6 L6.8 92.7 L8.5 98.1 L10.2 100.0 L11.9 94.0 L13.6 95.5 L15.3 96.6 L16.9 86.4 L18.6 85.9 L20.3 80.0 L22.0 80.4 L23.7 78.1 L25.4 82.9 L27.1 79.4 L28.8 73.2 L30.5 73.1 L32.2 69.6 L33.9 67.7 L35.6 74.5 L37.3 69.5 L39.0 67.9 L40.7 70.4 L42.4 75.7 L44.1 67.7 L45.8 66.9 L47.5 62.6 L49.2 56.8 L50.8 54.4 L52.5 49.5 L54.2 52.8 L55.9 49.3 L57.6 51.4 L59.3 45.8 L61.0 42.0 L62.7 49.9 L64.4 54.9 L66.1 57.2 L67.8 48.2 L69.5 48.5 L71.2 45.8 L72.9 48.0 L74.6 46.5 L76.3 46.7 L78.0 47.1 L79.7 43.8 L81.4 41.0 L83.1 34.2 L84.7 31.8 L86.4 26.3 L88.1 22.9 L89.8 18.1 L91.5 18.7 L93.2 26.0 L94.9 21.3 L96.6 16.1 L98.3 12.7 L100.0 14.6" fill="none" stroke="#0e1f3c" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg></div>
+</section>
+<div class="col">
+<section class="card" aria-label="Club NAV"><div class="lbl">Club NAV</div><div class="nav2">$4,002,118</div><div class="delta">37 members · updated 4:01 PM</div></section>
+<section class="card vote" aria-label="Open vote"><div class="lbl" style="color:var(--gold)">Open vote · 3 days left</div><p>Raise max allocation to longer-dated options from 23.6% to 38.2%?</p><div class="vr"><button class="btn" type="button">Vote</button><span>22 of 37 voted</span></div></section>
+<section class="card" aria-label="Recent activity"><div class="lbl">Recent activity</div><div class="act"><div><span>Oct distribution</span><span class="up">+$2,690.18</span></div><div><span>Deposit confirmed</span><span>+$10,000.00</span></div><div><span>Sep distribution</span><span class="up">+$1,844.07</span></div></div></section>
+</div></div></main>
+<nav class="tabs" aria-label="Member"><a href="#" aria-current="page">Home</a><a href="#">Performance</a><a href="#">Money</a><a href="#">Votes</a><a href="#">More</a></nav>
+<script>
+(function(){var D={1M:['M0.0 99.7 L1.7 97.8 L3.4 98.6 L5.1 95.6 L6.8 92.7 L8.5 98.1 L10.2 100.0 L11.9 94.0 L13.6 95.5 L15.3 96.6 L16.9 86.4 L18.6 85.9 L20.3 80.0 L22.0 80.4 L23.7 78.1 L25.4 82.9 L27.1 79.4 L28.8 73.2 L30.5 73.1 L32.2 69.6 L33.9 67.7 L35.6 74.5 L37.3 69.5 L39.0 67.9 L40.7 70.4 L42.4 75.7 L44.1 67.7 L45.8 66.9 L47.5 62.6 L49.2 56.8 L50.8 54.4 L52.5 49.5 L54.2 52.8 L55.9 49.3 L57.6 51.4 L59.3 45.8 L61.0 42.0 L62.7 49.9 L64.4 54.9 L66.1 57.2 L67.8 48.2 L69.5 48.5 L71.2 45.8 L72.9 48.0 L74.6 46.5 L76.3 46.7 L78.0 47.1 L79.7 43.8 L81.4 41.0 L83.1 34.2 L84.7 31.8 L86.4 26.3 L88.1 22.9 L89.8 18.1 L91.5 18.7 L93.2 26.0 L94.9 21.3 L96.6 16.1 L98.3 12.7 L100.0 14.6','M0.0 99.7 L1.7 97.8 L3.4 98.6 L5.1 95.6 L6.8 92.7 L8.5 98.1 L10.2 100.0 L11.9 94.0 L13.6 95.5 L15.3 96.6 L16.9 86.4 L18.6 85.9 L20.3 80.0 L22.0 80.4 L23.7 78.1 L25.4 82.9 L27.1 79.4 L28.8 73.2 L30.5 73.1 L32.2 69.6 L33.9 67.7 L35.6 74.5 L37.3 69.5 L39.0 67.9 L40.7 70.4 L42.4 75.7 L44.1 67.7 L45.8 66.9 L47.5 62.6 L49.2 56.8 L50.8 54.4 L52.5 49.5 L54.2 52.8 L55.9 49.3 L57.6 51.4 L59.3 45.8 L61.0 42.0 L62.7 49.9 L64.4 54.9 L66.1 57.2 L67.8 48.2 L69.5 48.5 L71.2 45.8 L72.9 48.0 L74.6 46.5 L76.3 46.7 L78.0 47.1 L79.7 43.8 L81.4 41.0 L83.1 34.2 L84.7 31.8 L86.4 26.3 L88.1 22.9 L89.8 18.1 L91.5 18.7 L93.2 26.0 L94.9 21.3 L96.6 16.1 L98.3 12.7 L100.0 14.6 L100 100 L0 100Z'],'3M':['M0.0 94.9 L1.7 85.1 L3.4 92.6 L5.1 87.5 L6.8 94.5 L8.5 96.7 L10.2 84.5 L11.9 89.3 L13.6 84.9 L15.3 84.6 L16.9 84.3 L18.6 83.0 L20.3 87.2 L22.0 78.7 L23.7 85.3 L25.4 87.5 L27.1 92.7 L28.8 91.9 L30.5 88.5 L32.2 76.8 L33.9 77.2 L35.6 82.0 L37.3 82.8 L39.0 69.9 L40.7 76.7 L42.4 71.5 L44.1 71.7 L45.8 66.5 L47.5 68.2 L49.2 62.8 L50.8 62.0 L52.5 58.4 L54.2 51.0 L55.9 50.9 L57.6 58.5 L59.3 65.3 L61.0 54.3 L62.7 54.0 L64.4 58.9 L66.1 48.7 L67.8 47.4 L69.5 43.5 L71.2 37.6 L72.9 43.6 L74.6 46.6 L76.3 39.2 L78.0 46.8 L79.7 40.9 L81.4 48.2 L83.1 42.8 L84.7 38.2 L86.4 30.1 L88.1 25.7 L89.8 28.2 L91.5 35.4 L93.2 41.3 L94.9 38.8 L96.6 36.9 L98.3 43.1 L100.0 32.6','M0.0 94.9 L1.7 85.1 L3.4 92.6 L5.1 87.5 L6.8 94.5 L8.5 96.7 L10.2 84.5 L11.9 89.3 L13.6 84.9 L15.3 84.6 L16.9 84.3 L18.6 83.0 L20.3 87.2 L22.0 78.7 L23.7 85.3 L25.4 87.5 L27.1 92.7 L28.8 91.9 L30.5 88.5 L32.2 76.8 L33.9 77.2 L35.6 82.0 L37.3 82.8 L39.0 69.9 L40.7 76.7 L42.4 71.5 L44.1 71.7 L45.8 66.5 L47.5 68.2 L49.2 62.8 L50.8 62.0 L52.5 58.4 L54.2 51.0 L55.9 50.9 L57.6 58.5 L59.3 65.3 L61.0 54.3 L62.7 54.0 L64.4 58.9 L66.1 48.7 L67.8 47.4 L69.5 43.5 L71.2 37.6 L72.9 43.6 L74.6 46.6 L76.3 39.2 L78.0 46.8 L79.7 40.9 L81.4 48.2 L83.1 42.8 L84.7 38.2 L86.4 30.1 L88.1 25.7 L89.8 28.2 L91.5 35.4 L93.2 41.3 L94.9 38.8 L96.6 36.9 L98.3 43.1 L100.0 32.6 L100 100 L0 100Z'],YTD:['M0.0 96.0 L1.7 92.3 L3.4 88.3 L5.1 82.7 L6.8 81.3 L8.5 77.0 L10.2 87.8 L11.9 88.5 L13.6 81.1 L15.3 79.9 L16.9 74.6 L18.6 82.9 L20.3 83.1 L22.0 86.5 L23.7 83.9 L25.4 81.2 L27.1 87.7 L28.8 89.1 L30.5 88.7 L32.2 77.9 L33.9 71.9 L35.6 76.8 L37.3 69.9 L39.0 74.9 L40.7 70.6 L42.4 75.0 L44.1 79.9 L45.8 69.3 L47.5 71.7 L49.2 73.0 L50.8 61.3 L52.5 54.0 L54.2 57.5 L55.9 49.1 L57.6 49.2 L59.3 46.7 L61.0 52.0 L62.7 43.9 L64.4 41.5 L66.1 34.9 L67.8 30.8 L69.5 37.0 L71.2 40.2 L72.9 45.4 L74.6 49.3 L76.3 53.2 L78.0 52.0 L79.7 45.9 L81.4 50.6 L83.1 43.0 L84.7 42.4 L86.4 42.0 L88.1 33.3 L89.8 31.8 L91.5 33.0 L93.2 30.9 L94.9 25.4 L96.6 31.3 L98.3 20.7 L100.0 27.7','M0.0 96.0 L1.7 92.3 L3.4 88.3 L5.1 82.7 L6.8 81.3 L8.5 77.0 L10.2 87.8 L11.9 88.5 L13.6 81.1 L15.3 79.9 L16.9 74.6 L18.6 82.9 L20.3 83.1 L22.0 86.5 L23.7 83.9 L25.4 81.2 L27.1 87.7 L28.8 89.1 L30.5 88.7 L32.2 77.9 L33.9 71.9 L35.6 76.8 L37.3 69.9 L39.0 74.9 L40.7 70.6 L42.4 75.0 L44.1 79.9 L45.8 69.3 L47.5 71.7 L49.2 73.0 L50.8 61.3 L52.5 54.0 L54.2 57.5 L55.9 49.1 L57.6 49.2 L59.3 46.7 L61.0 52.0 L62.7 43.9 L64.4 41.5 L66.1 34.9 L67.8 30.8 L69.5 37.0 L71.2 40.2 L72.9 45.4 L74.6 49.3 L76.3 53.2 L78.0 52.0 L79.7 45.9 L81.4 50.6 L83.1 43.0 L84.7 42.4 L86.4 42.0 L88.1 33.3 L89.8 31.8 L91.5 33.0 L93.2 30.9 L94.9 25.4 L96.6 31.3 L98.3 20.7 L100.0 27.7 L100 100 L0 100Z'],ALL:['M0.0 100.0 L1.7 99.4 L3.4 93.8 L5.1 94.8 L6.8 94.7 L8.5 93.3 L10.2 96.8 L11.9 95.1 L13.6 92.1 L15.3 87.6 L16.9 92.3 L18.6 92.9 L20.3 95.6 L22.0 88.7 L23.7 84.6 L25.4 89.0 L27.1 80.7 L28.8 74.3 L30.5 72.9 L32.2 72.0 L33.9 76.5 L35.6 81.3 L37.3 78.3 L39.0 81.4 L40.7 81.9 L42.4 81.2 L44.1 83.0 L45.8 78.7 L47.5 75.5 L49.2 67.9 L50.8 65.8 L52.5 62.4 L54.2 61.2 L55.9 58.1 L57.6 57.8 L59.3 59.5 L61.0 51.7 L62.7 45.6 L64.4 42.6 L66.1 41.5 L67.8 45.2 L69.5 48.6 L71.2 50.1 L72.9 53.5 L74.6 47.4 L76.3 46.9 L78.0 40.8 L79.7 41.4 L81.4 34.7 L83.1 30.7 L84.7 37.5 L86.4 39.7 L88.1 32.7 L89.8 32.4 L91.5 25.7 L93.2 27.3 L94.9 32.1 L96.6 28.7 L98.3 24.0 L100.0 26.3','M0.0 100.0 L1.7 99.4 L3.4 93.8 L5.1 94.8 L6.8 94.7 L8.5 93.3 L10.2 96.8 L11.9 95.1 L13.6 92.1 L15.3 87.6 L16.9 92.3 L18.6 92.9 L20.3 95.6 L22.0 88.7 L23.7 84.6 L25.4 89.0 L27.1 80.7 L28.8 74.3 L30.5 72.9 L32.2 72.0 L33.9 76.5 L35.6 81.3 L37.3 78.3 L39.0 81.4 L40.7 81.9 L42.4 81.2 L44.1 83.0 L45.8 78.7 L47.5 75.5 L49.2 67.9 L50.8 65.8 L52.5 62.4 L54.2 61.2 L55.9 58.1 L57.6 57.8 L59.3 59.5 L61.0 51.7 L62.7 45.6 L64.4 42.6 L66.1 41.5 L67.8 45.2 L69.5 48.6 L71.2 50.1 L72.9 53.5 L74.6 47.4 L76.3 46.9 L78.0 40.8 L79.7 41.4 L81.4 34.7 L83.1 30.7 L84.7 37.5 L86.4 39.7 L88.1 32.7 L89.8 32.4 L91.5 25.7 L93.2 27.3 L94.9 32.1 L96.6 28.7 L98.3 24.0 L100.0 26.3 L100 100 L0 100Z']};
+var bs=document.querySelectorAll('.rng button');
+bs.forEach(function(b){b.addEventListener('click',function(){bs.forEach(function(x){x.setAttribute('aria-pressed',x===b)});var d=D[b.dataset.r];document.getElementById('line').setAttribute('d',d[0]);document.getElementById('area').setAttribute('d',d[1])})});
+document.querySelectorAll('a[href="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault()})});})();
+</script></body></html>
