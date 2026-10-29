@@ -24,9 +24,4 @@
   X-Robots-Tag: noindex, nofollow, noarchive
 
 
-/p-mt7g3x/
-  X-Robots-Tag: noindex, nofollow, noarchive
-  Cache-Control: no-store
 
-/p-mt7g3x/*
-  X-Robots-Tag: noindex, nofollow, noarchive
