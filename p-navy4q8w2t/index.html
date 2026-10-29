@@ -148,7 +148,7 @@ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:T
 scene.add(new THREE.Points(g,mat));
 const dg=new THREE.BufferGeometry(),dp=new Float32Array(4500);for(let i=0;i<dp.length;i++)dp[i]=(Math.random()-.5)*60;
 dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
-scene.add(new THREE.Points(dg,new THREE.PointsMaterial({color:0x6d7f9e,size:0.03,transparent:true,opacity:0.3})));
+scene.add(new THREE.Points(dg,new THREE.PointsMaterial({color:0x8a9bb8,size:0.034,transparent:true,opacity:0.45})));
 const comp=new EffectComposer(renderer);comp.addPass(new RenderPass(scene,cam));
 comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.85,0.618,0.0));
 let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
