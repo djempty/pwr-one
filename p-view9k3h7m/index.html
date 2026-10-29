@@ -55,6 +55,15 @@
 }
 .navr{transform:translateZ(0);will-change:transform;isolation:isolate}.navr .btn,.navr a .btn,.navr span{transition:none!important}.navr a{display:inline-block;margin-left:34px;cursor:pointer;line-height:1;transform:translateZ(0);backface-visibility:hidden}.navr a .btn{backface-visibility:hidden;-webkit-font-smoothing:antialiased}.navr a .btn{display:inline-block;margin-left:0}.navr a:hover .btn{background:#b08d4f;color:#0e1f3c}
 @media(max-width:600px){.navr a{display:none!important}}
+@view-transition{navigation:auto}
+.mk{view-transition-name:pmk}.foot{view-transition-name:pfoot}
+::view-transition-group(pmk),::view-transition-group(pfoot){animation:none}
+::view-transition-old(pmk),::view-transition-new(pmk),::view-transition-old(pfoot),::view-transition-new(pfoot){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){animation:vtout 1s cubic-bezier(.382,0,.618,1) both}
+::view-transition-new(root){animation:vtin 1s cubic-bezier(.382,0,.618,1) both}
+@keyframes vtout{to{opacity:0}}@keyframes vtin{from{opacity:0}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+.leaving .copy,.leaving .navr{visibility:hidden!important}
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 <!-- navy-aligned-v10 --></head><body>
@@ -177,4 +186,5 @@ function frame(){
   comp.render(); if(!reduce) requestAnimationFrame(frame);
 }
 frame();
-</script></body></html>
+</script><script>document.querySelectorAll('a[href="login/"]').forEach(a=>a.addEventListener('click',e=>{if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();document.documentElement.classList.add('leaving');requestAnimationFrame(()=>requestAnimationFrame(()=>location.href=a.href))}));addEventListener('pageshow',()=>document.documentElement.classList.remove('leaving'));</script>
+</body></html>
