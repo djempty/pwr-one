@@ -81,7 +81,7 @@ body>*:not(.mk):not(.foot){animation:pin .618s .382s ease both}
 @keyframes pin{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){body,body>*:not(.mk):not(.foot){animation:none}}
 @view-transition{navigation:auto}
-.mk{view-transition-name:pmk}.foot{view-transition-name:pfoot}
+.mk{view-transition-name:pmk}.foot{view-transition-name:pfoot;width:max-content!important;max-width:none!important}
 ::view-transition-group(pmk),::view-transition-group(pfoot){animation:none}
 ::view-transition-old(pmk),::view-transition-new(pmk),::view-transition-old(pfoot),::view-transition-new(pfoot){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){animation:vtout 1s cubic-bezier(.382,0,.618,1) both}
