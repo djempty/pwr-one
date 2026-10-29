@@ -80,14 +80,6 @@ body{animation:pfade 1s cubic-bezier(.382,0,.618,1) both}
 body>*:not(.mk):not(.foot){animation:pin .618s .382s ease both}
 @keyframes pin{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){body,body>*:not(.mk):not(.foot){animation:none}}
-@view-transition{navigation:auto}
-.mk{view-transition-name:pmk}.foot{view-transition-name:pfoot;width:max-content!important;max-width:none!important}
-::view-transition-group(pmk),::view-transition-group(pfoot){animation:none}
-::view-transition-old(pmk),::view-transition-new(pmk),::view-transition-old(pfoot),::view-transition-new(pfoot){animation:none;mix-blend-mode:normal}
-::view-transition-old(root){animation:vtout 1s cubic-bezier(.382,0,.618,1) both}
-::view-transition-new(root){animation:vtin 1s cubic-bezier(.382,0,.618,1) both}
-@keyframes vtout{to{opacity:0}}@keyframes vtin{from{opacity:0}}
-@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
 .vt body,.vt body>*{animation:none!important}
 </style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
