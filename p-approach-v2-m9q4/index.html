@@ -84,6 +84,10 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
 .rule{display:block;height:1px;width:89px;background:var(--gold);margin:34px 0 0;transform-origin:left}
 .mask{width:100%;max-width:521px;margin:0 auto;display:block;overflow:visible}
 .mask .ol{fill:none;stroke:#b08d4f;stroke-width:.5}
+.v3{position:relative;width:100%;max-width:521px;margin:0 auto;aspect-ratio:1;background:var(--navy);overflow:hidden}
+.v3 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%;opacity:.78}
+.v3::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(14,31,60,.1) 0,rgba(14,31,60,.62) 100%)}
+#mark3d{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
 .tall{aspect-ratio:3/4;max-height:80vh;width:100%;margin:0 auto}
 .wide4{aspect-ratio:4/3;width:100%}
 /* engine + stats band */
@@ -143,8 +147,9 @@ html.mo .in .mz{transform:none;transition:transform 1.8s cubic-bezier(.19,1,.22,
 html.mo .mask .ol{stroke-dasharray:1;stroke-dashoffset:1}
 html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke-dashoffset 2.4s cubic-bezier(.65,0,.35,1) .382s}
 @media(max-width:900px){
+ .v3{max-width:377px}
  .sec .wrap,.sec.a .wrap,.sec.b .wrap{grid-template-columns:1fr;gap:34px}
- .sec.rev .ph,.sec.rev .mask{order:-1}
+ .sec.rev .ph,.sec.rev .v3{order:-1}
  .stats{grid-template-columns:1fr 1fr;gap:34px 21px;margin-top:55px}
  .tall{max-height:none;max-width:377px}
 }
@@ -179,7 +184,7 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
 
 <section class="sec lt a rev" id="vision"><div class="wrap">
  <div class="tx"><div class="k rv">01 · Vision</div><h2 data-split>Ego out.</h2><p class="rv">Markets punish emotion. Fear, greed and gut conviction are the most expensive inputs in investing, and Polarity is built to take them out of the room. Every decision is driven by strict but adaptable rules written in code, not by a hunch or a headline. The goal is simple: a better quality of life for our members, earned together through shared discipline.</p><i class="rule rl"></i></div>
- <svg class="mask rv" viewBox="0 0 100 100" role="img" aria-label="A lone figure at the edge of still water at dawn, seen through the golden-section split circle"><defs><mask id="sm" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100"><g class="mz"><path fill="#fff" d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" transform="translate(-3.5,5.84)"/><path fill="#fff" d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" transform="translate(3.5,-5.84)"/></g></mask></defs><image href="img/vision-dawn.webp" x="-4" y="-4" width="108" height="108" preserveAspectRatio="xMidYMid slice" mask="url(#sm)"/><g class="olg"><path class="ol" pathLength="1" d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" transform="translate(-3.5,5.84)"/><path class="ol" pathLength="1" d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" transform="translate(3.5,-5.84)"/></g></svg>
+ <div class="v3 rv" role="img" aria-label="A lone figure at the edge of still water at dawn, with the Polarity golden-section mark turning in light above it"><img src="img/vision-dawn.webp" width="876" height="1200" alt="" loading="lazy" decoding="async"><canvas id="mark3d" aria-hidden="true"></canvas></div>
 </div></section>
 
 <section class="band eng" id="engine">
@@ -256,30 +261,32 @@ addEventListener('pageshow',function(){h.classList.remove('mm-lock')});
 var hero=document.getElementById('top'),ctx=cv.getContext('2d'),HZ=0.5957,IA=1344/768,
  rm=matchMedia('(prefers-reduced-motion: reduce)').matches,
  W=0,H=0,dpr=1,hz=0,N=0,bx,by,bvx,bvy,off=document.createElement('canvas'),octx=off.getContext('2d'),
- grid=new Map(),vis=true,tabv=!document.hidden,run=false,last=0,t=0,sy=0,sv=0,lastY=window.pageYOffset||0,
- ft=0,fn=0,ox,oy;
+ vis=true,tabv=!document.hidden,run=false,last=0,t=0,sy=0,sv=0,lastY=window.pageYOffset||0,
+ ft=0,fn=0,ox,oy,cf=.5,wd=0,gc=1,gr=1,gh=new Int32Array(1),gn=new Int32Array(1),CS=46;
 function layout(){var r=hero.getBoundingClientRect();W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
  dpr=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
  var sc=Math.max(W/IA/H>=1?W/(H*IA):1,1),ih,dh;dh=Math.max(H,W/IA);hz=(H-dh)/2+HZ*dh;
  off.width=Math.max(1,Math.round(W*dpr*.5));off.height=Math.max(1,Math.round(hz*dpr*.5));
- var want=W<700?420:Math.min(1000,Math.round(W*H/1500));
+ var want=W<700?560:Math.min(1340,Math.round(W*H/1080));
+ cf=.5+.2*(W<700?0:Math.max(0,Math.min(1,(W/H-1)/.5)));wd=cf>.5?(cf-.5)/.2:0;
+ gc=Math.ceil(W/CS)+3;gr=Math.ceil(hz/CS)+3;gh=new Int32Array(gc*gr);
  if(want!==N)seed(want)}
-function seed(n){N=n;bx=new Float32Array(n);by=new Float32Array(n);bvx=new Float32Array(n);bvy=new Float32Array(n);ox=new Float32Array(n);oy=new Float32Array(n);
- for(var i=0;i<n;i++){var a=Math.random()*6.283,r=Math.sqrt(-2*Math.log(Math.random()+1e-6))*.45;ox[i]=Math.cos(a)*r;oy[i]=Math.sin(a)*r;bx[i]=W*.62+ox[i]*W*.2;by[i]=hz*.62+oy[i]*hz*.1;var v=Math.random()*6.283;bvx[i]=Math.cos(v)*1.5;bvy[i]=Math.sin(v)*1.5}}
+function seed(n){N=n;gn=new Int32Array(n);bx=new Float32Array(n);by=new Float32Array(n);bvx=new Float32Array(n);bvy=new Float32Array(n);ox=new Float32Array(n);oy=new Float32Array(n);
+ for(var i=0;i<n;i++){var a=Math.random()*6.283,r=Math.sqrt(-2*Math.log(Math.random()+1e-6))*.45;ox[i]=Math.cos(a)*r;oy[i]=Math.sin(a)*r;bx[i]=W*cf+ox[i]*W*(.2-.07*wd);by[i]=hz*.62+oy[i]*hz*.1;var v=Math.random()*6.283;bvx[i]=Math.cos(v)*1.5;bvy[i]=Math.sin(v)*1.5}}
 function prog(){var y=window.pageYOffset||0;return Math.max(0,Math.min(1.5,y/Math.max(1,H*.9)))}
-var CS=46;
 function step(k){
  var p=rm?0:prog(),spd=1.5+Math.min(3,sv*.06),a=t*.11+p*5.2,
-  tx=W*(.6+.17*Math.sin(a)),ty=hz*(.62+.1*Math.sin(a*1.31+1)),
-  pull=.0007,sp=1+Math.min(1.5,p)*.9,rot=t*.17+p*2.6,cr=Math.cos(rot),sr=Math.sin(rot),shx=Math.max(W*.2,120)*sp,shy=hz*.11*(1+.5*Math.sin(t*.23+p*3)),
+  tx=W*(cf+(.17-.08*wd)*Math.sin(a)),ty=hz*(.62+.1*Math.sin(a*1.31+1)),
+  pull=.0007,sp=1+Math.min(1.5,p)*.9*(1-.5*wd),rot=t*.17+p*2.6,cr=Math.cos(rot),sr=Math.sin(rot),shx=Math.max(W*(.2-.06*wd),120)*sp,shy=hz*.11*(1+.5*Math.sin(t*.23+p*3)),
   ceil=hz*.08,floor=hz-hz*.04,i,j;
- grid.clear();
- for(i=0;i<N;i++){var key=((bx[i]/CS)|0)*4096+((by[i]/CS)|0),c=grid.get(key);if(c)c.push(i);else grid.set(key,[i])}
+ gh.fill(-1);
+ for(i=0;i<N;i++){var gx0=Math.min(gc-1,Math.max(0,(bx[i]/CS)|0)),gy0=Math.min(gr-1,Math.max(0,(by[i]/CS)|0)),k0=gx0*gr+gy0;gn[i]=gh[k0];gh[k0]=i}
  var iv=1/(spd*spd);
  for(i=0;i<N;i++){
   var x=bx[i],y=by[i],cx=(x/CS)|0,cy=(y/CS)|0,ax=0,ay=0,cox=0,coy=0,sx=0,sy2=0,n=0,dx,dy,d2;
-  for(var gx=cx-1;gx<=cx+1&&n<9;gx++)for(var gy=cy-1;gy<=cy+1&&n<9;gy++){var c=grid.get(gx*4096+gy);if(!c)continue;
-   for(var q=0;q<c.length&&n<9;q++){j=c[q];if(j===i)continue;dx=bx[j]-x;dy=by[j]-y;d2=dx*dx+dy*dy;if(d2>CS*CS)continue;
+  cx=Math.min(gc-1,Math.max(0,cx));cy=Math.min(gr-1,Math.max(0,cy));
+  for(var gx=Math.max(0,cx-1);gx<=cx+1&&gx<gc&&n<9;gx++)for(var gy=Math.max(0,cy-1);gy<=cy+1&&gy<gr&&n<9;gy++){
+   for(j=gh[gx*gr+gy];j>=0&&n<9;j=gn[j]){if(j===i)continue;dx=bx[j]-x;dy=by[j]-y;d2=dx*dx+dy*dy;if(d2>CS*CS)continue;
     n++;ax+=bvx[j];ay+=bvy[j];cox+=dx;coy+=dy;if(d2<110){sx-=dx/(d2+4);sy2-=dy/(d2+4)}}}
   var fx=0,fy=0;
   if(n){fx+=(ax/n-bvx[i])*.06+cox/n*.0005+sx*5;fy+=(ay/n-bvy[i])*.06+coy/n*.0005+sy2*5}
@@ -317,6 +324,49 @@ else{for(var i=0;i<120;i++)step(1);
  addEventListener('resize',function(){layout()});
  if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting;go()}).observe(hero);
  document.addEventListener('visibilitychange',function(){tabv=!document.hidden;go()});go()}
+})();
+
+/* ---- 3D golden-section mark (scroll-driven turn, canvas 2D, no libraries) ---- */
+(function(){var cv=document.getElementById('mark3d');if(!cv||!cv.getContext)return;
+var sec=document.getElementById('vision'),ctx=cv.getContext('2d'),
+ rm=matchMedia('(prefers-reduced-motion: reduce)').matches,
+ S=0,dpr=1,vis=false,run=false,tick=false,th=0,t=0,spr=[],ft=0,fn=0,N=0,X,Y,Z,C,A,Ph,Sz;
+function rnd(){return Math.random()}
+/* brand mark in logo units, centred: ivory = large segment (x<=9.44) offset (-3.5,5.84); gold = small segment offset (3.5,-5.84) */
+function build(){var pts=[],R=40,CX=9.44,T=4.6,i,x,y,u,r,a,half;
+ function add(px,py,pz,gold,al,sz){var o=gold?[3.5,-5.84]:[-3.5,5.84];pts.push([px+o[0],py+o[1],pz,gold?1:0,gold?Math.min(1,al*1.25):al,sz])}
+ function disc(gold){for(;;){r=R*Math.sqrt(rnd());a=rnd()*6.2832;x=r*Math.cos(a);y=r*Math.sin(a);if(gold?x>CX:x<=CX)return[x,y]}}
+ for(i=0;i<1900;i++){half=rnd()<.62?0:1;var g=disc(half);add(g[0],g[1],T,half,.95,1)}              /* front face (denser) */
+ for(i=0;i<350;i++){half=rnd()<.62?0:1;var g=disc(half);add(g[0],g[1],-T,half,.7,.9)}           /* back face */
+ for(i=0;i<200;i++){half=rnd()<.62?0:1;var g=disc(half);add(g[0],g[1],(rnd()*2-1)*T,half,.22,.75)} /* body haze */
+ for(i=0;i<750;i++){half=rnd()<.62?0:1;var tt;/* rim: arc + chord */
+  if(rnd()<.8){for(;;){a=rnd()*6.2832;x=R*Math.cos(a);y=R*Math.sin(a);if(half?x>CX:x<=CX)break}}else{x=CX;y=(rnd()*2-1)*Math.sqrt(R*R-CX*CX)}
+  add(x,y,(rnd()*2-1)*T,half,.85,.95)}
+ N=pts.length;X=new Float32Array(N);Y=new Float32Array(N);Z=new Float32Array(N);C=new Uint8Array(N);A=new Float32Array(N);Sz=new Float32Array(N);Ph=new Float32Array(N);
+ for(i=0;i<N;i++){X[i]=pts[i][0];Y[i]=pts[i][1];Z[i]=pts[i][2];C[i]=pts[i][3];A[i]=pts[i][4];Sz[i]=pts[i][5];Ph[i]=rnd()*6.283}
+}
+function sprite(rgb){var c=document.createElement('canvas');c.width=c.height=64;var g=c.getContext('2d'),gr=g.createRadialGradient(32,32,0,32,32,32);
+ gr.addColorStop(0,'rgba(255,252,246,1)');gr.addColorStop(.18,'rgba('+rgb+',.95)');gr.addColorStop(.5,'rgba('+rgb+',.28)');gr.addColorStop(1,'rgba('+rgb+',0)');g.fillStyle=gr;g.fillRect(0,0,64,64);return c}
+function layout(){var r=cv.getBoundingClientRect();S=Math.max(1,Math.round(r.width));dpr=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(S*dpr);cv.height=Math.round(S*dpr)}
+function angle(){var r=sec.getBoundingClientRect(),vh=window.innerHeight,q=((r.top+r.height/2)-vh/2)/(vh/2+r.height/2);q=Math.max(-1,Math.min(1,q));
+ var m=Math.max(0,Math.abs(q)-.08)/.92;return -(q<0?-1:1)*m*2.0944}   /* 0 when centred; -120deg entering, +120deg leaving */
+function draw(){var t0=performance.now();
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,S,S);ctx.globalCompositeOperation='lighter';
+ var c=Math.cos(th),s=Math.sin(th),D=3.4*40,k=S*.36/40,half=S/2,i;
+ for(i=0;i<N;i++){var x=X[i],z=Z[i],xr=x*c+z*s,zr=-x*s+z*c,f=D/(D-zr),px=half+xr*f*k,py=half+Y[i]*f*k,
+   dep=(zr+50)/100,al=A[i]*(.45+.55*Math.max(0,Math.min(1,dep)))*(rm?1:.86+.14*Math.sin(t*1.6+Ph[i])),
+   sz=(S<420?7.4:8.6)*f*Sz[i]*(.8+.35*dep);
+  ctx.globalAlpha=Math.min(1,al);
+  ctx.drawImage(spr[C[i]],px-sz/2,py-sz/2,sz,sz)}
+ ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+ ft+=performance.now()-t0;if(++fn===30){window.__markMs=ft/fn;ft=0;fn=0}}
+function frame(now){if(!run)return;t=now/1000;th=rm?0:angle();draw();requestAnimationFrame(frame)}
+function go(){var w=vis&&!document.hidden&&!rm;if(w&&!run){run=true;requestAnimationFrame(frame)}else if(!w)run=false}
+spr=[sprite('248,244,239'),sprite('176,141,79')];build();layout();th=0;draw();window.__markN=N;
+if(!rm){addEventListener('resize',function(){layout()});
+ if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting;go()},{rootMargin:'80px'}).observe(sec);else{vis=true;go()}
+ document.addEventListener('visibilitychange',go)}
+else addEventListener('resize',function(){layout();draw()});
 })();
 </script>
 </body></html>
