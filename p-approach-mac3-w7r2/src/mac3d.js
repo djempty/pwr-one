@@ -94,7 +94,7 @@ export function createMac(opts){
   sun.shadow.radius=phone?6:10; sun.shadow.bias=-.0006; sun.shadow.normalBias=1.5; G.add(sun,sun.target);
   var fill=new T.DirectionalLight(0xdfe6ff,.6); fill.position.set(700,300,300); G.add(fill);
   // contact shadow
-  var RSH=110, CS=1300, RS=phone?256:512;
+  var RSH=120, RSO=1.0, FSO=.05, CS=1300, RS=phone?256:512;
   var rtA=new T.WebGLRenderTarget(RS,RS),rtB=new T.WebGLRenderTarget(RS,RS);
   var cc=new T.OrthographicCamera(-CS/2,CS/2,CS/2,-CS/2,0,700); cc.rotation.x=Math.PI/2; cc.position.y=FLOOR; G.add(cc);
   var depthMat=new T.MeshDepthMaterial(); depthMat.userData.dark={value:3.2};
@@ -103,9 +103,9 @@ export function createMac(opts){
   var blurMat=new T.ShaderMaterial({uniforms:{t:{value:null},d:{value:new T.Vector2()}},vertexShader:'varying vec2 u;void main(){u=uv;gl_Position=vec4(position.xy,0.,1.);}',
    fragmentShader:'uniform sampler2D t;uniform vec2 d;varying vec2 u;void main(){float a=0.;float w=0.;for(int i=-6;i<=6;i++){float k=exp(-float(i*i)/14.);a+=texture2D(t,u+d*float(i)).a*k;w+=k;}gl_FragColor=vec4(0.,0.,0.,a/w);}',depthTest:false,depthWrite:false});
   var bq=new T.Mesh(new T.PlaneGeometry(2,2),blurMat),bs=new T.Scene();bs.add(bq);var bcam=new T.Camera();
-  var cplane=new T.Mesh(new T.PlaneGeometry(CS,CS),new T.MeshBasicMaterial({map:rtA.texture,transparent:true,opacity:.7,depthWrite:false,toneMapped:false}));
+  var cplane=new T.Mesh(new T.PlaneGeometry(CS,CS),new T.MeshBasicMaterial({map:rtA.texture,transparent:true,opacity:FSO,depthWrite:false,toneMapped:false}));
   cplane.rotation.x=-Math.PI/2;cplane.position.y=FLOOR+.2;cplane.renderOrder=-1;G.add(cplane);
-  var cplane2=new T.Mesh(cplane.geometry,new T.MeshBasicMaterial({map:rtA.texture,transparent:true,opacity:.7,depthWrite:false,toneMapped:false}));
+  var cplane2=new T.Mesh(cplane.geometry,new T.MeshBasicMaterial({map:rtA.texture,transparent:true,opacity:RSO,depthWrite:false,toneMapped:false}));
   cplane2.rotation.x=-Math.PI/2;cplane2.position.set(RSH,FLOOR+.15,0);cplane2.renderOrder=-1;G.add(cplane2);
   var hid=[ground,cplane,cplane2];
   function contact(){
@@ -138,6 +138,7 @@ export function createMac(opts){
     lid.rotation.x=-ph*Math.PI/180;
     G.updateMatrixWorld(true);
     qq.copy(G.quaternion).invert(); scene.environmentRotation.setFromQuaternion(qq);
+    var k=.79/u; cc.zoom=k; cc.far=700/k; cc.updateProjectionMatrix();
     contact(); renderer.render(scene,cam);
   }
   size();
