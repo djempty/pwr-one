@@ -23,9 +23,9 @@
 .foot{position:fixed;left:55px;bottom:34px;color:#5d6a80;font-size:11px;letter-spacing:3px;z-index:2;font-family:Helvetica,Arial,sans-serif}
 @media(max-width:900px){.copy{width:calc(100vw - 110px)}}
 @media(max-width:600px){
-  .navr{right:21px;top:0;height:80px}
+  .navr{right:max(11px,env(safe-area-inset-right));top:env(safe-area-inset-top);height:76px}
   .navr span{display:none}
-  .navr .hb{display:block;color:#f8f4ef;cursor:default;transition:color .25s}
+  .navr .hb{display:flex;align-items:center;justify-content:center;width:54px;height:76px;margin:0;color:#f8f4ef;cursor:default;transition:color .25s}
   .navr .hb svg{display:block;fill:currentColor}
   .navr .hb:hover{color:#b08d4f}
   .copy{left:21px;right:21px;top:34%;width:auto;max-width:none}
