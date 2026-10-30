@@ -99,8 +99,8 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
 .eng .shade{background:linear-gradient(180deg,rgba(14,31,60,.7) 0,rgba(14,31,60,.78) 55%,rgba(14,31,60,.94) 100%)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0 34px;margin-top:89px}
 .st{position:relative;padding-top:34px}
-.gr{position:absolute;left:0;top:0;right:0;height:1px;background:rgba(248,244,239,.28);transform-origin:left}
-.gr::after{content:"";position:absolute;left:0;top:0;width:34px;height:1px;background:var(--gold);height:2px;top:-1px;transition:width .5s}
+.sr{position:absolute;left:0;top:0;right:0;height:1px;background:rgba(248,244,239,.28);transform-origin:left}
+.sr::after{content:"";position:absolute;left:0;top:0;width:34px;height:1px;background:var(--gold);height:2px;top:-1px;transition:width .5s}
 .st b{display:block;font-size:clamp(24px,2.6vw,38px);line-height:1.15;color:var(--ivory);font-weight:700}
 .st:first-child b{color:var(--gold)}
 .st>span{display:block;margin-top:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(248,244,239,.78);line-height:1.6}
@@ -128,7 +128,7 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
  .cta:hover{background:transparent;color:var(--ivory);transform:translateY(-3px)}
  .cta.ghost:hover{background:var(--gold);color:var(--navy)}
  .mm a:not([aria-current]):hover{color:var(--ivory)}
- .st:hover .gr::after{width:100%}
+ .st:hover .sr::after{width:100%}
  .ph.in img{transition:transform 1.2s cubic-bezier(.382,0,.618,1)}
  .ph.in:hover img{transform:scale(1.045)}
  .k::before{transition:width .5s}.sec:hover .k::before{width:55px}
@@ -241,10 +241,10 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
   <div class="k rv">02 · The Engine</div><h2 data-split>Discipline in.</h2>
   <p class="rv">Polarity runs an algorithmic strategy trained on more than five years of historical market data and refined through billions of simulations. It looks for recurring patterns, then acts only when an index, ETF or individual stock meets its conditions. Positions combine short-duration options strategies with longer-term holdings, and the model keeps evolving as markets do.</p>
   <div class="stats" data-stagger>
-   <div class="st rv"><i class="gr rl"></i><b><span data-count="5">5</span>+ years</b><span>historical data</span></div>
-   <div class="st rv"><i class="gr rl"></i><b>Billions</b><span>of simulations</span></div>
-   <div class="st rv"><i class="gr rl"></i><b>Indexes · ETFs · Equities</b><span>what it trades</span></div>
-   <div class="st rv"><i class="gr rl"></i><b>Short + long</b><span>options strategies and longer-term positions</span></div>
+   <div class="st rv"><i class="sr rl"></i><b><span data-count="5">5</span>+ years</b><span>historical data</span></div>
+   <div class="st rv"><i class="sr rl"></i><b>Billions</b><span>of simulations</span></div>
+   <div class="st rv"><i class="sr rl"></i><b>Indexes · ETFs · Equities</b><span>what it trades</span></div>
+   <div class="st rv"><i class="sr rl"></i><b>Short + long</b><span>options strategies and longer-term positions</span></div>
   </div>
  </div>
 </section>
