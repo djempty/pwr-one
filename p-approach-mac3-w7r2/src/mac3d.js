@@ -88,25 +88,28 @@ export function createMac(opts){
   var FLOOR=-20.3;
   var ground=new T.Mesh(new T.PlaneGeometry(2400,2400),new T.ShadowMaterial({opacity:.2,color:0x0f121a}));
   var gm=ground.material;gm.onBeforeCompile=function(sh){sh.vertexShader='varying vec2 gp;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ngp=position.xy;');sh.fragmentShader='varying vec2 gp;\n'+sh.fragmentShader.replace('#include <fog_fragment>','#include <fog_fragment>\ngl_FragColor.a*=1.0-smoothstep(330.0,590.0,length(gp));')};
-  ground.rotation.x=-Math.PI/2;ground.position.y=FLOOR;ground.receiveShadow=true;G.add(ground);
+  dith(gm);ground.rotation.x=-Math.PI/2;ground.position.y=FLOOR;ground.receiveShadow=true;G.add(ground);
   var sun=new T.DirectionalLight(0xffffff,2.2); sun.position.set(-260,1500,420); sun.target.position.set(0,0,0);
   sun.castShadow=true; var ss=phone?1024:2048; sun.shadow.mapSize.set(ss,ss); var sc=sun.shadow.camera; sc.left=-900;sc.right=900;sc.top=900;sc.bottom=-900;sc.near=200;sc.far=2600;
   sun.shadow.radius=phone?6:10; sun.shadow.bias=-.0006; sun.shadow.normalBias=1.5; G.add(sun,sun.target);
   var fill=new T.DirectionalLight(0xdfe6ff,.6); fill.position.set(700,300,300); G.add(fill);
   // contact shadow
   var TSO=.5, BSO=.8, CS=1300, RS=phone?256:512;
-  var rtA=new T.WebGLRenderTarget(RS,RS),rtB=new T.WebGLRenderTarget(RS,RS),rtC=new T.WebGLRenderTarget(RS,RS);
+  var hf=!!(renderer.extensions.has('EXT_color_buffer_half_float')||renderer.extensions.has('EXT_color_buffer_float'));var rto={type:hf?T.HalfFloatType:T.UnsignedByteType,minFilter:T.LinearFilter,magFilter:T.LinearFilter,depthBuffer:false};
+  var rtA=new T.WebGLRenderTarget(RS,RS,rto),rtB=new T.WebGLRenderTarget(RS,RS,rto),rtC=new T.WebGLRenderTarget(RS,RS,rto);
+  var DITH='float ign=fract(52.9829189*fract(dot(gl_FragCoord.xy,vec2(0.06711056,0.00583715))));float ign2=fract(ign+0.618034*mod(gl_FragCoord.x+gl_FragCoord.y,7.0));gl_FragColor.a=clamp(gl_FragColor.a+(ign-0.5+ign2-0.5)*0.5/255.0,0.0,1.0);';
+  function dith(m){var o=m.onBeforeCompile;m.onBeforeCompile=function(sh){if(o)o(sh);sh.fragmentShader=sh.fragmentShader.replace(/}\s*$/,DITH+'\n}')}}
   var cc=new T.OrthographicCamera(-CS/2,CS/2,CS/2,-CS/2,0,700); cc.rotation.x=Math.PI/2; cc.position.y=FLOOR; G.add(cc);
   var depthMat=new T.MeshDepthMaterial(); depthMat.userData.dark={value:3.2};
   depthMat.onBeforeCompile=function(s){s.uniforms.dark=depthMat.userData.dark;s.fragmentShader='uniform float dark;\n'+s.fragmentShader.replace('gl_FragColor = vec4( vec3( 1.0 - fragCoordZ ), opacity );','gl_FragColor = vec4( vec3( 0.0 ), ( 1.0 - fragCoordZ ) * dark );')};
   depthMat.depthTest=false;depthMat.depthWrite=false;
   var blurMat=new T.ShaderMaterial({uniforms:{t:{value:null},d:{value:new T.Vector2()}},vertexShader:'varying vec2 u;void main(){u=uv;gl_Position=vec4(position.xy,0.,1.);}',
-   fragmentShader:'uniform sampler2D t;uniform vec2 d;varying vec2 u;void main(){float a=0.;float w=0.;for(int i=-6;i<=6;i++){float k=exp(-float(i*i)/14.);a+=texture2D(t,u+d*float(i)).a*k;w+=k;}gl_FragColor=vec4(0.,0.,0.,a/w);}',depthTest:false,depthWrite:false});
+   fragmentShader:'uniform sampler2D t;uniform vec2 d;varying vec2 u;void main(){float a=0.;float w=0.;for(int i=-12;i<=12;i++){float x=float(i)*.5;float k=exp(-x*x/14.);a+=texture2D(t,u+d*x).a*k;w+=k;}gl_FragColor=vec4(0.,0.,0.,a/w);}',depthTest:false,depthWrite:false});
   var bq=new T.Mesh(new T.PlaneGeometry(2,2),blurMat),bs=new T.Scene();bs.add(bq);var bcam=new T.Camera();
   var cplane=new T.Mesh(new T.PlaneGeometry(CS,CS),new T.MeshBasicMaterial({map:rtA.texture,transparent:true,opacity:BSO,depthWrite:false,toneMapped:false}));
-  cplane.rotation.x=-Math.PI/2;cplane.position.y=FLOOR+.1;cplane.renderOrder=-2;G.add(cplane);
+  dith(cplane.material);cplane.rotation.x=-Math.PI/2;cplane.position.y=FLOOR+.1;cplane.renderOrder=-2;G.add(cplane);
   var cplane2=new T.Mesh(cplane.geometry,new T.MeshBasicMaterial({map:rtC.texture,transparent:true,opacity:TSO,depthWrite:false,toneMapped:false}));
-  cplane2.rotation.x=-Math.PI/2;cplane2.position.y=FLOOR+.2;cplane2.renderOrder=-1;G.add(cplane2);
+  dith(cplane2.material);cplane2.rotation.x=-Math.PI/2;cplane2.position.y=FLOOR+.2;cplane2.renderOrder=-1;G.add(cplane2);
   var hid=[ground,cplane,cplane2];
   function contact(){
     hid.forEach(function(o){o.visible=false});var bgc=scene.background;var rt0=renderer.getRenderTarget();var ca=renderer.getClearAlpha();
@@ -129,13 +132,13 @@ export function createMac(opts){
 
   // ---- sizing + pose (mirrors the CSS transform chain)
   var W=1,H=1;
-  var PAD=0,PADR=0; // extra canvas rows below the frame so the ground shadow fades out fully (view offset keeps the laptop's placement identical)
-  function size(){W=host.clientWidth;H=host.clientHeight;PAD=Math.round(H*.45);PADR=Math.round(W*.42);renderer.setSize(W+PADR,H+PAD,false);cv.style.width=(W+PADR)+'px';cv.style.height=(H+PAD)+'px'}
+  var PAD=0,PADR=0,PADL=0; // extra canvas rows below the frame so the ground shadow fades out fully (view offset keeps the laptop's placement identical)
+  function size(){W=host.clientWidth;H=host.clientHeight;PAD=Math.round(H*.45);PADR=Math.round(W*.42);PADL=Math.round(W*.2);renderer.setSize(W+PADL+PADR,H+PAD,false);cv.style.width=(W+PADL+PADR)+'px';cv.style.height=(H+PAD)+'px';cv.style.left=(-PADL)+'px'}
   var ev=new T.Euler(),qq=new T.Quaternion();
   function pose(p,u,ty){ // p 0..1, u scale, ty = css translateY px
     function cl(x){return x<0?0:x>1?1:x}function eo(x){return 1-Math.pow(1-x,3)}function io(x){return x*x*(3-2*x)}
     var a=eo(p),ry=-88+60*a,rx=38-20*a,ph=-82+97*io(cl((p-.08)/.8));
-    var d=2600*u/.84; cam.fov=2*Math.atan(H/2/d)*180/Math.PI; cam.aspect=W/H; cam.position.set(0,0,d); cam.lookAt(0,0,0); cam.setViewOffset(W,H,0,0,W+PADR,H+PAD); cam.updateProjectionMatrix();
+    var d=2600*u/.84; cam.fov=2*Math.atan(H/2/d)*180/Math.PI; cam.aspect=W/H; cam.position.set(0,0,d); cam.lookAt(0,0,0); cam.setViewOffset(W,H,-PADL,0,W+PADL+PADR,H+PAD); cam.updateProjectionMatrix();
     G.position.set(0,-ty,0); G.scale.setScalar(u); G.rotation.set(rx*Math.PI/180,ry*Math.PI/180,0,'XYZ');
     lid.rotation.x=-ph*Math.PI/180;
     G.updateMatrixWorld(true);
