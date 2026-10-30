@@ -92,6 +92,11 @@ h1{font-weight:400;font-size:40px;line-height:1.15;margin:13px 0 34px;letter-spa
 @media(prefers-reduced-motion:reduce){.mm,.hb{transition:none!important}}
 
 .mm:not(.open){display:none!important}
+@media(max-width:900px){
+ /* iOS-safe: content scrolls in its own container under the pinned header, independent of document scroll */
+ html,body{height:100%;overflow:hidden}
+ main{position:fixed;left:0;right:0;bottom:0;top:calc(var(--bar) + env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-top:34px!important}
+}
 </style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <header class="bar"><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
