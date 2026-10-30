@@ -94,7 +94,7 @@ export function createMac(opts){
   sun.shadow.radius=phone?6:10; sun.shadow.bias=-.0006; sun.shadow.normalBias=1.5; G.add(sun,sun.target);
   var fill=new T.DirectionalLight(0xdfe6ff,.6); fill.position.set(700,300,300); G.add(fill);
   // contact shadow
-  var TSO=.85, BSO=.42, CS=1300, RS=phone?256:512;
+  var TSO=.5, BSO=.8, CS=1300, RS=phone?256:512;
   var rtA=new T.WebGLRenderTarget(RS,RS),rtB=new T.WebGLRenderTarget(RS,RS),rtC=new T.WebGLRenderTarget(RS,RS);
   var cc=new T.OrthographicCamera(-CS/2,CS/2,CS/2,-CS/2,0,700); cc.rotation.x=Math.PI/2; cc.position.y=FLOOR; G.add(cc);
   var depthMat=new T.MeshDepthMaterial(); depthMat.userData.dark={value:3.2};
@@ -117,12 +117,12 @@ export function createMac(opts){
     var vs=[sun,fill];vs.forEach(function(l){l.visible=false});
     renderer.render(scene,cc);
     scene.overrideMaterial=null;scene.environment=env;vs.forEach(function(l){l.visible=true});renderer.shadowMap.enabled=sm;
-    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(.9/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
-    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,.9/RS);renderer.setRenderTarget(rtC);renderer.clear();renderer.render(bs,bcam);
-    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(5/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
-    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,5/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
-    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(5/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
-    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,5/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(1.7/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,1.7/RS);renderer.setRenderTarget(rtC);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(6/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,6/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(6/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,6/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
     renderer.setRenderTarget(rt0);renderer.toneMapping=tm;renderer.setClearColor(0xffffff,0);
     hid.forEach(function(o){o.visible=true});
   }
