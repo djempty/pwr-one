@@ -25,3 +25,7 @@
 
 
 
+
+/p-approach-s7k2/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
