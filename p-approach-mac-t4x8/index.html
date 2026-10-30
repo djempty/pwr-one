@@ -54,7 +54,7 @@ a{color:inherit;text-decoration:none}
 .lt .k{color:var(--navy)}.lt .k::before{background:var(--gold);height:2px}
 h1,h2{margin:0;font-weight:700;letter-spacing:0}
 .ph{position:relative;overflow:hidden;background:var(--navy)}
-.px{position:absolute;left:0;right:0;top:-16%;bottom:-16%;will-change:transform}
+.px{position:absolute;left:0;right:0;top:-20%;bottom:-20%;will-change:transform}
 .px picture,.px img,.ph>picture,.ph>picture img{display:block;width:100%;height:100%;object-fit:cover}
 .ph img{transform-origin:center}
 .shade{position:absolute;inset:0;pointer-events:none}
@@ -289,7 +289,7 @@ if(mo&&'IntersectionObserver' in w){
  function count(c){var to=+c.getAttribute('data-count'),t0=null;c.textContent='0';(function f(t){if(t0===null)t0=t;var p=Math.min(1,(t-t0)/1618);p=1-Math.pow(1-p,3);c.textContent=Math.round(to*p);if(p<1)requestAnimationFrame(f)})(performance.now())}
  var items=Array.prototype.slice.call(d.querySelectorAll('[data-par]')),tick=false;
  function par(){tick=false;var vh=w.innerHeight,r=items.map(function(e){return e.parentElement.getBoundingClientRect()});
-  items.forEach(function(e,i){var b=r[i];if(b.bottom<-89||b.top>vh+89)return;var y=-((b.top+b.height/2)-vh/2)*parseFloat(e.getAttribute('data-par'));e.style.transform='translate3d(0,'+y.toFixed(1)+'px,0)'})}
+  items.forEach(function(e,i){var b=r[i];if(b.bottom<-89||b.top>vh+89)return;var m=b.height*.19,y=Math.max(-m,Math.min(m,-((b.top+b.height/2)-vh/2)*parseFloat(e.getAttribute('data-par'))));e.style.transform='translate3d(0,'+y.toFixed(1)+'px,0)'})}
  function req(){if(!tick){tick=true;requestAnimationFrame(par)}}
  addEventListener('scroll',req,{passive:true});addEventListener('resize',req);par();
 }
