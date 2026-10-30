@@ -27,18 +27,18 @@ export function createMac(opts){
   var maxAn=renderer.capabilities.getMaxAnisotropy();
 
   // ---- materials
-  var alu=new T.MeshPhysicalMaterial({color:0xc6c4c0,metalness:1,roughness:.36,envMapIntensity:1.0,clearcoat:.12,clearcoatRoughness:.5});
-  var aluDark=new T.MeshPhysicalMaterial({color:0xc2c0bc,metalness:1,roughness:.4,envMapIntensity:1.0});
+  var alu=new T.MeshPhysicalMaterial({color:0xc5c5c4,metalness:1,roughness:.36,envMapIntensity:1.0,clearcoat:.12,clearcoatRoughness:.5});
+  var aluDark=new T.MeshPhysicalMaterial({color:0xc1c1c1,metalness:1,roughness:.4,envMapIntensity:1.0});
   var black=new T.MeshPhysicalMaterial({color:0x050506,metalness:0,roughness:.4,envMapIntensity:.05});
   var keyMat=new T.MeshPhysicalMaterial({color:0x050506,metalness:0,roughness:.72,envMapIntensity:.05});
   var well=new T.MeshStandardMaterial({color:0x0b0b0c,metalness:.1,roughness:.8});
 
   // smooth normals across shallow edges only (keeps hard creases)
-  function crease(g,ang){g=g.index?g.toNonIndexed():g;var P=g.attributes.position,n=P.count,F=new Float32Array(n*3),a=new T.Vector3(),b=new T.Vector3(),c=new T.Vector3(),e=new T.Vector3(),f=new T.Vector3();
-    for(var i=0;i<n;i+=3){a.fromBufferAttribute(P,i);b.fromBufferAttribute(P,i+1);c.fromBufferAttribute(P,i+2);e.subVectors(c,b);f.subVectors(a,b);e.cross(f).normalize();for(var k=0;k<3;k++){F[(i+k)*3]=e.x;F[(i+k)*3+1]=e.y;F[(i+k)*3+2]=e.z}}
+  function crease(g,ang,ax){g=g.index?g.toNonIndexed():g;var P=g.attributes.position,n=P.count,F=new Float32Array(n*3),FL=[],a=new T.Vector3(),b=new T.Vector3(),c=new T.Vector3(),e=new T.Vector3(),f=new T.Vector3();
+    for(var i=0;i<n;i+=3){a.fromBufferAttribute(P,i);b.fromBufferAttribute(P,i+1);c.fromBufferAttribute(P,i+2);e.subVectors(c,b);f.subVectors(a,b);e.cross(f).normalize();var flat=Math.abs(ax==='z'?e.z:e.y)>.9995;for(var k=0;k<3;k++){FL[i+k]=flat;F[(i+k)*3]=e.x;F[(i+k)*3+1]=e.y;F[(i+k)*3+2]=e.z}}
     var map={};for(i=0;i<n;i++){var key=Math.round(P.getX(i)*50)+','+Math.round(P.getY(i)*50)+','+Math.round(P.getZ(i)*50);(map[key]=map[key]||[]).push(i)}
     var N=new Float32Array(n*3),cs=Math.cos(ang),m=new T.Vector3();
-    for(i=0;i<n;i++){var k2=Math.round(P.getX(i)*50)+','+Math.round(P.getY(i)*50)+','+Math.round(P.getZ(i)*50),L=map[k2];m.set(0,0,0);
+    for(i=0;i<n;i++){var k2=Math.round(P.getX(i)*50)+','+Math.round(P.getY(i)*50)+','+Math.round(P.getZ(i)*50),L=map[k2];m.set(0,0,0);if(FL[i]){N[i*3]=F[i*3];N[i*3+1]=F[i*3+1];N[i*3+2]=F[i*3+2];continue}
       for(var j=0;j<L.length;j++){var t=L[j];if(F[t*3]*F[i*3]+F[t*3+1]*F[i*3+1]+F[t*3+2]*F[i*3+2]>=cs){m.x+=F[t*3];m.y+=F[t*3+1];m.z+=F[t*3+2]}}
       m.normalize();N[i*3]=m.x;N[i*3+1]=m.y;N[i*3+2]=m.z}
     g.setAttribute('normal',new T.BufferAttribute(N,3));return g}
@@ -51,7 +51,7 @@ export function createMac(opts){
   function hole(cx,cz,w,h,r){var p=rr(new T.Path(),cx,cz,w,h,r);shape.holes.push(p)}
   hole(KX,KZ,621,236,6); hole(TX,TZ,340,200,9);
   var bg=new T.ExtrudeGeometry(shape,{depth:BT-4.4,bevelEnabled:true,bevelThickness:2.2,bevelSize:2,bevelSegments:6,curveSegments:20});
-  bg.rotateX(-Math.PI/2); bg.translate(0,-BT+2.2,0); bg=crease(bg,.9);
+  bg.rotateX(-Math.PI/2); bg.translate(0,-BT+2.2,0); bg=crease(bg,.9,'y');
   var base=new T.Mesh(bg,alu); G.add(base);
   var wellFloor=new T.Mesh(new RoundedBoxGeometry(626,4,242,2,1.5),well); wellFloor.position.set(KX,-9,KZ); G.add(wellFloor);
   var tpGroove=new T.Mesh(new RoundedBoxGeometry(344,4,204,2,1.5),well); tpGroove.position.set(TX,-9,TZ); G.add(tpGroove);
@@ -88,7 +88,7 @@ export function createMac(opts){
   var lsh=rr(new T.Shape(),0,0,756,480,18); // plan-view corners match the base
   var lg2=new T.ExtrudeGeometry(lsh,{depth:3.6,bevelEnabled:true,bevelThickness:2.2,bevelSize:2,bevelSegments:6,curveSegments:20});
   lg2.translate(0,0,-1.8);
-  lg2=crease(lg2,.9); lg2.translate(0,242,0);
+  lg2=crease(lg2,.9,'z'); lg2.translate(0,242,0);
   var shell=new T.Mesh(lg2,alu); lid.add(shell);
   var logo=new T.Mesh(new T.CircleGeometry(40,48),new T.MeshPhysicalMaterial({color:0xf4f5f7,metalness:1,roughness:.15,envMapIntensity:1.0}));
   logo.rotation.y=Math.PI;logo.position.set(0,242,-4.08);lid.add(logo);
