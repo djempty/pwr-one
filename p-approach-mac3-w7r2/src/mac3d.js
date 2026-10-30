@@ -27,12 +27,21 @@ export function createMac(opts){
   var maxAn=renderer.capabilities.getMaxAnisotropy();
 
   // ---- materials
-  var alu=new T.MeshPhysicalMaterial({color:0xbfc1c5,metalness:1,roughness:.34,envMapIntensity:1.0});
-  var aluDark=new T.MeshPhysicalMaterial({color:0xbcbec2,metalness:1,roughness:.36,envMapIntensity:1.0});
+  var alu=new T.MeshPhysicalMaterial({color:0xc6c4c0,metalness:1,roughness:.36,envMapIntensity:1.0,clearcoat:.12,clearcoatRoughness:.5});
+  var aluDark=new T.MeshPhysicalMaterial({color:0xc2c0bc,metalness:1,roughness:.4,envMapIntensity:1.0});
   var black=new T.MeshPhysicalMaterial({color:0x050506,metalness:0,roughness:.4,envMapIntensity:.05});
-  var keyMat=new T.MeshPhysicalMaterial({color:0x040405,metalness:0,roughness:.6,envMapIntensity:.04});
+  var keyMat=new T.MeshPhysicalMaterial({color:0x050506,metalness:0,roughness:.72,envMapIntensity:.05});
   var well=new T.MeshStandardMaterial({color:0x0b0b0c,metalness:.1,roughness:.8});
 
+  // smooth normals across shallow edges only (keeps hard creases)
+  function crease(g,ang){g=g.index?g.toNonIndexed():g;var P=g.attributes.position,n=P.count,F=new Float32Array(n*3),a=new T.Vector3(),b=new T.Vector3(),c=new T.Vector3(),e=new T.Vector3(),f=new T.Vector3();
+    for(var i=0;i<n;i+=3){a.fromBufferAttribute(P,i);b.fromBufferAttribute(P,i+1);c.fromBufferAttribute(P,i+2);e.subVectors(c,b);f.subVectors(a,b);e.cross(f).normalize();for(var k=0;k<3;k++){F[(i+k)*3]=e.x;F[(i+k)*3+1]=e.y;F[(i+k)*3+2]=e.z}}
+    var map={};for(i=0;i<n;i++){var key=Math.round(P.getX(i)*50)+','+Math.round(P.getY(i)*50)+','+Math.round(P.getZ(i)*50);(map[key]=map[key]||[]).push(i)}
+    var N=new Float32Array(n*3),cs=Math.cos(ang),m=new T.Vector3();
+    for(i=0;i<n;i++){var k2=Math.round(P.getX(i)*50)+','+Math.round(P.getY(i)*50)+','+Math.round(P.getZ(i)*50),L=map[k2];m.set(0,0,0);
+      for(var j=0;j<L.length;j++){var t=L[j];if(F[t*3]*F[i*3]+F[t*3+1]*F[i*3+1]+F[t*3+2]*F[i*3+2]>=cs){m.x+=F[t*3];m.y+=F[t*3+1];m.z+=F[t*3+2]}}
+      m.normalize();N[i*3]=m.x;N[i*3+1]=m.y;N[i*3+2]=m.z}
+    g.setAttribute('normal',new T.BufferAttribute(N,3));return g}
   // ---- base: extruded rounded outline with keywell + trackpad cut-outs, bevelled
   function rr(sh,cx,cz,w,h,r){var x=cx-w/2,y=-(cz+h/2); // shape y = -world z
     sh.moveTo(x+r,y);sh.lineTo(x+w-r,y);sh.absarc(x+w-r,y+r,r,-Math.PI/2,0);sh.lineTo(x+w,y+h-r);sh.absarc(x+w-r,y+h-r,r,0,Math.PI/2);
@@ -42,7 +51,7 @@ export function createMac(opts){
   function hole(cx,cz,w,h,r){var p=rr(new T.Path(),cx,cz,w,h,r);shape.holes.push(p)}
   hole(KX,KZ,621,236,6); hole(TX,TZ,340,200,9);
   var bg=new T.ExtrudeGeometry(shape,{depth:BT-4.4,bevelEnabled:true,bevelThickness:2.2,bevelSize:2,bevelSegments:6,curveSegments:20});
-  bg.rotateX(-Math.PI/2); bg.translate(0,-BT+2.2,0);
+  bg.rotateX(-Math.PI/2); bg.translate(0,-BT+2.2,0); bg=crease(bg,.9);
   var base=new T.Mesh(bg,alu); G.add(base);
   var wellFloor=new T.Mesh(new RoundedBoxGeometry(626,4,242,2,1.5),well); wellFloor.position.set(KX,-9,KZ); G.add(wellFloor);
   var tpGroove=new T.Mesh(new RoundedBoxGeometry(344,4,204,2,1.5),well); tpGroove.position.set(TX,-9,TZ); G.add(tpGroove);
@@ -51,7 +60,7 @@ export function createMac(opts){
   var nt=new T.Mesh(new RoundedBoxGeometry(110,1.2,9,2,.5),new T.MeshPhysicalMaterial({color:0xb4b7bd,metalness:1,roughness:.5}));nt.position.set(0,-.55,254.6);G.add(nt);
   // trackpad edge hairline
   // keys
-  var kgeo=new RoundedBoxGeometry(1,1,1,3,.16);
+  var kgeo=new RoundedBoxGeometry(1,1,1,4,.2);
   var im=new T.InstancedMesh(kgeo,keyMat,keys.length); var m4=new T.Matrix4(),q=new T.Quaternion(),pv=new T.Vector3(),sv=new T.Vector3();
   var KH=3.2, kx0=KX-307.5, kz0=KZ-115.2;
   keys.forEach(function(k,i){pv.set(kx0+k[0]+k[2]/2,-4.6+KH/2,kz0+k[1]+k[3]/2);sv.set(k[2]-1.2,KH,k[3]-1.2);m4.compose(pv,q,sv);im.setMatrixAt(i,m4)});
@@ -71,17 +80,24 @@ export function createMac(opts){
   var hg=new T.Mesh(new T.CylinderGeometry(5.5,5.5,610,28,1),new T.MeshPhysicalMaterial({color:0x2a2b2f,metalness:.9,roughness:.4}));
   hg.rotation.z=Math.PI/2;hg.position.set(0,1.5,-256);G.add(hg);
 
+  // soft AO where the lid meets the base
+  (function(){var c=document.createElement('canvas');c.width=4;c.height=64;var x=c.getContext('2d'),g=x.createLinearGradient(0,0,0,64);g.addColorStop(0,'rgba(0,0,0,.55)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,4,64);
+    var m=new T.Mesh(new T.PlaneGeometry(700,26),new T.MeshBasicMaterial({map:new T.CanvasTexture(c),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1}));m.rotation.x=-Math.PI/2;m.position.set(0,.04,-247);G.add(m)})();
   // ---- lid (pivot at hinge)
   var lid=new T.Group(); lid.position.set(0,2,-260); G.add(lid);
-  var shell=new T.Mesh(new RoundedBoxGeometry(760,484,8,5,3.5),alu); shell.position.set(0,242,0); lid.add(shell);
+  var lsh=rr(new T.Shape(),0,0,756,480,18); // plan-view corners match the base
+  var lg2=new T.ExtrudeGeometry(lsh,{depth:3.6,bevelEnabled:true,bevelThickness:2.2,bevelSize:2,bevelSegments:6,curveSegments:20});
+  lg2.translate(0,0,-1.8);
+  lg2=crease(lg2,.9); lg2.translate(0,242,0);
+  var shell=new T.Mesh(lg2,alu); lid.add(shell);
   var logo=new T.Mesh(new T.CircleGeometry(40,48),new T.MeshPhysicalMaterial({color:0xf4f5f7,metalness:1,roughness:.15,envMapIntensity:1.0}));
   logo.rotation.y=Math.PI;logo.position.set(0,242,-4.08);lid.add(logo);
   // front black glass panel with rounded corners
   function panel(w,h,r,x,y){var s=new T.Shape(),X=-w/2,Y=0;s.moveTo(X+r,Y);s.lineTo(X+w-r,Y);s.absarc(X+w-r,Y+r,r,-Math.PI/2,0);s.lineTo(X+w,Y+h-r);s.absarc(X+w-r,Y+h-r,r,0,Math.PI/2);s.lineTo(X+r,Y+h);s.absarc(X+r,Y+h-r,r,Math.PI/2,Math.PI);s.lineTo(X,Y+r);s.absarc(X+r,Y+r,r,Math.PI,Math.PI*1.5);return new T.ShapeGeometry(s,12)}
-  var bz=new T.Mesh(panel(756,478,12),black); bz.position.set(0,3,4.5); lid.add(bz);
+  var bz=new T.Mesh(panel(756,478,16),black); bz.position.set(0,3,4.5); lid.add(bz);
   var tex=new T.TextureLoader().load(texUrl,function(){host.dispatchEvent(new Event('m3ready'))});
   tex.colorSpace=T.SRGBColorSpace; tex.anisotropy=maxAn; tex.generateMipmaps=true; tex.minFilter=T.LinearMipmapLinearFilter;
-  var scr=new T.Mesh(panel(740,462,6),new T.MeshBasicMaterial({map:tex,toneMapped:false}));
+  var scr=new T.Mesh(panel(740,462,10),new T.MeshBasicMaterial({map:tex,toneMapped:false}));
   // panel() y origin is bottom; ShapeGeometry uv are in shape units -> normalise
   (function(g){var p=g.attributes.position,uv=g.attributes.uv;for(var i=0;i<p.count;i++)uv.setXY(i,(p.getX(i)+370)/740,p.getY(i)/462)})(scr.geometry);
   scr.position.set(0,10,5); lid.add(scr);
@@ -99,7 +115,7 @@ export function createMac(opts){
     'float dl=sdr(p,vec2(0.,-258.-lid*.5),vec2(380.,lid*.5),6.);'+
     'float a=.30*exp(-max(d,0.)/3.2)+.11*exp(-max(d,0.)/11.)+.05*exp(-max(d,0.)/46.)+.035*exp(-max(d,0.)/150.);'+
     'a+=.07*lid/200.*exp(-max(dl,0.)/60.);'+
-    'a*=1.-smoothstep(380.,620.,length(gp));'+
+    'a*=1.-smoothstep(380.,620.,length(gp));a*=1.26;'+
     'float ign=fract(52.9829189*fract(dot(gl_FragCoord.xy,vec2(0.06711056,0.00583715))));'+
     'a=clamp(a+(ign-.5)*1.5/255.,0.,1.);'+
     'gl_FragColor=vec4(vec3(.16,.17,.2),a);}'});

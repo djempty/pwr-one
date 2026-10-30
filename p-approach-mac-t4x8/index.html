@@ -100,7 +100,7 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0 34px;margin-top:89px}
 .st{position:relative;padding-top:34px}
 .sr{position:absolute;left:0;top:0;right:0;height:1px;background:rgba(248,244,239,.28);transform-origin:left}
-.sr::after{content:"";position:absolute;left:0;top:0;width:34px;height:1px;background:var(--gold);height:2px;top:-1px;transition:width .5s}
+.sr::after{content:"";position:absolute;left:0;top:0;width:34px;height:1px;background:var(--gold);height:2px;top:-1px}
 .st b{display:block;font-size:clamp(24px,2.6vw,38px);line-height:1.15;color:var(--ivory);font-weight:700}
 .st:first-child b{color:var(--gold)}
 .st>span{display:block;margin-top:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(248,244,239,.78);line-height:1.6}
@@ -128,7 +128,6 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
  .cta:hover{background:transparent;color:var(--ivory);transform:translateY(-3px)}
  .cta.ghost:hover{background:var(--gold);color:var(--navy)}
  .mm a:not([aria-current]):hover{color:var(--ivory)}
- .st:hover .sr::after{width:100%}
  .ph.in img{transition:transform 1.2s cubic-bezier(.382,0,.618,1)}
  .ph.in:hover img{transform:scale(1.045)}
  .k::before{transition:width .5s}.sec:hover .k::before{width:55px}
