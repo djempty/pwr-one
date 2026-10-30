@@ -82,6 +82,7 @@ body>*:not(.mk):not(.foot){animation:pin .618s .382s ease both}
 @media(prefers-reduced-motion:reduce){body,body>*:not(.mk):not(.foot){animation:none}}
 .vt body,.vt body>*{animation:none!important}
 .nobg,.nobg body{background:#0e1f3c!important}.nobg body{animation:none!important}
+@media(max-width:900px){input{font-size:16px!important}}
 </style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <main><div class="card">
@@ -98,6 +99,6 @@ body>*:not(.mk):not(.foot){animation:pin .618s .382s ease both}
 <div class="foot">MEMBERSHIP BY INVITATION ONLY</div>
 <script>
 (function(){var d=document.getElementById('demo'),m='Demo only. Nothing is sent or stored.';
-document.getElementById('f').addEventListener('submit',function(e){e.preventDefault();location.href='../welcome/'});
+document.getElementById('f').addEventListener('submit',function(e){e.preventDefault();if(document.activeElement)document.activeElement.blur();var h=document.documentElement;h.style.overflow=document.body.style.overflow='visible';h.style.height=document.body.style.height='auto';setTimeout(function(){location.href='../welcome/'},60)});
 document.getElementById('forgot').addEventListener('click',function(e){e.preventDefault();d.textContent=m});})();
 </script></body></html>
