@@ -96,7 +96,7 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
 .wide4{aspect-ratio:4/3;width:100%}
 /* engine + stats band */
 .eng{padding:calc(55px + 34px + 34px) 0 calc(55px + 34px)}
-.eng .shade{background:linear-gradient(180deg,rgba(14,31,60,.7) 0,rgba(14,31,60,.78) 55%,rgba(14,31,60,.94) 100%)}
+.eng .shade{background:linear-gradient(0deg,#0e1f3c 0,rgba(14,31,60,0) 144px),linear-gradient(180deg,#000 0,rgba(0,0,0,0) 144px),linear-gradient(180deg,rgba(14,31,60,.7) 0,rgba(14,31,60,.78) 55%,rgba(14,31,60,.94) 100%)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0 34px;margin-top:89px}
 .st{position:relative;padding-top:34px}
 .sr{position:absolute;left:0;top:0;right:0;height:1px;background:rgba(248,244,239,.28);transform-origin:left}
@@ -106,9 +106,9 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
 .st>span{display:block;margin-top:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(248,244,239,.78);line-height:1.6}
 /* cinematic bands */
 .cap{min-height:92vh;min-height:92svh;display:flex;align-items:flex-end;padding:calc(55px + 34px) 0 calc(55px + 34px)}
-.cap .shade{background:linear-gradient(0deg,rgba(14,31,60,.92) 0,rgba(14,31,60,.55) 45%,rgba(14,31,60,.18) 100%)}
+.cap .shade{background:linear-gradient(180deg,#0e1f3c 0,rgba(14,31,60,0) 144px),linear-gradient(0deg,rgba(14,31,60,.92) 0,rgba(14,31,60,.55) 45%,rgba(14,31,60,.18) 100%)}
 .mem{min-height:92vh;min-height:92svh;display:flex;align-items:center;padding:calc(55px + 34px + 21px) 0}
-.mem .shade{background:linear-gradient(90deg,rgba(14,31,60,.94) 0,rgba(14,31,60,.78) 42%,rgba(14,31,60,.2) 100%)}
+.mem .shade{background:linear-gradient(0deg,#000 0,rgba(0,0,0,0) 144px),linear-gradient(90deg,rgba(14,31,60,.94) 0,rgba(14,31,60,.78) 42%,rgba(14,31,60,.2) 100%)}
 .mem h2{max-width:9ch}
 .mem .px img{object-position:74% 50%}
 .ctas{display:flex;flex-wrap:wrap;gap:21px;margin-top:34px}
@@ -167,7 +167,7 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
  .eng{padding:55px 0}.stats{margin-top:34px}
  .cap,.mem{min-height:0;padding:calc(55px + 55px) 0 55px}
  .band h2{font-size:clamp(34px,10vw,48px)}
- .mem .shade{background:linear-gradient(0deg,rgba(14,31,60,.94) 0,rgba(14,31,60,.7) 100%)}
+ .mem .shade{background:linear-gradient(0deg,#000 0,rgba(0,0,0,0) 144px),linear-gradient(0deg,rgba(14,31,60,.94) 0,rgba(14,31,60,.7) 100%)}
  .ctas{flex-direction:column;gap:13px}.cta{text-align:center;padding:13px;font-size:11px}
  .foot .wrap{padding-left:max(21px,env(safe-area-inset-left));padding-right:max(21px,env(safe-area-inset-right))}
 }
