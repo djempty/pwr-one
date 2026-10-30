@@ -212,8 +212,8 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
 .ll{transform:translateX(-380px) rotateY(90deg)}.lr{transform:translateX(380px) rotateY(90deg)}
 .mac3 .gl{position:absolute;inset:0;pointer-events:none}
 .mac3 .m3gl{position:absolute;left:0;top:0;display:block;pointer-events:none}
-.mac3.gl3 .m3s{display:none}
-</style></head><body>
+.mac3 .m3gl{opacity:0;transition:opacity .6s ease}.mac3.gl3 .m3gl{opacity:1}.mac3 .m3s{transition:opacity .6s ease}.mac3.gl3 .m3s{opacity:0;pointer-events:none}
+</style><link rel="modulepreload" href="js/mac3d.min.js"></head><body>
 <header class="bar" id="bar"></header>
 <a class="mk" href="/p-view9k3h7m/" aria-label="Polarity home" style="text-decoration:none"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <nav class="navr" aria-label="Primary"><a href="/p-view9k3h7m/approach/" aria-current="page">Approach</a><a href="#membership">Membership</a><a href="/p-view9k3h7m/login/"><span class="btn">Member Login</span></a><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26"><path d="M2 2 L24 24 M24 2 L2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></nav>
@@ -475,9 +475,10 @@ function initGL(){if(gtried)return;gtried=1;
  var svg=box.querySelector('.kw svg'),keys=[],lg=[];
  svg.querySelectorAll('rect').forEach(function(e){if(e.getAttribute('fill')==='url(#kg)')keys.push([+e.getAttribute('x'),+e.getAttribute('y'),+e.getAttribute('width'),+e.getAttribute('height')])});
  svg.querySelectorAll('text').forEach(function(e){lg.push({t:e.textContent,x:+e.getAttribute('x'),y:+e.getAttribute('y'),a:e.getAttribute('text-anchor')==='middle'?'center':e.getAttribute('text-anchor')==='end'?'right':'left',s:+e.getAttribute('font-size')})});
- import('./js/mac3d.min.js').then(function(m){try{G3=m.createMac({host:box,keys:keys,legends:lg,texUrl:matchMedia('(max-width:700px)').matches?'img/mac-ui-m.webp':'img/mac-ui.webp'});box.classList.add('gl3');G3.size();draw();box.addEventListener('m3ready',function(){draw()});
-  var cvs=G3.canvas;cvs.addEventListener('webglcontextlost',function(e){e.preventDefault();G3=null;box.classList.remove('gl3');upd()})}catch(e){G3=null;console.warn('mac3d fallback',e)}}).catch(function(){})}catch(e){}}
+ import('./js/mac3d.min.js').then(function(m){try{G3=m.createMac({host:box,keys:keys,legends:lg,texUrl:matchMedia('(max-width:700px)').matches?'img/mac-ui-m.webp':'img/mac-ui.webp'});var texOk=new Promise(function(r){box.addEventListener('m3ready',r,{once:true});setTimeout(r,2500)});var g=G3;g.canvas.addEventListener('webglcontextlost',function(e){e.preventDefault();G3=null;box.classList.remove('gl3');upd()});G3=null;
+  g.warm().then(function(){G3=g;G3.size();draw();texOk.then(function(){if(G3){draw();box.classList.add('gl3')}})});}catch(e){G3=null;console.warn('mac3d fallback',e)}}).catch(function(){})}catch(e){}}
 function q(){if(G3){if(vis&&!tx)tx=requestAnimationFrame(draw);return}if(!tk)tk=requestAnimationFrame(upd)}
+var idle=window.requestIdleCallback||function(f){setTimeout(f,1200)};function kick(){idle(initGL,{timeout:3000})}if(document.readyState==='complete')kick();else addEventListener('load',kick);
 if('IntersectionObserver' in window){new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis){initGL();q()}},{rootMargin:'400px 0px'}).observe(box)}else{vis=true;initGL()}
 addEventListener('scroll',q,{passive:true});addEventListener('resize',size);size();upd()})();
 </script>

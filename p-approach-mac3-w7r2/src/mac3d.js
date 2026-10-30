@@ -140,5 +140,9 @@ export function createMac(opts){
     gmat.uniforms.lid.value=Math.max(0,Math.sin(ph*Math.PI/180))*484*.9; renderer.render(scene,cam);
   }
   size();
-  return {pose:pose,size:size,dispose:function(){renderer.dispose();cv.remove()},canvas:cv};
+  function warm(){ // precompile shaders + draw one frame offscreen-hidden so the first visible frame costs nothing
+    size(); pose(0.5,1,0);
+    return (renderer.compileAsync?renderer.compileAsync(scene,cam):Promise.resolve()).catch(function(){}).then(function(){renderer.render(scene,cam)});
+  }
+  return {pose:pose,size:size,warm:warm,dispose:function(){renderer.dispose();cv.remove()},canvas:cv};
 }
