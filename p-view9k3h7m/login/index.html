@@ -74,14 +74,12 @@ button:hover{background:transparent;color:#f8f4ef}
 .mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}
 @media(max-width:600px){.mk{left:21px;top:21px}}
 @media(orientation:landscape) and (max-height:500px){.mk{left:max(28px,env(safe-area-inset-left));top:14px;font-size:17px}.mk svg{width:26px;height:26px;vertical-align:-6px;margin-right:14px}}
-html{background:#000}
-body{animation:pfade 1s cubic-bezier(.382,0,.618,1) both}
-@keyframes pfade{from{background-color:#000}to{background-color:#0e1f3c}}
-body>*:not(.mk):not(.foot){animation:pin .618s .382s ease both}
+body>*:not(.mk):not(.foot){animation:pin .3s ease both}
+.nobg body>*:not(.mk):not(.foot){animation:pin .618s .382s ease both}
 @keyframes pin{from{opacity:0}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){body,body>*:not(.mk):not(.foot){animation:none}}
+@media(prefers-reduced-motion:reduce){body>*:not(.mk):not(.foot),.nobg body>*:not(.mk):not(.foot){animation:none}}
 .vt body,.vt body>*{animation:none!important}
-.nobg,.nobg body{background:#0e1f3c!important}.nobg body{animation:none!important}
+.nobg,.nobg body{background:#0e1f3c!important}
 @media(max-width:900px){input{font-size:16px!important}}
 </style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
