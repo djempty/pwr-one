@@ -398,12 +398,12 @@ function draw(){var t0=performance.now();
   base=Math.max(.7,S/400)*(S<420?1.1:1);
  for(b=0;b<2*2*NB;b++)bk[b]=[];
  for(i=0;i<N;i++){var x=X[i],y=Y[i],z=Z[i],xr=x*c+z*s,z1=-x*s+z*c,yr=y*ct-z1*st,zr=y*st+z1*ct,f=D/(D-zr),dep=Math.max(0,Math.min(1,(zr+46)/92)),
-   back=zr<0?0:1,al=back?.55+.45*dep:.1+.3*dep;if(F[i])al*=.8;
+   back=zr<0?0:1,al=back?.55+.45*dep:.5+.2*dep;if(F[i])al*=.8;
   var q=Math.min(NB-1,Math.floor(al*NB));
-  bk[(back*2+C[i])*NB+q].push(h+xr*f*k,h+yr*f*k,base*f*(.7+.45*dep))}
+  bk[(back*2+C[i])*NB+q].push(h+xr*f*k,h+yr*f*k,base*f*(.82+.33*dep))}
  for(b=0;b<2*2*NB;b++){var a=bk[b],n=a.length;if(!n)continue;var q=b%NB,cc=((b/NB)|0)&1,bb=(b/NB/2)|0;
   ctx.fillStyle='rgba('+COL[cc]+','+((q+.6)/NB).toFixed(2)+')';ctx.beginPath();
-  for(u=0;u<n;u+=3){var rr=a[u+2]*(bb?1:.8);ctx.moveTo(a[u]+rr,a[u+1]);ctx.arc(a[u],a[u+1],rr,0,6.2832)}
+  for(u=0;u<n;u+=3){var rr=a[u+2]*(bb?1:.95);ctx.moveTo(a[u]+rr,a[u+1]);ctx.arc(a[u],a[u+1],rr,0,6.2832)}
   ctx.fill()}
  ft+=performance.now()-t0;if(++fn===30){window.__markMs=ft/fn;ft=0;fn=0}}
 function frame(now){if(!run)return;t=now/1000;th=rm?0:angle();draw();requestAnimationFrame(frame)}

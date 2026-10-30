@@ -125,12 +125,13 @@ export function createMac(opts){
 
   // ---- sizing + pose (mirrors the CSS transform chain)
   var W=1,H=1;
-  function size(){W=host.clientWidth;H=host.clientHeight;renderer.setSize(W,H,false);cv.style.width=W+'px';cv.style.height=H+'px'}
+  var PAD=0; // extra canvas rows below the frame so the ground shadow fades out fully (view offset keeps the laptop's placement identical)
+  function size(){W=host.clientWidth;H=host.clientHeight;PAD=Math.round(H*.45);renderer.setSize(W,H+PAD,false);cv.style.width=W+'px';cv.style.height=(H+PAD)+'px'}
   var ev=new T.Euler(),qq=new T.Quaternion();
   function pose(p,u,ty){ // p 0..1, u scale, ty = css translateY px
     function cl(x){return x<0?0:x>1?1:x}function eo(x){return 1-Math.pow(1-x,3)}function io(x){return x*x*(3-2*x)}
     var a=eo(p),ry=-88+60*a,rx=38-20*a,ph=-82+97*io(cl((p-.08)/.8));
-    var d=2600*u/.84; cam.fov=2*Math.atan(H/2/d)*180/Math.PI; cam.aspect=W/H; cam.position.set(0,0,d); cam.lookAt(0,0,0); cam.updateProjectionMatrix();
+    var d=2600*u/.84; cam.fov=2*Math.atan(H/2/d)*180/Math.PI; cam.aspect=W/H; cam.position.set(0,0,d); cam.lookAt(0,0,0); cam.setViewOffset(W,H,0,0,W,H+PAD); cam.updateProjectionMatrix();
     G.position.set(0,-ty,0); G.scale.setScalar(u); G.rotation.set(rx*Math.PI/180,ry*Math.PI/180,0,'XYZ');
     lid.rotation.x=-ph*Math.PI/180;
     G.updateMatrixWorld(true);
