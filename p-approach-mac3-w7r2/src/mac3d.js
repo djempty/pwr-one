@@ -10,7 +10,7 @@ export function createMac(opts){
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
   renderer.setClearColor(0xffffff,0);
   renderer.toneMapping=T.NeutralToneMapping; renderer.toneMappingExposure=1.0;
-  renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFShadowMap;
+  
   var cv=renderer.domElement; cv.className='m3gl'; cv.setAttribute('aria-hidden','true'); host.appendChild(cv);
   var gl=renderer.getContext(); if(!gl||gl.isContextLost()) throw new Error('nogl');
 
@@ -86,13 +86,39 @@ export function createMac(opts){
 
   // ---- ground: directional soft shadow + contact shadow
   var FLOOR=-21;
-  var ground=new T.Mesh(new T.PlaneGeometry(2400,2400),new T.ShadowMaterial({opacity:.2,color:0x0f121a}));
-  var gm=ground.material;gm.onBeforeCompile=function(sh){sh.vertexShader='varying vec2 gp;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ngp=position.xy;');sh.fragmentShader='varying vec2 gp;\n'+sh.fragmentShader.replace('#include <fog_fragment>','#include <fog_fragment>\ngl_FragColor.a*=1.0-smoothstep(330.0,590.0,length(gp));')};
-  ground.rotation.x=-Math.PI/2;ground.position.y=FLOOR;ground.receiveShadow=true;G.add(ground);
-  var sun=new T.DirectionalLight(0xffffff,2.2); sun.position.set(-260,1500,420); sun.target.position.set(0,0,0);
-  sun.castShadow=true; var ss=phone?1024:2048; sun.shadow.mapSize.set(ss,ss); var sc=sun.shadow.camera; sc.left=-900;sc.right=900;sc.top=900;sc.bottom=-900;sc.near=200;sc.far=2600;
-  sun.shadow.radius=phone?6:10; sun.shadow.bias=-.0006; sun.shadow.normalBias=1.5; G.add(sun,sun.target);
+  // directional shadow: ray-march a top-down height map toward a fixed (screen-space) light behind-left, so it falls to the right
+  var HS=2000, HRS=phone?512:1024, NT=phone?5:7, NS=phone?36:48;
+  var hrt=new T.WebGLRenderTarget(HRS,HRS,{generateMipmaps:false});
+  var hcam=new T.OrthographicCamera(-HS/2,HS/2,HS/2,-HS/2,0,700); hcam.rotation.x=-Math.PI/2; hcam.position.y=FLOOR+700; G.add(hcam);
+  var hmat=new T.MeshDepthMaterial();
+  hmat.onBeforeCompile=function(s){s.fragmentShader=s.fragmentShader.replace('gl_FragColor = vec4( vec3( 1.0 - fragCoordZ ), opacity );','gl_FragColor = vec4( 1.0 - fragCoordZ, 0.0, 0.0, 1.0 );')};
+  var gu={hm:{value:hrt.texture},ld:{value:new T.Vector2(1,0)},te:{value:.75},tmax:{value:700}};
+  var gm=new T.ShaderMaterial({uniforms:gu,transparent:true,depthWrite:false,
+   vertexShader:'varying vec2 gp;void main(){gp=position.xy;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+   fragmentShader:'uniform sampler2D hm;uniform vec2 ld;uniform float te,tmax;varying vec2 gp;\n'+
+   'float hit(vec2 q,float rh,float soft){return smoothstep(0.,soft*2.,texture2D(hm,q/'+HS+'.+.5).r*700.-rh-1.5);}\n'+
+   'void main(){vec2 pr=vec2(-ld.y,ld.x);float jn=fract(52.9829189*fract(dot(gl_FragCoord.xy,vec2(.06711056,.00583715))));float occ=0.;\n'+
+   'for(int k=0;k<'+NT+';k++){float kf=((float(k)+jn)/'+NT+'.)*2.-1.;float o=0.;\n'+
+   ' for(int i=1;i<='+NS+';i++){float f=float(i)/'+NS+'.;f*=f;float t=tmax*f;float rh=t*te;\n'+
+   '  vec2 q=gp+ld*t+pr*kf*(t*.17+4.);\n'+
+   '  o=max(o,hit(q,rh,5.+t*.05)*(1.-.62*f));}\n'+
+   ' occ+=o;}\n'+
+   'occ/='+NT+'.;\n'+
+   'float fade=1.-smoothstep(300.,720.,length((gp-vec2(150.,-70.))*vec2(.8,1.)));\n'+
+   'gl_FragColor=vec4(vec3(.06,.07,.1),.3*occ*fade);}'});
+  var ground=new T.Mesh(new T.PlaneGeometry(2400,2400),gm);
+  ground.rotation.x=-Math.PI/2;ground.position.y=FLOOR;G.add(ground);
+  var sun=new T.DirectionalLight(0xffffff,2.2); sun.position.set(-260,1500,420); sun.target.position.set(0,0,0); G.add(sun,sun.target);
   var fill=new T.DirectionalLight(0xdfe6ff,.6); fill.position.set(700,300,300); G.add(fill);
+  var LW=new T.Vector3(-.7,.95,-.55).normalize(), LL=new T.Vector3();
+  function hmap(){
+    var hc=ground.visible;ground.visible=false;cplane.visible=false;var rt0=renderer.getRenderTarget();var tm=renderer.toneMapping;renderer.toneMapping=T.NoToneMapping;
+    scene.overrideMaterial=hmat;renderer.setClearColor(0x000000,1);renderer.setRenderTarget(hrt);renderer.clear();
+    var env=scene.environment;scene.environment=null;var vs=[sun,fill];vs.forEach(function(l){l.visible=false});
+    renderer.render(scene,hcam);
+    scene.overrideMaterial=null;scene.environment=env;vs.forEach(function(l){l.visible=true});
+    renderer.setRenderTarget(rt0);renderer.toneMapping=tm;renderer.setClearColor(0xffffff,0);ground.visible=hc;cplane.visible=true;
+  }
   // contact shadow
   var CS=1300, RS=phone?256:512;
   var rtA=new T.WebGLRenderTarget(RS,RS),rtB=new T.WebGLRenderTarget(RS,RS);
@@ -110,11 +136,10 @@ export function createMac(opts){
     hid.forEach(function(o){o.visible=false});var bgc=scene.background;var rt0=renderer.getRenderTarget();var ca=renderer.getClearAlpha();
     var tm=renderer.toneMapping;renderer.toneMapping=T.NoToneMapping;
     scene.overrideMaterial=depthMat;renderer.setClearColor(0xffffff,0);renderer.setRenderTarget(rtA);renderer.clear();
-    var sm=renderer.shadowMap.enabled;renderer.shadowMap.enabled=false;
     var env=scene.environment;scene.environment=null;
     var vs=[sun,fill];vs.forEach(function(l){l.visible=false});
     renderer.render(scene,cc);
-    scene.overrideMaterial=null;scene.environment=env;vs.forEach(function(l){l.visible=true});renderer.shadowMap.enabled=sm;
+    scene.overrideMaterial=null;scene.environment=env;vs.forEach(function(l){l.visible=true});
     blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(2.2/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
     blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,2.2/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
     blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(4.2/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
@@ -125,18 +150,20 @@ export function createMac(opts){
 
   // ---- sizing + pose (mirrors the CSS transform chain)
   var W=1,H=1;
-  var PAD=0; // extra canvas rows below the frame so the ground shadow fades out fully (view offset keeps the laptop's placement identical)
-  function size(){W=host.clientWidth;H=host.clientHeight;PAD=Math.round(H*.45);renderer.setSize(W,H+PAD,false);cv.style.width=W+'px';cv.style.height=(H+PAD)+'px'}
+  var PAD=0,PADR=0; // extra canvas rows below the frame so the ground shadow fades out fully (view offset keeps the laptop's placement identical)
+  function size(){W=host.clientWidth;H=host.clientHeight;PAD=Math.round(H*.45);PADR=Math.round(W*.42);renderer.setSize(W+PADR,H+PAD,false);cv.style.width=(W+PADR)+'px';cv.style.height=(H+PAD)+'px'}
   var ev=new T.Euler(),qq=new T.Quaternion();
   function pose(p,u,ty){ // p 0..1, u scale, ty = css translateY px
     function cl(x){return x<0?0:x>1?1:x}function eo(x){return 1-Math.pow(1-x,3)}function io(x){return x*x*(3-2*x)}
     var a=eo(p),ry=-88+60*a,rx=38-20*a,ph=-82+97*io(cl((p-.08)/.8));
-    var d=2600*u/.84; cam.fov=2*Math.atan(H/2/d)*180/Math.PI; cam.aspect=W/H; cam.position.set(0,0,d); cam.lookAt(0,0,0); cam.setViewOffset(W,H,0,0,W,H+PAD); cam.updateProjectionMatrix();
+    var d=2600*u/.84; cam.fov=2*Math.atan(H/2/d)*180/Math.PI; cam.aspect=W/H; cam.position.set(0,0,d); cam.lookAt(0,0,0); cam.setViewOffset(W,H,0,0,W+PADR,H+PAD); cam.updateProjectionMatrix();
     G.position.set(0,-ty,0); G.scale.setScalar(u); G.rotation.set(rx*Math.PI/180,ry*Math.PI/180,0,'XYZ');
     lid.rotation.x=-ph*Math.PI/180;
     G.updateMatrixWorld(true);
     qq.copy(G.quaternion).invert(); scene.environmentRotation.setFromQuaternion(qq);
-    contact(); renderer.render(scene,cam);
+    qq.copy(G.quaternion).invert(); LL.copy(LW).applyQuaternion(qq); var hz=Math.hypot(LL.x,LL.z)||1;
+    gu.ld.value.set(LL.x/hz,-LL.z/hz); gu.te.value=Math.max(.3,LL.y/hz); gu.tmax.value=Math.min(1000,540/gu.te.value);
+    hmap(); contact(); renderer.render(scene,cam);
   }
   size();
   return {pose:pose,size:size,dispose:function(){renderer.dispose();cv.remove()},canvas:cv};
