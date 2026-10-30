@@ -1,0 +1,258 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Our Approach · Polarity</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="theme-color" content="#000000">
+<style>
+*{box-sizing:border-box}
+:root{--navy:#0e1f3c;--ivory:#f8f4ef;--gold:#b08d4f;--graphite:#333a45;--bar:76px}
+html{background:#000;-webkit-text-size-adjust:100%}
+body{margin:0;background:#000;color:var(--ivory);font-family:Helvetica,Arial,sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+/* ---- header (identical rules to home) ---- */
+.bar{position:fixed;left:0;right:0;top:0;height:calc(89px + env(safe-area-inset-top));z-index:4;background:transparent;border-bottom:1px solid transparent;transition:background .382s,border-color .382s;pointer-events:none}
+.bar.on{background:var(--navy);border-bottom-color:rgba(248,244,239,.08)}
+.mk{position:fixed;left:55px;top:34px;font-family:Helvetica,Arial,sans-serif;font-weight:700;letter-spacing:0;color:#f8f4ef;font-size:21px;line-height:1;z-index:5}
+.mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}
+.navr{position:fixed;right:55px;top:34px;z-index:6;color:rgba(248,244,239,.78);font-size:13px;letter-spacing:1px;font-family:Helvetica,Arial,sans-serif;display:flex;align-items:center}
+.navr a{display:inline-block;margin-left:34px;line-height:1;cursor:pointer}
+.navr a[aria-current]{color:var(--ivory);border-bottom:1px solid var(--gold);padding-bottom:5px;margin-bottom:-6px}
+.navr a .btn{display:inline-block;border:1px solid var(--gold);color:var(--ivory);padding:8px 21px}
+.navr .hb{display:none}
+@media(max-width:600px){.mk{left:21px;top:21px;font-size:21px;line-height:1}.mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}}
+@media(max-width:600px){
+ .bar{height:calc(var(--bar) + env(safe-area-inset-top))}
+ .navr{right:max(11px,env(safe-area-inset-right));top:env(safe-area-inset-top);height:76px}
+ .navr a{display:none}
+ .navr .hb{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;width:54px;height:76px;margin:0;color:var(--ivory);cursor:pointer}
+ .navr .hb svg{display:block;fill:currentColor}
+ .navr .hb .x{display:none}.navr .hb[aria-expanded=true] .x{display:block}.navr .hb[aria-expanded=true] .h{display:none}
+ .navr .hb:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
+}
+@media(orientation:landscape) and (max-height:500px){
+ .bar{height:calc(55px + env(safe-area-inset-top))}
+ .mk{left:max(28px,env(safe-area-inset-left));top:14px;font-size:17px}
+ .mk svg{width:26px;height:26px;vertical-align:-6px;margin-right:14px}
+ .navr{right:max(28px,env(safe-area-inset-right));top:14px;height:auto;font-size:11px;letter-spacing:.8px}
+ .navr a{display:inline-block;margin-left:21px}
+ .navr .hb{display:none}
+ .navr a .btn{padding:5px 13px}
+}
+/* mobile menu overlay */
+.mm{display:none}
+@media(max-width:600px){
+ .mm{display:flex;flex-direction:column;position:fixed;inset:0;z-index:3;background:var(--navy);padding:calc(var(--bar) + env(safe-area-inset-top) + 13px) max(21px,env(safe-area-inset-right)) max(21px,env(safe-area-inset-bottom)) max(21px,env(safe-area-inset-left));overflow-y:auto;overscroll-behavior:contain;visibility:hidden;opacity:0;transition:opacity .25s,visibility 0s .25s}
+ .mm.open{visibility:visible;opacity:1;transition:opacity .25s}
+ .mm a{display:block;padding:13px 21px;font-size:18px;color:rgba(248,244,239,.618);border-left:2px solid transparent}
+ .mm a+a{margin-top:5px}
+ .mm a[aria-current]{background:rgba(248,244,239,.08);color:var(--ivory);border-left-color:var(--gold)}
+ html.mm-lock,html.mm-lock body{overflow:hidden}
+}
+/* ---- v2 layout ---- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(21px,5vw,55px)}
+.k{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:13px;font-weight:700}
+.k::before{content:"";width:34px;height:1px;background:currentColor;flex:none;transform-origin:left}
+.lt .k{color:var(--navy)}.lt .k::before{background:var(--gold);height:2px}
+h1,h2{margin:0;font-weight:700;letter-spacing:0}
+.ph{position:relative;overflow:hidden;background:var(--navy)}
+.px{position:absolute;left:0;right:0;top:-16%;bottom:-16%;will-change:transform}
+.px picture,.px img,.ph>picture,.ph>picture img{display:block;width:100%;height:100%;object-fit:cover}
+.ph img{transform-origin:center}
+.shade{position:absolute;inset:0;pointer-events:none}
+.band{position:relative;overflow:hidden;background:var(--navy);color:var(--ivory)}
+.band .wrap{position:relative;z-index:1;width:100%}
+.band h2{font-size:clamp(40px,6.4vw,96px);line-height:1.05;margin:21px 0 21px}
+.band p{margin:0;font-size:18px;line-height:1.7;max-width:56ch;color:rgba(248,244,239,.86)}
+/* hero */
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;padding:calc(55px + 55px + 34px) 0 calc(55px + 21px)}
+.hero .shade{background:linear-gradient(90deg,rgba(14,31,60,.86) 0,rgba(14,31,60,.55) 48%,rgba(14,31,60,.08) 100%),linear-gradient(0deg,rgba(14,31,60,.8) 0,rgba(14,31,60,0) 42%)}
+.hero h1{font-size:clamp(46px,8.2vw,128px);line-height:1;margin:21px 0 34px;max-width:11ch}
+.hero p{margin:0;font-size:clamp(16px,1.5vw,20px);line-height:1.62;max-width:48ch;color:rgba(248,244,239,.9)}
+.mkd{position:absolute;right:clamp(21px,6vw,89px);bottom:calc(55px + 21px);width:clamp(144px,22vw,377px);height:auto;z-index:1;overflow:visible;pointer-events:none}
+.mkd path{fill:none;stroke-width:.8;stroke-linejoin:round}
+.mkd .d1{stroke:#f8f4ef}.mkd .d2{stroke:#b08d4f}
+.cue{position:absolute;left:50%;bottom:13px;width:1px;height:34px;background:rgba(248,244,239,.25);z-index:1;overflow:hidden;pointer-events:none}
+.cue::after{content:"";position:absolute;left:0;top:0;width:1px;height:100%;background:var(--gold);animation:cue 2.4s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes cue{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+/* split sections */
+.sec{padding:calc(55px + 34px + 34px) 0}
+.sec .wrap{display:grid;gap:55px calc(55px + 34px);align-items:center}
+.sec.a .wrap{grid-template-columns:1fr 1.15fr}
+.sec.b .wrap{grid-template-columns:1.2fr 1fr}
+.sec h2{font-size:clamp(34px,4.6vw,68px);line-height:1.08;margin:21px 0 34px}
+.sec p{margin:0;font-size:18px;line-height:1.72;max-width:56ch}
+.lt{background:var(--ivory);color:var(--graphite)}.lt h2{color:var(--navy)}
+.dk{background:var(--navy);color:rgba(248,244,239,.86)}.dk h2{color:var(--ivory)}
+.rule{display:block;height:1px;width:89px;background:var(--gold);margin:34px 0 0;transform-origin:left}
+.mask{width:100%;max-width:521px;margin:0 auto;display:block;overflow:visible}
+.mask .ol{fill:none;stroke:#b08d4f;stroke-width:.5}
+.tall{aspect-ratio:3/4;max-height:80vh;width:100%;margin:0 auto}
+.wide4{aspect-ratio:4/3;width:100%}
+/* engine + stats band */
+.eng{padding:calc(55px + 34px + 34px) 0 calc(55px + 34px)}
+.eng .shade{background:linear-gradient(180deg,rgba(14,31,60,.7) 0,rgba(14,31,60,.78) 55%,rgba(14,31,60,.94) 100%)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0 34px;margin-top:89px}
+.st{position:relative;padding-top:34px}
+.gr{position:absolute;left:0;top:0;right:0;height:1px;background:rgba(248,244,239,.28);transform-origin:left}
+.gr::after{content:"";position:absolute;left:0;top:0;width:34px;height:1px;background:var(--gold);height:2px;top:-1px;transition:width .5s}
+.st b{display:block;font-size:clamp(24px,2.6vw,38px);line-height:1.15;color:var(--ivory);font-weight:700}
+.st:first-child b{color:var(--gold)}
+.st>span{display:block;margin-top:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(248,244,239,.78);line-height:1.6}
+/* cinematic bands */
+.cap{min-height:92vh;min-height:92svh;display:flex;align-items:flex-end;padding:calc(55px + 34px) 0 calc(55px + 34px)}
+.cap .shade{background:linear-gradient(0deg,rgba(14,31,60,.92) 0,rgba(14,31,60,.55) 45%,rgba(14,31,60,.18) 100%)}
+.mem{min-height:92vh;min-height:92svh;display:flex;align-items:center;padding:calc(55px + 34px + 21px) 0}
+.mem .shade{background:linear-gradient(90deg,rgba(14,31,60,.94) 0,rgba(14,31,60,.78) 42%,rgba(14,31,60,.2) 100%)}
+.mem h2{max-width:9ch}
+.ctas{display:flex;flex-wrap:wrap;gap:21px;margin-top:34px}
+.cta{display:inline-block;background:var(--gold);border:1px solid var(--gold);color:var(--navy);padding:13px 34px;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.cta.ghost{background:transparent;color:var(--ivory)}
+.foot{background:#000;padding:calc(55px + 21px) 0 calc(34px + env(safe-area-inset-bottom));color:rgba(248,244,239,.618)}
+.foot .in{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700}
+.foot p{margin:13px 0 0;font-size:13px;line-height:1.6;max-width:62ch}
+/* split text */
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.14em;margin-bottom:-.14em}
+.wi{display:inline-block}
+/* hover (desktop only) */
+@media(hover:hover) and (pointer:fine){
+ .navr a:not([aria-current]):hover{color:var(--ivory)}
+ .navr a:hover .btn{background:var(--gold);color:var(--navy)}
+ .cta{transition:background .25s,color .25s,transform .25s}
+ .cta:hover{background:transparent;color:var(--ivory);transform:translateY(-3px)}
+ .cta.ghost:hover{background:var(--gold);color:var(--navy)}
+ .mm a:not([aria-current]):hover{color:var(--ivory)}
+ .st:hover .gr::after{width:100%}
+ .ph.in img{transition:transform 1.2s cubic-bezier(.382,0,.618,1)}
+ .ph.in:hover img{transform:scale(1.045)}
+ .k::before{transition:width .5s}.sec:hover .k::before{width:55px}
+}
+/* reveal states (only when JS on and motion allowed) */
+html.mo .rv{opacity:0;transform:translateY(34px)}
+html.mo .rv.in{opacity:1;transform:none;transition:opacity 1s cubic-bezier(.382,0,.618,1),transform 1s cubic-bezier(.382,0,.618,1)}
+html.mo .wi{transform:translateY(110%)}
+html.mo .in .wi,html.mo .wi.in{transform:none;transition:transform 1s cubic-bezier(.19,1,.22,1)}
+html.mo .wl{clip-path:inset(0 100% 0 0)}html.mo .wb{clip-path:inset(100% 0 0 0)}html.mo .wr{clip-path:inset(0 0 0 100%)}
+html.mo .wl.in,html.mo .wb.in,html.mo .wr.in{clip-path:inset(0 0 0 0);transition:clip-path 1.618s cubic-bezier(.77,0,.18,1)}
+html.mo .ph:not(.nz) img{transform:scale(1.25)}
+html.mo .ph.in:not(.nz) img{transform:none;transition:transform 2s cubic-bezier(.19,1,.22,1)}
+html.mo .rl{transform:scaleX(0)}
+html.mo .in .rl,html.mo .rl.in{transform:none;transition:transform 1s cubic-bezier(.77,0,.18,1) .382s}
+html.mo .k::before{transform:scaleX(0)}
+html.mo .in .k::before,html.mo .k.in::before{transform:none;transition:transform .8s cubic-bezier(.77,0,.18,1)}
+html.mo .mkd path{stroke-dasharray:1;stroke-dashoffset:1;fill-opacity:0}
+html.mo .mkd.in path{stroke-dashoffset:0;transition:stroke-dashoffset 2.6s cubic-bezier(.65,0,.35,1)}
+html.mo .mkd.in .d2{transition-delay:.382s}
+html.mo .mz{transform-origin:50px 50px;transform:scale(.001) rotate(-24deg)}
+html.mo .in .mz{transform:none;transition:transform 1.8s cubic-bezier(.19,1,.22,1)}
+html.mo .mask .ol{stroke-dasharray:1;stroke-dashoffset:1}
+html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke-dashoffset 2.4s cubic-bezier(.65,0,.35,1) .382s}
+@media(max-width:900px){
+ .sec .wrap,.sec.a .wrap,.sec.b .wrap{grid-template-columns:1fr;gap:34px}
+ .sec.rev .ph,.sec.rev .mask{order:-1}
+ .stats{grid-template-columns:1fr 1fr;gap:34px 21px;margin-top:55px}
+ .tall{max-height:none;max-width:377px}
+}
+@media(max-width:600px){
+ .hero{padding:calc(var(--bar) + 34px + env(safe-area-inset-top)) 0 calc(55px + 55px)}
+ .hero h1{font-size:clamp(44px,13vw,64px)}
+ .mkd{right:21px;bottom:21px;width:89px}
+ .sec{padding:55px 0}
+ .sec p,.band p{font-size:16px;line-height:1.65}
+ .eng{padding:55px 0}.stats{margin-top:34px}
+ .cap,.mem{min-height:0;padding:calc(55px + 55px) 0 55px}
+ .band h2{font-size:clamp(34px,10vw,48px)}
+ .mem .shade{background:linear-gradient(0deg,rgba(14,31,60,.94) 0,rgba(14,31,60,.7) 100%)}
+ .ctas{flex-direction:column;gap:13px}.cta{text-align:center;padding:13px;font-size:11px}
+ .foot .wrap{padding-left:max(21px,env(safe-area-inset-left));padding-right:max(21px,env(safe-area-inset-right))}
+}
+@media(orientation:landscape) and (max-height:500px){.hero,.cap,.mem{min-height:0}.hero{padding:calc(55px + 34px) 0 34px}}
+@media(prefers-reduced-motion:reduce){.bar{transition:none}.cue::after{animation:none}}
+</style></head><body>
+<header class="bar" id="bar"></header>
+<div class="mk"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</div>
+<nav class="navr" aria-label="Primary"><a href="/p-approach-v2-m9q4/" aria-current="page">Approach</a><a href="#membership">Membership</a><a href="/p-view9k3h7m/login/"><span class="btn">Member Login</span></a><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26"><path d="M2 2 L24 24 M24 2 L2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></nav>
+<nav class="mm" id="mm" aria-label="Menu"><a href="/p-approach-v2-m9q4/" aria-current="page">Approach</a><a href="#membership">Membership</a><a href="/p-view9k3h7m/login/">Member Login</a></nav>
+
+<main>
+<section class="band hero" id="top">
+ <div class="ph wb nz" style="position:absolute;inset:0"><div class="px" data-par="0.14"><picture><source media="(max-width:700px)" srcset="img/hero-murmuration-m.webp"><img class="" src="img/hero-murmuration.webp" alt="Starlings in a dark ribbon over still water at dusk" decoding="async"></picture></div></div>
+ <div class="shade"></div>
+ <svg class="mkd" viewBox="0 0 100 100" aria-hidden="true"><path class="d1" pathLength="1" d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" transform="translate(-3.5,5.84)"/><path class="d2" pathLength="1" d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" transform="translate(3.5,-5.84)"/></svg>
+ <div class="wrap"><div class="k rv">Our Approach</div><h1 data-split>Discipline, by design.</h1><p class="rv" style="transition-delay:.55s">Polarity replaces impulse with process: rules written in code, guided by a community of members, and accountable to every one of them.</p></div>
+ <div class="cue" aria-hidden="true"></div>
+</section>
+
+<section class="sec lt a rev" id="vision"><div class="wrap">
+ <div class="tx"><div class="k rv">01 · Vision</div><h2 data-split>Ego out.</h2><p class="rv">Markets punish emotion. Fear, greed and gut conviction are the most expensive inputs in investing, and Polarity is built to take them out of the room. Every decision is driven by strict but adaptable rules written in code, not by a hunch or a headline. The goal is simple: a better quality of life for our members, earned together through shared discipline.</p><i class="rule rl"></i></div>
+ <svg class="mask rv" viewBox="0 0 100 100" role="img" aria-label="A lone figure at the edge of still water at dawn, seen through the golden-section split circle"><defs><mask id="sm" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100"><g class="mz"><path fill="#fff" d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" transform="translate(-3.5,5.84)"/><path fill="#fff" d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" transform="translate(3.5,-5.84)"/></g></mask></defs><image href="img/vision-dawn.webp" x="-4" y="-4" width="108" height="108" preserveAspectRatio="xMidYMid slice" mask="url(#sm)"/><g class="olg"><path class="ol" pathLength="1" d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" transform="translate(-3.5,5.84)"/><path class="ol" pathLength="1" d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" transform="translate(3.5,-5.84)"/></g></svg>
+</div></section>
+
+<section class="band eng" id="engine">
+ <div class="px" data-par="0.12" style="position:absolute"><picture><source media="(max-width:700px)" srcset="img/engine-movement-m.webp"><img class="" src="img/engine-movement.webp" alt="Macro of a precision mechanical movement with gold light" decoding="async" loading="lazy"></picture></div>
+ <div class="shade"></div>
+ <div class="wrap">
+  <div class="k rv">02 · The Engine</div><h2 data-split>Discipline in.</h2>
+  <p class="rv">Polarity runs an algorithmic strategy trained on more than five years of historical market data and refined through billions of simulations. It looks for recurring patterns, then acts only when an index, ETF or individual stock meets its conditions. Positions combine short-duration options strategies with longer-term holdings, and the model keeps evolving as markets do.</p>
+  <div class="stats" data-stagger>
+   <div class="st rv"><i class="gr rl"></i><b><span data-count="5">5</span>+ years</b><span>historical data</span></div>
+   <div class="st rv"><i class="gr rl"></i><b>Billions</b><span>of simulations</span></div>
+   <div class="st rv"><i class="gr rl"></i><b>Indexes · ETFs · Equities</b><span>what it trades</span></div>
+   <div class="st rv"><i class="gr rl"></i><b>Short + long</b><span>options strategies and longer-term positions</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="sec dk b" id="participation"><div class="wrap">
+ <div class="ph wl wide4"><div class="shade" style="z-index:1;background:linear-gradient(0deg,rgba(14,31,60,.35),rgba(14,31,60,0) 50%)"></div><picture><source media="(max-width:700px)" srcset="img/participation-table-m.webp"><img class="" src="img/participation-table.webp" alt="Hands and a gathered group around a candlelit table" decoding="async" loading="lazy"></picture></div>
+ <div class="tx"><div class="k rv">03 · Member Participation</div><h2 data-split>One club. Many voices.</h2><p class="rv">Polarity is an investment club, not a fund you hand off and forget. Members shape the higher-level strategy. When broader market direction is on the table, every member receives the reasoning behind each option and votes in real time. The majority decides.</p><i class="rule rl"></i></div>
+</div></section>
+
+<section class="band cap" id="capital">
+ <div class="px" data-par="0.14" style="position:absolute"><picture><source media="(max-width:700px)" srcset="img/capital-columns-m.webp"><img class="" src="img/capital-columns.webp" alt="Stone columns and shafts of gold light in a vault-like hall" decoding="async" loading="lazy"></picture></div>
+ <div class="shade"></div>
+ <div class="wrap"><div class="k rv">04 · Access to Capital</div><h2 data-split>Your capital, your terms.</h2><p class="rv">Through the Member Portal, members direct their own deposits and withdrawals and set personal instructions: a monthly payout target, a percentage reinvested to compound, or a mix that changes as life does.</p><i class="rule rl"></i></div>
+</section>
+
+<section class="sec lt a" id="transparency"><div class="wrap">
+ <div class="tx"><div class="k rv">05 · Transparency</div><h2 data-split>Open by default.</h2><p class="rv">Members see the full trading history, the current directional focus, and how the community's decisions shaped results, good and bad. The one thing we protect is the engine itself: the specifics of the algorithm stay private.</p><i class="rule rl"></i></div>
+ <div class="ph wb tall"><picture><source media="(max-width:700px)" srcset="img/transparency-glass-m.webp"><img class="" src="img/transparency-glass.webp" alt="A glass tower at blue hour reflecting the sky" decoding="async" loading="lazy"></picture></div>
+</div></section>
+
+<section class="band mem" id="membership">
+ <div class="px" data-par="0.12" style="position:absolute"><picture><source media="(max-width:700px)" srcset="img/membership-door-m.webp"><img class="" src="img/membership-door.webp" alt="A heavy door ajar with gold light beside an embossed invitation card" decoding="async" loading="lazy"></picture></div>
+ <div class="shade"></div>
+ <div class="wrap"><div class="k rv">06 · Membership</div><h2 data-split>By invitation only.</h2><p class="rv">When space is available, members can nominate prospective members through the portal. Every nomination is reviewed and approved by the board.</p>
+ <div class="ctas rv"><a class="cta" href="#membership">Membership Info</a><a class="cta ghost" href="/p-view9k3h7m/login/">Member Login</a></div></div>
+</section>
+</main>
+
+<footer class="foot"><div class="wrap"><div class="in">Membership by invitation only</div><p>Investing involves risk, including the loss of principal. Past performance does not guarantee future results.</p></div></footer>
+
+<script>
+(function(){var d=document,h=d.documentElement,w=window;
+var bar=d.getElementById('bar');function s(){bar.classList.toggle('on',(w.pageYOffset||h.scrollTop)>8)}addEventListener('scroll',s,{passive:true});s();
+var mo=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+function splitWords(el){var t=el.textContent.trim();el.setAttribute('aria-label',t);el.textContent='';t.split(/\s+/).forEach(function(x,i,a){var o=d.createElement('span');o.className='w';o.setAttribute('aria-hidden','true');var n=d.createElement('span');n.className='wi';n.style.transitionDelay=(i*0.07+0.1)+'s';n.textContent=x;o.appendChild(n);el.appendChild(o);if(i<a.length-1)el.appendChild(d.createTextNode(' '))})}
+if(mo&&'IntersectionObserver' in w){
+ h.classList.add('mo');
+ d.querySelectorAll('[data-split]').forEach(splitWords);
+ d.querySelectorAll('[data-stagger]').forEach(function(g){Array.prototype.forEach.call(g.children,function(c,i){c.style.transitionDelay=(i*0.12)+'s'})});
+ var px=new Map(),io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var tg=px.get(e.target)||e.target;tg.classList.add('in');io.unobserve(e.target);var c=tg.querySelector('[data-count]');if(c)count(c)}})},{threshold:.15,rootMargin:'0px 0px -8% 0px'});
+ d.querySelectorAll('.rv,.ph,[data-split],.mask,.mkd,.k,.stats,.rule').forEach(function(e){if(e.classList.contains('wl')||e.classList.contains('wb')||e.classList.contains('wr')){px.set(e.parentElement,e);io.observe(e.parentElement)}else io.observe(e)});
+ function count(c){var to=+c.getAttribute('data-count'),t0=null;c.textContent='0';(function f(t){if(t0===null)t0=t;var p=Math.min(1,(t-t0)/1618);p=1-Math.pow(1-p,3);c.textContent=Math.round(to*p);if(p<1)requestAnimationFrame(f)})(performance.now())}
+ var items=Array.prototype.slice.call(d.querySelectorAll('[data-par]')),tick=false;
+ function par(){tick=false;var vh=w.innerHeight,r=items.map(function(e){return e.parentElement.getBoundingClientRect()});
+  items.forEach(function(e,i){var b=r[i];if(b.bottom<-89||b.top>vh+89)return;var y=-((b.top+b.height/2)-vh/2)*parseFloat(e.getAttribute('data-par'));e.style.transform='translate3d(0,'+y.toFixed(1)+'px,0)'})}
+ function req(){if(!tick){tick=true;requestAnimationFrame(par)}}
+ addEventListener('scroll',req,{passive:true});addEventListener('resize',req);par();
+}
+var b=d.getElementById('mm-btn'),m=d.getElementById('mm'),mq=matchMedia('(max-width:600px)');
+function set(o){b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu');m.classList.toggle('open',o);h.classList.toggle('mm-lock',o);if(o)m.querySelector('a').focus()}
+b.addEventListener('click',function(){set(b.getAttribute('aria-expanded')!=='true')});
+d.addEventListener('keydown',function(e){if(e.key==='Escape'&&b.getAttribute('aria-expanded')==='true'){set(false);b.focus()}});
+m.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
+mq.addEventListener('change',function(){if(!mq.matches)set(false)});
+d.querySelectorAll('a[href="#membership"]').forEach(function(a){if(a.classList.contains('cta'))a.addEventListener('click',function(e){e.preventDefault()})});
+addEventListener('pageshow',function(){h.classList.remove('mm-lock')});
+})();
+</script>
+</body></html>
