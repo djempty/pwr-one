@@ -179,23 +179,16 @@ function frame(){
 }
 frame();
 </script><script>
-/* Member Login: login page dissolves in over the still-running animation (shadow DOM overlay, no iframe = no extra history entry), then navigate */
+/* Member Login: animation + content dissolve to navy while still moving (plain overlay, no iframe = no extra history entry), then navigate; login form fades in on arrival */
 document.querySelectorAll('a[href="login/"]').forEach(a=>a.addEventListener('click',e=>{
  if(e.metaKey||e.ctrlKey||e.shiftKey||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
  e.preventDefault();
- let go=false;const nav=()=>{if(go)return;go=true;sessionStorage.setItem('pxfade','1');location.href=a.href};
- setTimeout(nav,4000);
- fetch(a.href).then(r=>r.text()).then(h=>{
-  const d=new DOMParser().parseFromString(h,'text/html');
-  const css=[...d.querySelectorAll('style')].map(x=>x.textContent).join('\n').replace(/(^|[},\s])html(?=[\s,{.:])/g,'$1:host').replace(/(^|[},\s>])body(?=[\s,{.>:])/g,'$1:host');
-  const host=document.createElement('div');host.className='lgx';host.setAttribute('aria-hidden','true');
-  host.style.cssText='position:fixed;inset:0;z-index:50;opacity:0;pointer-events:none;overflow:hidden;transition:opacity 1s cubic-bezier(.382,0,.618,1)';
-  const r=host.attachShadow({mode:'open'});
-  r.innerHTML='<style>'+css+'\n:host{display:flex!important;width:100%;height:100%;overflow:hidden!important}*,:host{animation:none!important}</style>'+d.body.innerHTML.replace(/<script[\s\S]*?<\/script>/g,'');
-  document.body.appendChild(host);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{host.style.opacity=1;setTimeout(nav,1050)}));
- }).catch(nav);
+ const o=document.createElement('div');o.className='lgx';o.setAttribute('aria-hidden','true');
+ o.style.cssText='position:fixed;inset:0;z-index:40;background:#0e1f3c;opacity:0;pointer-events:none;transition:opacity .85s cubic-bezier(.382,0,.618,1)';
+ document.querySelectorAll('.mk,.foot').forEach(x=>{x.style.zIndex=60;x.style.position=getComputedStyle(x).position==='static'?'relative':''});
+ document.body.appendChild(o);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{o.style.opacity=1;setTimeout(()=>{sessionStorage.setItem('pxfade','1');location.href=a.href},880)}));
 }));
-addEventListener('pageshow',()=>{document.querySelectorAll('.lgx').forEach(f=>f.remove())});
+addEventListener('pageshow',()=>{document.querySelectorAll('.lgx').forEach(f=>f.remove());document.querySelectorAll('.mk,.foot').forEach(x=>{x.style.zIndex='';x.style.position=''})});
 </script>
 </body></html>
