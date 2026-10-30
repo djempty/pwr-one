@@ -63,13 +63,12 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
 .band h2{font-size:clamp(40px,6.4vw,96px);line-height:1.05;margin:21px 0 21px}
 .band p{margin:0;font-size:18px;line-height:1.7;max-width:56ch;color:rgba(248,244,239,.86)}
 /* hero */
-.hero{min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;padding:calc(55px + 55px + 34px) 0 calc(55px + 21px)}
-.hero .shade{background:linear-gradient(90deg,rgba(14,31,60,.86) 0,rgba(14,31,60,.55) 48%,rgba(14,31,60,.08) 100%),linear-gradient(0deg,rgba(14,31,60,.8) 0,rgba(14,31,60,0) 42%)}
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:calc(55px + 55px + 34px) 0 calc(55px + 34px + 21px)}
+.hero .ph img{transition:none!important;transform:none!important}
+#flock{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.hero .shade{background:linear-gradient(90deg,rgba(14,31,60,.78) 0,rgba(14,31,60,.42) 48%,rgba(14,31,60,.04) 100%),linear-gradient(0deg,rgba(14,31,60,.55) 0,rgba(14,31,60,0) 38%),linear-gradient(180deg,rgba(14,31,60,.35) 0,rgba(14,31,60,0) 30%)}
 .hero h1{font-size:clamp(46px,8.2vw,128px);line-height:1;margin:21px 0 34px;max-width:11ch}
 .hero p{margin:0;font-size:clamp(16px,1.5vw,20px);line-height:1.62;max-width:48ch;color:rgba(248,244,239,.9)}
-.mkd{position:absolute;right:clamp(21px,6vw,89px);bottom:calc(55px + 21px);width:clamp(144px,22vw,377px);height:auto;z-index:1;overflow:visible;pointer-events:none}
-.mkd path{fill:none;stroke-width:.8;stroke-linejoin:round}
-.mkd .d1{stroke:#f8f4ef}.mkd .d2{stroke:#b08d4f}
 .cue{position:absolute;left:50%;bottom:13px;width:1px;height:34px;background:rgba(248,244,239,.25);z-index:1;overflow:hidden;pointer-events:none}
 .cue::after{content:"";position:absolute;left:0;top:0;width:1px;height:100%;background:var(--gold);animation:cue 2.4s cubic-bezier(.65,0,.35,1) infinite}
 @keyframes cue{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
@@ -103,6 +102,7 @@ h1,h2{margin:0;font-weight:700;letter-spacing:0}
 .mem{min-height:92vh;min-height:92svh;display:flex;align-items:center;padding:calc(55px + 34px + 21px) 0}
 .mem .shade{background:linear-gradient(90deg,rgba(14,31,60,.94) 0,rgba(14,31,60,.78) 42%,rgba(14,31,60,.2) 100%)}
 .mem h2{max-width:9ch}
+.mem .px img{object-position:74% 50%}
 .ctas{display:flex;flex-wrap:wrap;gap:21px;margin-top:34px}
 .cta{display:inline-block;background:var(--gold);border:1px solid var(--gold);color:var(--navy);padding:13px 34px;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
 .cta.ghost{background:transparent;color:var(--ivory)}
@@ -138,9 +138,6 @@ html.mo .rl{transform:scaleX(0)}
 html.mo .in .rl,html.mo .rl.in{transform:none;transition:transform 1s cubic-bezier(.77,0,.18,1) .382s}
 html.mo .k::before{transform:scaleX(0)}
 html.mo .in .k::before,html.mo .k.in::before{transform:none;transition:transform .8s cubic-bezier(.77,0,.18,1)}
-html.mo .mkd path{stroke-dasharray:1;stroke-dashoffset:1;fill-opacity:0}
-html.mo .mkd.in path{stroke-dashoffset:0;transition:stroke-dashoffset 2.6s cubic-bezier(.65,0,.35,1)}
-html.mo .mkd.in .d2{transition-delay:.382s}
 html.mo .mz{transform-origin:50px 50px;transform:scale(.001) rotate(-24deg)}
 html.mo .in .mz{transform:none;transition:transform 1.8s cubic-bezier(.19,1,.22,1)}
 html.mo .mask .ol{stroke-dasharray:1;stroke-dashoffset:1}
@@ -152,9 +149,8 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
  .tall{max-height:none;max-width:377px}
 }
 @media(max-width:600px){
- .hero{padding:calc(var(--bar) + 34px + env(safe-area-inset-top)) 0 calc(55px + 55px)}
+ .hero{padding:calc(var(--bar) + 34px + env(safe-area-inset-top)) 0 calc(55px + 34px)}
  .hero h1{font-size:clamp(44px,13vw,64px)}
- .mkd{right:21px;bottom:21px;width:89px}
  .sec{padding:55px 0}
  .sec p,.band p{font-size:16px;line-height:1.65}
  .eng{padding:55px 0}.stats{margin-top:34px}
@@ -174,9 +170,9 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
 
 <main>
 <section class="band hero" id="top">
- <div class="ph wb nz" style="position:absolute;inset:0"><div class="px" data-par="0.14"><picture><source media="(max-width:700px)" srcset="img/hero-murmuration-m.webp"><img class="" src="img/hero-murmuration.webp" alt="Starlings in a dark ribbon over still water at dusk" decoding="async"></picture></div></div>
+ <div class="ph nz" style="position:absolute;inset:0"><picture><source media="(max-width:700px)" srcset="img/hero-dusk-m.webp"><img id="herobg" src="img/hero-dusk.webp" width="1344" height="768" alt="" decoding="async"></picture></div>
+ <canvas id="flock" role="img" aria-label="A murmuration of starlings drifting over still water at dusk, with their reflection below"></canvas>
  <div class="shade"></div>
- <svg class="mkd" viewBox="0 0 100 100" aria-hidden="true"><path class="d1" pathLength="1" d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" transform="translate(-3.5,5.84)"/><path class="d2" pathLength="1" d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" transform="translate(3.5,-5.84)"/></svg>
  <div class="wrap"><div class="k rv">Our Approach</div><h1 data-split>Discipline, by design.</h1><p class="rv" style="transition-delay:.55s">Polarity replaces impulse with process: rules written in code, guided by a community of members, and accountable to every one of them.</p></div>
  <div class="cue" aria-hidden="true"></div>
 </section>
@@ -202,7 +198,7 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
 </section>
 
 <section class="sec dk b" id="participation"><div class="wrap">
- <div class="ph wl wide4"><div class="shade" style="z-index:1;background:linear-gradient(0deg,rgba(14,31,60,.35),rgba(14,31,60,0) 50%)"></div><picture><source media="(max-width:700px)" srcset="img/participation-table-m.webp"><img class="" src="img/participation-table.webp" alt="Hands and a gathered group around a candlelit table" decoding="async" loading="lazy"></picture></div>
+ <div class="ph wl wide4"><div class="shade" style="z-index:1;background:linear-gradient(0deg,rgba(14,31,60,.35),rgba(14,31,60,0) 50%)"></div><picture><source media="(max-width:700px)" srcset="img/participation-network-m.webp"><img class="" src="img/participation-network.webp" alt="A luminous network of nodes, each linked by fine gold lines to a central hub" decoding="async" loading="lazy"></picture></div>
  <div class="tx"><div class="k rv">03 · Member Participation</div><h2 data-split>One club. Many voices.</h2><p class="rv">Polarity is an investment club, not a fund you hand off and forget. Members shape the higher-level strategy. When broader market direction is on the table, every member receives the reasoning behind each option and votes in real time. The majority decides.</p><i class="rule rl"></i></div>
 </div></section>
 
@@ -214,11 +210,11 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
 
 <section class="sec lt a" id="transparency"><div class="wrap">
  <div class="tx"><div class="k rv">05 · Transparency</div><h2 data-split>Open by default.</h2><p class="rv">Members see the full trading history, the current directional focus, and how the community's decisions shaped results, good and bad. The one thing we protect is the engine itself: the specifics of the algorithm stay private.</p><i class="rule rl"></i></div>
- <div class="ph wb tall"><picture><source media="(max-width:700px)" srcset="img/transparency-glass-m.webp"><img class="" src="img/transparency-glass.webp" alt="A glass tower at blue hour reflecting the sky" decoding="async" loading="lazy"></picture></div>
+ <div class="ph wb tall"><picture><source media="(max-width:700px)" srcset="img/transparency-cube-m.webp"><img class="" src="img/transparency-cube.webp" alt="A clear glass cube on dark stone, light passing cleanly through it" decoding="async" loading="lazy"></picture></div>
 </div></section>
 
 <section class="band mem" id="membership">
- <div class="px" data-par="0.12" style="position:absolute"><picture><source media="(max-width:700px)" srcset="img/membership-door-m.webp"><img class="" src="img/membership-door.webp" alt="A heavy door ajar with gold light beside an embossed invitation card" decoding="async" loading="lazy"></picture></div>
+ <div class="px" data-par="0.12" style="position:absolute"><picture><source media="(max-width:700px)" srcset="img/membership-club-m.webp"><img class="" src="img/membership-club.webp" alt="A dark door ajar with warm gold light spilling from a private members' club" decoding="async" loading="lazy"></picture></div>
  <div class="shade"></div>
  <div class="wrap"><div class="k rv">06 · Membership</div><h2 data-split>By invitation only.</h2><p class="rv">When space is available, members can nominate prospective members through the portal. Every nomination is reviewed and approved by the board.</p>
  <div class="ctas rv"><a class="cta" href="#membership">Membership Info</a><a class="cta ghost" href="/p-view9k3h7m/login/">Member Login</a></div></div>
@@ -237,7 +233,7 @@ if(mo&&'IntersectionObserver' in w){
  d.querySelectorAll('[data-split]').forEach(splitWords);
  d.querySelectorAll('[data-stagger]').forEach(function(g){Array.prototype.forEach.call(g.children,function(c,i){c.style.transitionDelay=(i*0.12)+'s'})});
  var px=new Map(),io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var tg=px.get(e.target)||e.target;tg.classList.add('in');io.unobserve(e.target);var c=tg.querySelector('[data-count]');if(c)count(c)}})},{threshold:.15,rootMargin:'0px 0px -8% 0px'});
- d.querySelectorAll('.rv,.ph,[data-split],.mask,.mkd,.k,.stats,.rule').forEach(function(e){if(e.classList.contains('wl')||e.classList.contains('wb')||e.classList.contains('wr')){px.set(e.parentElement,e);io.observe(e.parentElement)}else io.observe(e)});
+ d.querySelectorAll('.rv,.ph,[data-split],.mask,.k,.stats,.rule').forEach(function(e){if(e.classList.contains('wl')||e.classList.contains('wb')||e.classList.contains('wr')){px.set(e.parentElement,e);io.observe(e.parentElement)}else io.observe(e)});
  function count(c){var to=+c.getAttribute('data-count'),t0=null;c.textContent='0';(function f(t){if(t0===null)t0=t;var p=Math.min(1,(t-t0)/1618);p=1-Math.pow(1-p,3);c.textContent=Math.round(to*p);if(p<1)requestAnimationFrame(f)})(performance.now())}
  var items=Array.prototype.slice.call(d.querySelectorAll('[data-par]')),tick=false;
  function par(){tick=false;var vh=w.innerHeight,r=items.map(function(e){return e.parentElement.getBoundingClientRect()});
@@ -253,6 +249,74 @@ m.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
 mq.addEventListener('change',function(){if(!mq.matches)set(false)});
 d.querySelectorAll('a[href="#membership"]').forEach(function(a){if(a.classList.contains('cta'))a.addEventListener('click',function(e){e.preventDefault()})});
 addEventListener('pageshow',function(){h.classList.remove('mm-lock')});
+})();
+
+/* ---- live murmuration (canvas) ---- */
+(function(){var cv=document.getElementById('flock');if(!cv||!cv.getContext)return;
+var hero=document.getElementById('top'),ctx=cv.getContext('2d'),HZ=0.5957,IA=1344/768,
+ rm=matchMedia('(prefers-reduced-motion: reduce)').matches,
+ W=0,H=0,dpr=1,hz=0,N=0,bx,by,bvx,bvy,off=document.createElement('canvas'),octx=off.getContext('2d'),
+ grid=new Map(),vis=true,tabv=!document.hidden,run=false,last=0,t=0,sy=0,sv=0,lastY=window.pageYOffset||0,
+ ft=0,fn=0,ox,oy;
+function layout(){var r=hero.getBoundingClientRect();W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
+ dpr=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+ var sc=Math.max(W/IA/H>=1?W/(H*IA):1,1),ih,dh;dh=Math.max(H,W/IA);hz=(H-dh)/2+HZ*dh;
+ off.width=Math.max(1,Math.round(W*dpr*.5));off.height=Math.max(1,Math.round(hz*dpr*.5));
+ var want=W<700?420:Math.min(1000,Math.round(W*H/1500));
+ if(want!==N)seed(want)}
+function seed(n){N=n;bx=new Float32Array(n);by=new Float32Array(n);bvx=new Float32Array(n);bvy=new Float32Array(n);ox=new Float32Array(n);oy=new Float32Array(n);
+ for(var i=0;i<n;i++){var a=Math.random()*6.283,r=Math.sqrt(-2*Math.log(Math.random()+1e-6))*.45;ox[i]=Math.cos(a)*r;oy[i]=Math.sin(a)*r;bx[i]=W*.62+ox[i]*W*.2;by[i]=hz*.62+oy[i]*hz*.1;var v=Math.random()*6.283;bvx[i]=Math.cos(v)*1.5;bvy[i]=Math.sin(v)*1.5}}
+function prog(){var y=window.pageYOffset||0;return Math.max(0,Math.min(1.5,y/Math.max(1,H*.9)))}
+var CS=46;
+function step(k){
+ var p=rm?0:prog(),spd=1.5+Math.min(3,sv*.06),a=t*.11+p*5.2,
+  tx=W*(.6+.17*Math.sin(a)),ty=hz*(.62+.1*Math.sin(a*1.31+1)),
+  pull=.0007,sp=1+Math.min(1.5,p)*.9,rot=t*.17+p*2.6,cr=Math.cos(rot),sr=Math.sin(rot),shx=Math.max(W*.2,120)*sp,shy=hz*.11*(1+.5*Math.sin(t*.23+p*3)),
+  ceil=hz*.08,floor=hz-hz*.04,i,j;
+ grid.clear();
+ for(i=0;i<N;i++){var key=((bx[i]/CS)|0)*4096+((by[i]/CS)|0),c=grid.get(key);if(c)c.push(i);else grid.set(key,[i])}
+ var iv=1/(spd*spd);
+ for(i=0;i<N;i++){
+  var x=bx[i],y=by[i],cx=(x/CS)|0,cy=(y/CS)|0,ax=0,ay=0,cox=0,coy=0,sx=0,sy2=0,n=0,dx,dy,d2;
+  for(var gx=cx-1;gx<=cx+1&&n<9;gx++)for(var gy=cy-1;gy<=cy+1&&n<9;gy++){var c=grid.get(gx*4096+gy);if(!c)continue;
+   for(var q=0;q<c.length&&n<9;q++){j=c[q];if(j===i)continue;dx=bx[j]-x;dy=by[j]-y;d2=dx*dx+dy*dy;if(d2>CS*CS)continue;
+    n++;ax+=bvx[j];ay+=bvy[j];cox+=dx;coy+=dy;if(d2<110){sx-=dx/(d2+4);sy2-=dy/(d2+4)}}}
+  var fx=0,fy=0;
+  if(n){fx+=(ax/n-bvx[i])*.06+cox/n*.0005+sx*5;fy+=(ay/n-bvy[i])*.06+coy/n*.0005+sy2*5}
+  var qx=ox[i]*shx,qy=oy[i]*shy;dx=tx+qx*cr-qy*sr*.5-x;dy=ty+qx*sr*.6+qy*cr-y;fx+=dx*pull;fy+=dy*pull;  /* shape morphs + rotates, scroll-driven */
+  if(y>floor)fy-=(y-floor)*.02;if(y<ceil)fy+=(ceil-y)*.02;
+  if(x<0)fx+=-x*.01;if(x>W)fx-=(x-W)*.01;
+  var vx=bvx[i]+fx*k,vy=bvy[i]+fy*k,v=Math.sqrt(vx*vx+vy*vy)||1,mx=spd,mn=spd*.55;
+  if(v>mx){vx*=mx/v;vy*=mx/v}else if(v<mn){vx*=mn/v;vy*=mn/v}
+  bvx[i]=vx;bvy[i]=vy;bx[i]=x+vx*k;by[i]=y+vy*k}}
+function draw(){
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+ var sz=W<700?1.25:1.8;ctx.beginPath();
+ for(var i=0;i<N;i++){var x=bx[i],y=by[i],v=Math.sqrt(bvx[i]*bvx[i]+bvy[i]*bvy[i])||1,ux=bvx[i]/v*sz*1.7,uy=bvy[i]/v*sz*1.7;
+  /* tiny wing "v" flapping with phase */
+  var f=Math.sin(t*9+i*1.7)*sz*.9;ctx.moveTo(x-ux-uy*.0-uy*f*.5,y-uy+ux*f*.5);ctx.lineTo(x,y);ctx.lineTo(x-ux+uy*f*.5,y-uy-ux*f*.5)}
+ ctx.strokeStyle='rgba(6,12,24,.82)';ctx.lineWidth=sz*.95;ctx.lineJoin='round';ctx.stroke();
+ /* reflection: downscale flock to offscreen (soft), then mirror in rippled strips below horizon */
+ if(off.width>1&&hz>2){octx.setTransform(1,0,0,1,0,0);octx.clearRect(0,0,off.width,off.height);
+  octx.drawImage(cv,0,0,cv.width,Math.round(hz*dpr),0,0,off.width,off.height);
+  ctx.save();ctx.beginPath();ctx.rect(0,hz,W,H-hz);ctx.clip();
+  var wh=H-hz,sq=.78,st=3,sh=hz*dpr*.5/hz*0,ow=off.width,oh=off.height,kx=ow/W,ky=oh/hz;
+  for(var d=0;d<wh;d+=st){var sY=hz-d/sq;if(sY<0)break;var rip=Math.sin(d*.19+t*1.6)*(1.2+d*.012);
+   ctx.globalAlpha=.5*(1-Math.min(1,d/(wh*.9)))*(.85+.15*Math.sin(d*.5+t*2));
+   ctx.drawImage(off,0,Math.max(0,(sY-st/sq)*ky),ow,Math.max(1,st/sq*ky),rip,hz+d,W,st+.6)}
+  ctx.restore();ctx.globalAlpha=1}}
+function frame(now){if(!run)return;requestAnimationFrame(frame);
+ var dt=Math.min(50,now-(last||now));last=now;var k=dt/16.667;t+=dt/1000;
+ var y=window.pageYOffset||0;sv+=(Math.abs(y-lastY)-sv)*.12;lastY=y;
+ var t0=performance.now();step(k);draw();ft+=performance.now()-t0;if(++fn===60){window.__flockMs=ft/fn;ft=0;fn=0}}
+function go(){var want=!rm&&vis&&tabv;if(want&&!run){run=true;last=0;requestAnimationFrame(frame)}else if(!want)run=false}
+function stat(){layout();for(var i=0;i<260;i++)step(1);draw()}
+layout();window.__flockN=N;
+if(rm){stat();addEventListener('resize',stat)}
+else{for(var i=0;i<120;i++)step(1);
+ addEventListener('resize',function(){layout()});
+ if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting;go()}).observe(hero);
+ document.addEventListener('visibilitychange',function(){tabv=!document.hidden;go()});go()}
 })();
 </script>
 </body></html>
