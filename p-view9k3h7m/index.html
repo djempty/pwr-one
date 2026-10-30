@@ -181,7 +181,7 @@ frame();
 </script><script>
 /* Member Login: hide copy, keep the animation running while the login page dissolves in over it, then navigate */
 document.querySelectorAll('a[href="login/"]').forEach(a=>a.addEventListener('click',e=>{
- if(e.metaKey||e.ctrlKey||e.shiftKey||matchMedia('(prefers-reduced-motion:reduce)').matches||/CriOS|FxiOS|EdgiOS/.test(navigator.userAgent))return;
+ if(e.metaKey||e.ctrlKey||e.shiftKey||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
  e.preventDefault();
  const f=document.createElement('iframe');f.setAttribute('aria-hidden','true');f.tabIndex=-1;
  f.style.cssText='position:fixed;inset:0;width:100%;height:100%;border:0;opacity:0;z-index:50;pointer-events:none;transition:opacity 1s cubic-bezier(.382,0,.618,1)';
