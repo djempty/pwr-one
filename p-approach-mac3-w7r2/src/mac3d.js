@@ -85,7 +85,7 @@ export function createMac(opts){
   notch.position.set(0,10+462,6.3);lid.add(notch);
 
   // ---- ground: directional soft shadow + contact shadow
-  var FLOOR=-21;
+  var FLOOR=-20.3;
   var ground=new T.Mesh(new T.PlaneGeometry(2400,2400),new T.ShadowMaterial({opacity:.2,color:0x0f121a}));
   var gm=ground.material;gm.onBeforeCompile=function(sh){sh.vertexShader='varying vec2 gp;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ngp=position.xy;');sh.fragmentShader='varying vec2 gp;\n'+sh.fragmentShader.replace('#include <fog_fragment>','#include <fog_fragment>\ngl_FragColor.a*=1.0-smoothstep(330.0,590.0,length(gp));')};
   ground.rotation.x=-Math.PI/2;ground.position.y=FLOOR;ground.receiveShadow=true;G.add(ground);
@@ -94,8 +94,8 @@ export function createMac(opts){
   sun.shadow.radius=phone?6:10; sun.shadow.bias=-.0006; sun.shadow.normalBias=1.5; G.add(sun,sun.target);
   var fill=new T.DirectionalLight(0xdfe6ff,.6); fill.position.set(700,300,300); G.add(fill);
   // contact shadow
-  var RSH=120, RSO=1.0, FSO=.05, CS=1300, RS=phone?256:512;
-  var rtA=new T.WebGLRenderTarget(RS,RS),rtB=new T.WebGLRenderTarget(RS,RS);
+  var TSO=.85, BSO=.42, CS=1300, RS=phone?256:512;
+  var rtA=new T.WebGLRenderTarget(RS,RS),rtB=new T.WebGLRenderTarget(RS,RS),rtC=new T.WebGLRenderTarget(RS,RS);
   var cc=new T.OrthographicCamera(-CS/2,CS/2,CS/2,-CS/2,0,700); cc.rotation.x=Math.PI/2; cc.position.y=FLOOR; G.add(cc);
   var depthMat=new T.MeshDepthMaterial(); depthMat.userData.dark={value:3.2};
   depthMat.onBeforeCompile=function(s){s.uniforms.dark=depthMat.userData.dark;s.fragmentShader='uniform float dark;\n'+s.fragmentShader.replace('gl_FragColor = vec4( vec3( 1.0 - fragCoordZ ), opacity );','gl_FragColor = vec4( vec3( 0.0 ), ( 1.0 - fragCoordZ ) * dark );')};
@@ -103,10 +103,10 @@ export function createMac(opts){
   var blurMat=new T.ShaderMaterial({uniforms:{t:{value:null},d:{value:new T.Vector2()}},vertexShader:'varying vec2 u;void main(){u=uv;gl_Position=vec4(position.xy,0.,1.);}',
    fragmentShader:'uniform sampler2D t;uniform vec2 d;varying vec2 u;void main(){float a=0.;float w=0.;for(int i=-6;i<=6;i++){float k=exp(-float(i*i)/14.);a+=texture2D(t,u+d*float(i)).a*k;w+=k;}gl_FragColor=vec4(0.,0.,0.,a/w);}',depthTest:false,depthWrite:false});
   var bq=new T.Mesh(new T.PlaneGeometry(2,2),blurMat),bs=new T.Scene();bs.add(bq);var bcam=new T.Camera();
-  var cplane=new T.Mesh(new T.PlaneGeometry(CS,CS),new T.MeshBasicMaterial({map:rtA.texture,transparent:true,opacity:FSO,depthWrite:false,toneMapped:false}));
-  cplane.rotation.x=-Math.PI/2;cplane.position.y=FLOOR+.2;cplane.renderOrder=-1;G.add(cplane);
-  var cplane2=new T.Mesh(cplane.geometry,new T.MeshBasicMaterial({map:rtA.texture,transparent:true,opacity:RSO,depthWrite:false,toneMapped:false}));
-  cplane2.rotation.x=-Math.PI/2;cplane2.position.set(RSH,FLOOR+.15,0);cplane2.renderOrder=-1;G.add(cplane2);
+  var cplane=new T.Mesh(new T.PlaneGeometry(CS,CS),new T.MeshBasicMaterial({map:rtA.texture,transparent:true,opacity:BSO,depthWrite:false,toneMapped:false}));
+  cplane.rotation.x=-Math.PI/2;cplane.position.y=FLOOR+.1;cplane.renderOrder=-2;G.add(cplane);
+  var cplane2=new T.Mesh(cplane.geometry,new T.MeshBasicMaterial({map:rtC.texture,transparent:true,opacity:TSO,depthWrite:false,toneMapped:false}));
+  cplane2.rotation.x=-Math.PI/2;cplane2.position.y=FLOOR+.2;cplane2.renderOrder=-1;G.add(cplane2);
   var hid=[ground,cplane,cplane2];
   function contact(){
     hid.forEach(function(o){o.visible=false});var bgc=scene.background;var rt0=renderer.getRenderTarget();var ca=renderer.getClearAlpha();
@@ -117,10 +117,12 @@ export function createMac(opts){
     var vs=[sun,fill];vs.forEach(function(l){l.visible=false});
     renderer.render(scene,cc);
     scene.overrideMaterial=null;scene.environment=env;vs.forEach(function(l){l.visible=true});renderer.shadowMap.enabled=sm;
-    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(2.2/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
-    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,2.2/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
-    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(4.2/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
-    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,4.2/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(.9/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,.9/RS);renderer.setRenderTarget(rtC);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(5/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,5/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtA.texture;blurMat.uniforms.d.value.set(5/RS,0);renderer.setRenderTarget(rtB);renderer.clear();renderer.render(bs,bcam);
+    blurMat.uniforms.t.value=rtB.texture;blurMat.uniforms.d.value.set(0,5/RS);renderer.setRenderTarget(rtA);renderer.clear();renderer.render(bs,bcam);
     renderer.setRenderTarget(rt0);renderer.toneMapping=tm;renderer.setClearColor(0xffffff,0);
     hid.forEach(function(o){o.visible=true});
   }
