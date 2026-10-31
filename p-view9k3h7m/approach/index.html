@@ -213,6 +213,12 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
 .mac3 .gl{position:absolute;inset:0;pointer-events:none}
 .mac3 .m3gl{position:absolute;left:0;top:0;display:block;pointer-events:none}
 .mac3 .m3gl{opacity:0;transition:opacity .6s ease}.mac3.gl3 .m3gl{opacity:1}.mac3 .m3s{transition:opacity .6s ease}.mac3.gl3 .m3s{opacity:0;pointer-events:none}
+/* last section always reaches under the fixed header: no seam from previous section at max scroll */
+.mem{min-height:100vh;min-height:100lvh;padding-top:calc(var(--bar) + env(safe-area-inset-top) + 34px);background:#000;margin-top:-1px}
+@media(min-width:601px){.mem{padding-top:calc(89px + env(safe-area-inset-top) + 34px)}}
+.mem .px{top:-25%;bottom:-25%}
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.25s}
 </style><link rel="modulepreload" href="js/mac3d.min.js"></head><body>
 <header class="bar" id="bar"></header>
 <a class="mk" href="/p-view9k3h7m/" aria-label="Polarity home" style="text-decoration:none"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
@@ -298,10 +304,10 @@ var b=d.getElementById('mm-btn'),m=d.getElementById('mm'),mq=matchMedia('(max-wi
 function set(o){b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu');m.classList.toggle('open',o);h.classList.toggle('mm-lock',o);if(o)m.querySelector('a').focus()}
 b.addEventListener('click',function(){set(b.getAttribute('aria-expanded')!=='true')});
 d.addEventListener('keydown',function(e){if(e.key==='Escape'&&b.getAttribute('aria-expanded')==='true'){set(false);b.focus()}});
-m.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
+m.addEventListener('click',function(e){var a=e.target.closest('a');if(a&&(a.getAttribute('href').charAt(0)==='#'||a.hasAttribute('aria-current')))set(false)});
 mq.addEventListener('change',function(){if(!mq.matches)set(false)});
 d.querySelectorAll('a[href="#membership"]').forEach(function(a){if(a.classList.contains('cta'))a.addEventListener('click',function(e){e.preventDefault()})});
-addEventListener('pageshow',function(){h.classList.remove('mm-lock')});
+addEventListener('pageshow',function(){set(false)});
 })();
 
 /* ---- live murmuration (canvas) ---- */

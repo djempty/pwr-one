@@ -68,6 +68,7 @@ html.mm-lock,html.mm-lock body{overflow:hidden}
 @media(max-width:600px){.navr a{display:none!important}}
 .navr a.nl{display:contents!important}.navr a.nl span:not(.btn),.navr a.nl span:not(.btn):hover{cursor:pointer}
 .leaving .copy,.leaving .navr{visibility:hidden!important}
+@view-transition{navigation:auto}::view-transition-old(root),::view-transition-new(root){animation-duration:.25s}
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 <!-- navy-aligned-v10 --></head><body>
@@ -206,7 +207,7 @@ document.querySelectorAll('a[href="login/"]').forEach(a=>a.addEventListener('cli
 function set(o){b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu');m.classList.toggle('open',o);h.classList.toggle('mm-lock',o);if(o)m.querySelector('a').focus()}
 b.addEventListener('click',function(){set(b.getAttribute('aria-expanded')!=='true')});
 d.addEventListener('keydown',function(e){if(e.key==='Escape'&&b.getAttribute('aria-expanded')==='true'){set(false);b.focus()}});
-m.addEventListener('click',function(e){var c=e.target.closest('a[aria-current]');if(c){e.preventDefault();set(false);return}if(e.target.closest('a')&&!e.defaultPrevented)set(false)});
+m.addEventListener('click',function(e){var c=e.target.closest('a[aria-current]');if(c){e.preventDefault();set(false);return}});
 mq.addEventListener('change',function(){if(!mq.matches)set(false)});
 addEventListener('pageshow',function(){set(false)});})();
 addEventListener('pageshow',()=>{document.querySelectorAll('.lgx').forEach(f=>f.remove());document.querySelectorAll('.mk,.foot').forEach(x=>{x.style.zIndex='';x.style.position=''})});
