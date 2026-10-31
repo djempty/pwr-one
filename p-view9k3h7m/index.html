@@ -192,16 +192,16 @@ function frame(){
 }
 frame();
 </script><script>
-/* Member Login: animation + content dissolve to navy while still moving (plain overlay, no iframe = no extra history entry), then navigate; login form fades in on arrival */
-document.querySelectorAll('a[href="login/"]').forEach(a=>a.addEventListener('click',e=>{
+/* Member Login + Approach: animation + content dissolve to navy while still moving (plain overlay, no iframe = no extra history entry), then navigate; login form fades in on arrival */
+[['login/','#0e1f3c','pxfade'],['approach/','#000','pxfade-ap']].forEach(([p,col,key])=>document.querySelectorAll('a[href^="'+p+'"]').forEach(a=>a.addEventListener('click',e=>{
  if(e.metaKey||e.ctrlKey||e.shiftKey||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
  e.preventDefault();
  const o=document.createElement('div');o.className='lgx';o.setAttribute('aria-hidden','true');
- o.style.cssText='position:fixed;inset:0;z-index:40;background:#0e1f3c;opacity:0;pointer-events:none;transition:opacity .85s cubic-bezier(.382,0,.618,1)';
+ o.style.cssText='position:fixed;inset:0;z-index:40;background:'+col+';opacity:0;pointer-events:none;transition:opacity .85s cubic-bezier(.382,0,.618,1)';
  document.querySelectorAll('.mk,.foot').forEach(x=>{x.style.zIndex=60;x.style.position=getComputedStyle(x).position==='static'?'relative':''});
  document.body.appendChild(o);
- requestAnimationFrame(()=>requestAnimationFrame(()=>{o.style.opacity=1;setTimeout(()=>{sessionStorage.setItem('pxfade','1');location.href=a.href},880)}));
-}));
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{o.style.opacity=1;setTimeout(()=>{sessionStorage.setItem(key,'1');location.href=a.href},880)}));
+})));
 (function(){var d=document,h=d.documentElement,b=d.getElementById('mm-btn'),m=d.getElementById('mm'),mq=matchMedia('(max-width:600px)');
 function set(o){b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu');m.classList.toggle('open',o);h.classList.toggle('mm-lock',o);if(o)m.querySelector('a').focus()}
 b.addEventListener('click',function(){set(b.getAttribute('aria-expanded')!=='true')});
