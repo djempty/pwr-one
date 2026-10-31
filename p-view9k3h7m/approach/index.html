@@ -224,8 +224,8 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
 a:not([href]){cursor:default}</style><link rel="modulepreload" href="js/mac3d.min.js"></head><body>
 <header class="bar" id="bar"></header>
 <a class="mk" href="/p-view9k3h7m/" aria-label="Polarity home" style="text-decoration:none"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
-<nav class="navr" aria-label="Primary"><a href="/p-view9k3h7m/approach/" aria-current="page">Approach</a><a aria-disabled="true">Membership</a><a href="/p-view9k3h7m/login/"><span class="btn">Member Login</span></a><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26"><path d="M2 2 L24 24 M24 2 L2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></nav>
-<nav class="mm" id="mm" aria-label="Menu"><a href="/p-view9k3h7m/">Home</a><a href="/p-view9k3h7m/approach/" aria-current="page">Approach</a><a aria-disabled="true">Membership</a><a href="/p-view9k3h7m/login/">Member Login</a></nav>
+<nav class="navr" aria-label="Primary"><a href="" aria-current="page">Approach</a><a aria-disabled="true">Membership</a><a href="/p-view9k3h7m/login/"><span class="btn">Member Login</span></a><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26"><path d="M2 2 L24 24 M24 2 L2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></nav>
+<nav class="mm" id="mm" aria-label="Menu"><a href="/p-view9k3h7m/">Home</a><a href="" aria-current="page">Approach</a><a aria-disabled="true">Membership</a><a href="/p-view9k3h7m/login/">Member Login</a></nav>
 
 <main>
 <section class="band hero" id="top">
@@ -400,28 +400,33 @@ function build(n){var R=40,CX=R*(-1+2/1.6180339887),GA=Math.PI*(3-Math.sqrt(5)),
 function layout(){var r=cv.getBoundingClientRect();S=Math.max(1,Math.round(r.width));dpr=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(S*dpr);cv.height=Math.round(S*dpr)}
 function angle(){var r=sec.getBoundingClientRect(),vh=window.innerHeight,q=((r.top+r.height/2)-vh/2)/(vh/2+r.height/2);
  return -q*2.3+.05*Math.sin(t*.4)}   /* linear in scroll, no clamp or dead zone: face-on when centred, keeps turning the whole time it is in view */
-var COL=['248,244,239','200,161,92'],NB=5;
+var COL=['248,244,239','200,161,92'],NB=6,GS=24,SP=[],G=null,bi=[];
+/* pre-rendered 0/1 glyph sprites per colour: SP[colour*2+bit] */
+function sprites(){SP=[];var px=Math.round(GS*dpr),c,g,cn,cx;for(c=0;c<2;c++)for(g=0;g<2;g++){cn=document.createElement('canvas');cn.width=cn.height=px;cx=cn.getContext('2d');
+ cx.fillStyle='rgb('+COL[c]+')';cx.font='700 '+Math.round(px*.84)+'px "SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(g?'1':'0',px/2,px*.54);SP.push(cn)}}
+function seed(){G=new Uint8Array(N);var s=12345;for(var i=0;i<N;i++){s=(s*1664525+1013904223)>>>0;G[i]=(s>>>16)&1}}
 function draw(){var t0=performance.now();
  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,S,S);
+ if(!rm)for(var j=0;j<2;j++)G[(Math.random()*N)|0]^=1;
  var c=Math.cos(th),s=Math.sin(th),tl=rm?0:.07*Math.sin(t*.35),ct=Math.cos(tl),st=Math.sin(tl),D=4.2*40,k=S*.4/40,h=S/2,i,b,u,
-  base=Math.max(.7,S/400)*(S<420?1.1:1);
- for(b=0;b<2*2*NB;b++)bk[b]=[];
+  base=Math.max(.7,S/400)*(S<420?1.1:1)*(S<420?5.6:5.2);
+ for(b=0;b<2*NB;b++)bi[b]=bi[b]||[];for(b=0;b<2*NB;b++)bi[b].length=0;
+ var PX=draw.px||(draw.px=new Float32Array(N)),PY=draw.py||(draw.py=new Float32Array(N)),PS=draw.ps||(draw.ps=new Float32Array(N));
  for(i=0;i<N;i++){var x=X[i],y=Y[i],z=Z[i],xr=x*c+z*s,z1=-x*s+z*c,yr=y*ct-z1*st,zr=y*st+z1*ct,f=D/(D-zr),dep=Math.max(0,Math.min(1,(zr+46)/92)),
    back=zr<0?0:1,al=back?.55+.45*dep:.5+.2*dep;if(F[i])al*=.8;
-  var q=Math.min(NB-1,Math.floor(al*NB));
-  bk[(back*2+C[i])*NB+q].push(h+xr*f*k,h+yr*f*k,base*f*(.82+.33*dep))}
- for(b=0;b<2*2*NB;b++){var a=bk[b],n=a.length;if(!n)continue;var q=b%NB,cc=((b/NB)|0)&1,bb=(b/NB/2)|0;
-  ctx.fillStyle='rgba('+COL[cc]+','+((q+.6)/NB).toFixed(2)+')';ctx.beginPath();
-  for(u=0;u<n;u+=3){var rr=a[u+2]*(bb?1:.95);ctx.moveTo(a[u]+rr,a[u+1]);ctx.arc(a[u],a[u+1],rr,0,6.2832)}
-  ctx.fill()}
+  PX[i]=h+xr*f*k;PY[i]=h+yr*f*k;PS[i]=base*f*(.82+.33*dep)*(back?1:.95);
+  bi[back*NB+Math.min(NB-1,Math.floor(al*NB))].push(i)}
+ for(b=0;b<2*NB;b++){var a=bi[b],n=a.length;if(!n)continue;ctx.globalAlpha=Math.min(1,((b%NB)+.6)/NB);
+  for(u=0;u<n;u++){i=a[u];var sz=PS[i];ctx.drawImage(SP[C[i]*2+G[i]],PX[i]-sz/2,PY[i]-sz/2,sz,sz)}}
+ ctx.globalAlpha=1;
  ft+=performance.now()-t0;if(++fn===30){window.__markMs=ft/fn;ft=0;fn=0}}
 function frame(now){if(!run)return;t=now/1000;th=rm?0:angle();draw();requestAnimationFrame(frame)}
 function go(){var w=vis&&!document.hidden&&!rm;if(w&&!run){run=true;requestAnimationFrame(frame)}else if(!w)run=false}
-build(window.innerWidth<700?2200:4000);layout();th=0;draw();window.__markN=N;
-if(!rm){addEventListener('resize',function(){layout()});
+build(window.innerWidth<700?1500:2600);layout();sprites();seed();th=0;draw();window.__markN=N;
+if(!rm){addEventListener('resize',function(){layout();sprites()});
  if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting;go()},{rootMargin:'80px'}).observe(sec);else{vis=true;go()}
  document.addEventListener('visibilitychange',go)}
-else addEventListener('resize',function(){layout();draw()});
+else addEventListener('resize',function(){layout();sprites();draw()});
 })();
 
 /* ---- member network: complete graph + hub (canvas 2D, scroll-linked) ---- */
