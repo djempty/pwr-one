@@ -193,7 +193,7 @@ function frame(){
 frame();
 </script><script>
 /* Member Login + Approach: animation + content dissolve to navy while still moving (plain overlay, no iframe = no extra history entry), then navigate; login form fades in on arrival */
-[['login/','#0e1f3c','pxfade'],['approach/','#000','pxfade-ap']].forEach(([p,col,key])=>document.querySelectorAll('a[href^="'+p+'"]').forEach(a=>a.addEventListener('click',e=>{
+[['login/','#0e1f3c','pxfade'],['approach/','#0e1f3c','pxfade-ap']].forEach(([p,col,key])=>document.querySelectorAll('a[href^="'+p+'"]').forEach(a=>a.addEventListener('click',e=>{
  if(e.metaKey||e.ctrlKey||e.shiftKey||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
  e.preventDefault();
  const o=document.createElement('div');o.className='lgx';o.setAttribute('aria-hidden','true');
