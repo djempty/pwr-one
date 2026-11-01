@@ -49,3 +49,7 @@
 /p-approach-gear-r8m3/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store
+
+/p-approach-sim-q2v6/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
