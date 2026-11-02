@@ -575,8 +575,10 @@ function dom(x){
  /* text rides the sphere's visible left edge (gaussian ~50% point = 1.353R), same maths as the shader */
  etw.style.transform='';var rb=(etw.firstElementChild||etw).getBoundingClientRect(),er=etw.getBoundingClientRect(),rest=rb.right,sl=W0*.5*(1+(innerWidth<=900?0:.24))-1.353*.13*Math.exp(5.1*aN0)*H0*.5;
  var es=0,ph=innerWidth<=900,rr=1.353*.13*Math.exp(5.1*aN0)*H0*.5;
- if(ph){/* phone: text sits above the ball; slide once the sphere's top reaches the text, finish as its left edge hits x=0 */var r1=.618*H0-rb.bottom-12,r2=W0*.5,tt=c01((rr-r1)/Math.max(1,r2-r1));tt=tt*tt*(3-2*tt);etwX=inn?-tt*(rest+40):0;sl=tt>=1?0:1;es=tt*(2-tt)*.55}
- else{etwX=inn?Math.min(0,sl-34-rest):0;es=c01(-etwX/(rest+34));es=es*(2-es)*.95}
+ /* one eased progress from x=2.5 (immediately): ends when the blue's left edge reaches x=0 */
+ var off=ph?0:.24,aE=Math.min(1,Math.max(.05,Math.log(W0*.5*(1+off)/(1.353*.13*H0*.5))/5.1)),tl=c01(aN0/aE),pp=.5*tl+.5*tl*tl*(3-2*tl);
+ if(ph){etwX=inn?-pp*(rest+40):0;sl=pp>=1?0:1;es=pp*.55}
+ else{etwX=inn?Math.min(-pp*(rest+34),Math.min(0,sl-34-rest)):0;sl=pp>=1?0:sl;es=pp*.95}
  /* zoom toward the blue: scale about the edge facing the sphere (right-centre; phone: bottom-centre) so the edge gap holds */
  etw.style.transformOrigin=ph?((rb.left+rb.right)/2-er.left).toFixed(1)+'px '+(rb.bottom-er.top).toFixed(1)+'px':(rb.right-er.left).toFixed(1)+'px '+((rb.top+rb.bottom)/2-er.top).toFixed(1)+'px';etw.style.opacity='1';etw.style.transform=etwX||es?'translate3d('+etwX.toFixed(1)+'px,0,0) scale('+(1+es).toFixed(4)+')':'';etw.style.visibility=(inn&&sl<=0)?'hidden':'';
  sec.style.setProperty('--sc',(sm(.95,1.4,x)*(1-sm(2.3,2.8,x))).toFixed(3));
