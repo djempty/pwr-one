@@ -465,7 +465,7 @@ function seed(){G=new Uint8Array(N);var s=12345;for(var i=0;i<N;i++){s=(s*166452
 function draw(){var t0=performance.now();
  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
  var sr=sec.getBoundingClientRect(),vr=vb.getBoundingClientRect(),vh=window.innerHeight,ox=vr.left-sr.left+vr.width/2,oy=vr.top-sr.top+vr.height/2;
- A=rm?1:Math.max(0,Math.min(1,(vh-sr.top)/(vh*.68)));
+ A=rm?1:Math.max(0,Math.min(1,(vh*.85-sr.top)/(vh*.75)));
  if(!rm)for(var j=0;j<2;j++)G[(Math.random()*N)|0]^=1;
  var c=Math.cos(th),s=Math.sin(th),tl=rm?0:.07*Math.sin(t*.35),ct=Math.cos(tl),st=Math.sin(tl),D=4.2*40,k=S*.4/40,i,b,u,
   base=Math.max(.7,S/400)*(S<420?1.1:1)*(S<420?5.6:5.2);
