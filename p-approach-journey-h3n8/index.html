@@ -566,7 +566,7 @@ function GATE(){return Math.min(.5,89/innerHeight)}
 function X(){var r=sec.getBoundingClientRect(),vh=innerHeight,ph=pin.offsetHeight||vh;if(r.top>=0)return Math.max(-1,(vh-r.top)/vh);return 1+c01(-r.top/Math.max(1,sec.offsetHeight-ph))*(XE()-1)}
 /* the light as the shader draws it (centred moment): brightness along the horizontal axis, zoom Z */
 function LZ(){var uK=2.1;return{K:uK,sg:.017*uK}}
-function lightB(a,Z,K){var r=a/Z/1.5,c=1.25*Math.exp(-r*r/(2*Math.pow(.017*K,2)))+.5*Math.exp(-r/(.06*K))+.17*Math.exp(-r/(.26*K))+.05*Math.exp(-r/(.85*K));return c+.55*Math.exp(-a/Z/(.5*K))}
+function lightB(a,Z,K){var r=a/Z/1.5,c=1.25*Math.exp(-r*r/(2*Math.pow(.017*K,2)))+.5*Math.exp(-r/(.06*K))+.25*Math.exp(-r/(.26*K))+.08*Math.exp(-r/(.85*K));return c+.55*Math.exp(-a/Z/(.5*K))}
 function zMax(W0,H0){var K=2.1,m=0,i,cx=[0,W0],cy=[0,H0];for(i=0;i<4;i++){var dx=(cx[i&1]-LP.x)/(H0/2),dy=(cy[i>>1]-(H0-LP.y))/(H0/2);m=Math.max(m,Math.hypot(dx/1.5,dy))}return 1.2*m/(.55*.017*K)}
 function zAt(a,W0,H0){var t=Math.min(1,a/.84);return Math.exp(Math.log(zMax(W0,H0))*t)}
 function edgePx(Z,H0){var K=2.1,pk=lightB(0,Z,K),lo=0,hi=40*Z,m,i;for(i=0;i<40;i++){m=(lo+hi)/2;if(lightB(m,Z,K)>.5*pk)lo=m;else hi=m}return lo*H0*.5}
@@ -634,7 +634,7 @@ function build(T){
   'float fx=exp(-pow(ax/3.2,1.5))*(.4+.6*exp(-ax*1.9));'+
   'float ext=uL;float lm=1.-smoothstep(ext-.35*min(ext,1.),ext+.001,ax);'+
   'float ln=(exp(-py*py/.9)+.22*exp(-py/6.5))*fx*lm*uLa;vec3 col=mix(BLU,IV,exp(-ax*3.)*.7)*ln*1.05;'+
-  'float s=uK*(1.+uGr);vec2 ql=q/uZ;float rl=length(vec2(ql.x/1.5,ql.y));float core=exp(-rl*rl/(2.*pow(.017*s,2.)))*1.25+exp(-rl/(.06*s))*.5+exp(-rl/(.26*s))*.17+.05*exp(-rl/(.85*s));'+
+  'float s=uK*(1.+uGr);vec2 ql=q/uZ;float rl=length(vec2(ql.x/1.5,ql.y));float core=exp(-rl*rl/(2.*pow(.017*s,2.)))*1.25+exp(-rl/(.06*s))*.5+exp(-rl/(.26*s))*.25+.08*exp(-rl/(.85*s));'+
   'float fl=exp(-abs(ql.y)/(.011+.004*s))*exp(-abs(ql.x)/(.5*s))*.55*mix(lm,1.,step(.001,uAn));'+
   'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
   'col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf;'+
