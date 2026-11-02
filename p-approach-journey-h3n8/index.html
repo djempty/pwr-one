@@ -570,8 +570,8 @@ function X(){var r=sec.getBoundingClientRect(),vh=innerHeight,ph=pin.offsetHeigh
 var G=null,tried=0,vis=false,raf=0,lastX=-1,small=innerWidth<=900;
 function dom(x){
  sec.classList.toggle('on',x>=1.12);
- var te=sm(2.5,3.05,x);etw.style.opacity=(1-te).toFixed(3);etw.style.transform='translate3d(0,'+(-te*90).toFixed(1)+'px,0)';etw.style.visibility=te>=1?'hidden':'';
- sec.style.setProperty('--sc',(sm(.95,1.4,x)*(1-sm(2.3,3.0,x))).toFixed(3));
+ var te=sm(2.4,2.62,x);etw.style.opacity=(1-te).toFixed(3);etw.style.transform='translate3d(0,'+(-te*90).toFixed(1)+'px,0)';etw.style.visibility=te>=1?'hidden':'';
+ sec.style.setProperty('--sc',(sm(.95,1.4,x)*(1-sm(2.3,2.8,x))).toFixed(3));
  nv.style.opacity=(G?sm(3.9,3.99,x):sm(2.7,3.9,x)).toFixed(3)}
 function build(T){
  var R;try{R=new T.WebGLRenderer({canvas:cv,antialias:false,alpha:false,powerPreference:'high-performance'})}catch(e){return}
@@ -605,22 +605,22 @@ function build(T){
  var lg=new T.BufferGeometry();lg.setAttribute('position',new T.BufferAttribute(new Float32Array(NP*6),3));lg.setAttribute('aE',new T.BufferAttribute(E,1));lg.setAttribute('aS',new T.BufferAttribute(lS,4));lg.setAttribute('aW',new T.BufferAttribute(lW,4));lg.setAttribute('aM',new T.BufferAttribute(lM,3));
  var lines=new T.LineSegments(lg,lm);lines.frustumCulled=false;lines.renderOrder=1;
  /* background: horizon, event-horizon bloom, navy disc + ivory ring */
- var bu={uEdge:{value:0},uRes:{value:new T.Vector2(1,1)},uC:{value:new T.Vector2(0,-.236)},uHor:{value:0},uK:{value:1},uL:{value:0},uLa:{value:0},uRb:{value:0},uRg:{value:0},uAn:{value:0},uT:{value:0}};
+ var bu={uGr:{value:0},uEdge:{value:0},uRes:{value:new T.Vector2(1,1)},uC:{value:new T.Vector2(0,-.236)},uHor:{value:0},uK:{value:1},uL:{value:0},uLa:{value:0},uRb:{value:0},uRg:{value:0},uAn:{value:0},uT:{value:0}};
  var bm=new T.ShaderMaterial({depthTest:false,depthWrite:false,uniforms:bu,
   vertexShader:'void main(){gl_Position=vec4(position.xy,0.,1.);}',
-  fragmentShader:'precision highp float;uniform vec2 uRes,uC;uniform float uEdge,uHor,uK,uL,uLa,uRb,uRg,uAn,uT;'+
+  fragmentShader:'precision highp float;uniform vec2 uRes,uC;uniform float uGr,uEdge,uHor,uK,uL,uLa,uRb,uRg,uAn,uT;'+
   'const vec3 NAVY=vec3(14.,31.,60.)/255.;const vec3 BLU=vec3(.43,.59,.90);const vec3 IV=vec3(.96,.97,1.);'+
   'float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}'+
   'void main(){vec2 v=(gl_FragCoord.xy-.5*uRes)/(.5*uRes.y);vec2 q=v-uC;float r=length(q),ax=abs(q.x),ay=abs(q.y),py=ay*.5*uRes.y;'+
   'float fx=exp(-pow(ax/3.2,1.5))*(.4+.6*exp(-ax*1.9));'+
   'float ext=uL;float lm=1.-smoothstep(ext-.35*min(ext,1.),ext+.001,ax);'+
   'float ln=(exp(-py*py/.9)+.22*exp(-py/6.5))*fx*lm*uLa;vec3 col=mix(BLU,IV,exp(-ax*3.)*.7)*ln*1.05;'+
-  'float s=uK;float core=exp(-r*r/(2.*pow(.017*s,2.)))*1.25+exp(-r/(.06*s))*.5+exp(-r/(.26*s))*.17+.05*exp(-r/(.85*s));'+
+  'float cc=smoothstep(0.,.18,uAn),ga=1.-smoothstep(.5,.88,uAn);float s=uK*(1.+uGr);float core=exp(-r*r/(2.*pow(.017*s,2.)))*1.25+exp(-r/(.06*s))*.5+exp(-r/(.26*s))*.17+.05*exp(-r/(.85*s));'+
   'float fl=exp(-ay/(.011+.004*s))*exp(-ax/(.5*s))*.55*lm;'+
-  'col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl);col*=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);'+
-  'vec3 T=mix(BLU*.72,NAVY,smoothstep(.2,.8,uAn));if(uRg>0.){float F=exp(-pow(r/uRg,2.))*smoothstep(0.,.12,uAn);col=mix(col,T,F);}'+
-  'if(uRb>0.){float fill=1.-smoothstep(uRb*.35,uRb,r);vec3 bc=mix(IV,T*1.12,smoothstep(0.,.55,uAn));col=mix(col,bc,fill);}'+
-  'col=mix(col,NAVY,smoothstep(.82,1.,uAn));'+
+  'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
+  'vec3 T=mix(BLU*.72,NAVY,smoothstep(.3,.9,uAn));if(uRg>0.){float F=exp(-pow(r/uRg,2.))*smoothstep(0.,.12,uAn);col=mix(col,T,F);}'+
+  'float amp=mix(1.,.34,cc)*ga;col+=mix(mix(BLU*1.05,IV,smoothstep(.2,1.1,core)*(1.-cc)),BLU*1.05,cc)*(core+fl)*amp*vf;'+
+  'col=mix(col,NAVY,smoothstep(.86,1.,uAn));'+
   'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b);gl_FragColor=vec4(max(col,0.),1.);}'});
  var bg=new T.Mesh(new T.PlaneGeometry(2,2),bm);bg.frustumCulled=false;bg.renderOrder=0;
  scene.add(bg,lines,pts);
@@ -643,7 +643,7 @@ function build(T){
   var aN=c01((x-2.5)/1.45),g=c01(x/2.5),vel=Math.min(1,Math.abs(sv)*.4);
   bu.uHor.value=sm(0,.25,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
   bu.uLa.value=sm(.3,.75,x)*(1-sm(.35,.85,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2);
-  bu.uAn.value=aN;bu.uRb.value=aN>0?(corner*1.05)*Math.pow(aN,2.4):0;bu.uRg.value=aN>0?.1+corner*2.2*Math.pow(aN,1.35):0;bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
+  bu.uAn.value=aN;bu.uGr.value=corner*4.5*Math.pow(aN,1.1);bu.uRg.value=aN>0?.9+corner*3*Math.pow(aN,1.1):0;bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
   u.uTL.value=.0042+.01*vel;u.uV.value=vel;
   dom(x);R.render(scene,cam);if(!sec.classList.contains('gl'))sec.classList.add('gl')}
  G={start:function(){if(!raf&&vis)raf=requestAnimationFrame(render)},size:size,R:R};
