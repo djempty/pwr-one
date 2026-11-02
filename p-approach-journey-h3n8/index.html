@@ -526,8 +526,8 @@ function draw(){
  ctx.strokeStyle='rgba(176,141,79,.55)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(h,h,S*(.052+.006*pu),0,6.2832);ctx.stroke();
  ctx.fillStyle='#b08d4f';ctx.beginPath();ctx.arc(h,h,S*.026,0,6.2832);ctx.fill();
  ctx.fillStyle='#f8f4ef';ctx.beginPath();ctx.arc(h,h,S*.009,0,6.2832);ctx.fill();ctx.globalAlpha=1}
-function frame(now){if(!run)return;requestAnimationFrame(frame);t=now/1000;if(started){if(!t0)t0=now;prog=Math.min(1,(now-t0)/3200)}draw()}
-function go(){var w=vis&&!document.hidden&&!rm;if(w&&!run){run=true;requestAnimationFrame(frame)}else if(!w)run=false}
+var pe=0,lf=0;function frame(now){if(!run)return;requestAnimationFrame(frame);t=now/1000;var dt=lf?Math.min(now-lf,50):16;lf=now;if(started){pe+=dt;prog=Math.min(1,pe/3200)}draw()}
+function go(){var w=vis&&!document.hidden&&!rm;if(w&&!run){run=true;requestAnimationFrame(frame)}else if(!w){run=false;lf=0}}
 layout();draw();
 if(rm){addEventListener('resize',function(){layout();draw()})}
 else{addEventListener('resize',layout);
