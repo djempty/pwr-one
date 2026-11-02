@@ -604,6 +604,10 @@ function build(T){
   S4[i*4]=Math.cos(th)*rr;S4[i*4+1]=Math.sin(th)*rr;S4[i*4+2]=d0;S4[i*4+3]=vr;
   W4[i*4]=.25+r()*1.1;W4[i*4+1]=.15+r()*.8;W4[i*4+2]=5+r()*17;W4[i*4+3]=r()*6.2832;
   var hu=r();M2[i*3]=.05+.1*Math.pow(r(),1.8);M2[i*3+1]=r();M2[i*3+2]=hu}
+ /* residual field: a sparse Fibonacci-ish subset is placed so it is still un-overtaken at the centred moment (s=1.1), then fades with the engulf */
+ var r2=rng(8955),ph9=small&&innerWidth<=600,NR=ph9?34:55,as9=innerWidth/Math.max(1,innerHeight);
+ for(i=0;i<NR;i++){var v2=S4[i*4+3],dc=6+34*Math.pow(r2(),1.4),hh=dc*TAN*1.08/(1-.39*M2[i*3+1]);
+  S4[i*4+2]=dc+(1-v2)*95*1.1;S4[i*4]=(r2()*2-1)*hh*as9;S4[i*4+1]=(r2()*2-1)*hh}
  var common='uniform float uS,uT,uCd,uPx,uSw,uTL,uV;attribute vec4 aS;attribute vec4 aW;attribute vec3 aM;varying float vA;varying vec3 vC;'+
  'vec3 place(float s,out float d){d=aS.z-(1.0-aS.w)*uCd*s;float st=1.0-.42*smoothstep(0.,1.,s*.8)*aM.y;float ph=aW.w+aW.z*s*1.6+.05*sin(uT*.25+aW.w*3.);float k=(.55+.1*max(d,0.))*(1.+uV*.6);'+
  'vec2 w=vec2(aW.x*sin(ph),aW.y*sin(ph*.83+1.7))*k;return vec3(aS.xy*st+w,-d);}'+
@@ -658,7 +662,7 @@ function build(T){
   var x=X(),t=now/1000;if(x<GATE()){dom(x);return}var sv=ft?(x-pxv)*1000/Math.max(8,now-ft):0;pxv=x;sv=svs+=(sv-svs)*.2;
   if(ft){var dt=now-ft;fn++;t0+=dt;if(fn>=40){if(t0/fn>23&&dpr>1.01){dpr=Math.max(1,dpr-.35);size()}fn=0;t0=0}}ft=now;
   var s=Math.pow(c01((x-.4)/1.25),1.8)+.1*c01((x+1)/1.4);
-  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(-.8,.5,x)*(1-sm(0,.04,c01((x-2.5)/1.45)));
+  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(-.8,.5,x)*(1-sm(0,.12,c01((x-2.5)/1.45)));
   var aN=c01((x-2.5)/1.45),g=c01(x/2.5),vel=Math.min(1,Math.abs(sv)*.4);
   bu.uHor.value=sm(.45,.9,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
   bu.uLa.value=sm(.3,.75,x)*(1-sm(.4,.46,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2)*(1-sm(0,.42,aN));
