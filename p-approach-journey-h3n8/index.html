@@ -244,7 +244,8 @@ a:not([href]){cursor:default}
 .ent{max-width:min(600px,48%)}
 #engine .ent h2{font-size:clamp(40px,5.4vw,80px);margin:21px 0}
 #engine .ent p{text-shadow:0 0 21px #000,0 0 3px rgba(0,0,0,.6)}
-html.j3d #engine{height:400vh;height:400svh}
+html.j3d #engine{height:350vh;height:350svh}
+@media(max-width:900px){html.j3d #engine{height:347vh;height:347svh}}
 html.j3d #engine::after{display:none}
 html.j3d .epin{position:sticky;top:0;height:100vh;height:100svh;min-height:0}
 html.j3d #engl{display:block;position:absolute;left:0;bottom:0;width:100%;opacity:0;transition:opacity .7s}
@@ -559,8 +560,10 @@ if(!J)return;
 splitJ(sec.querySelector('h2'));
 Array.prototype.forEach.call(sec.querySelectorAll('.jr'),function(e,i){e.style.setProperty('--d',(.28+i*.1)+'s')});
 /* timeline x: 0..1 section entering, 1..4 pinned */
+/* pin ends (x) just after the zoomed light has covered the screen; must match the #engine height in vh */
+function XE(){return innerWidth<=900?3.47:3.5}
 function GATE(){return Math.min(.5,89/innerHeight)}
-function X(){var r=sec.getBoundingClientRect(),vh=innerHeight,ph=pin.offsetHeight||vh;if(r.top>=0)return Math.max(-1,(vh-r.top)/vh);return 1+c01(-r.top/Math.max(1,sec.offsetHeight-ph))*3}
+function X(){var r=sec.getBoundingClientRect(),vh=innerHeight,ph=pin.offsetHeight||vh;if(r.top>=0)return Math.max(-1,(vh-r.top)/vh);return 1+c01(-r.top/Math.max(1,sec.offsetHeight-ph))*(XE()-1)}
 /* the light as the shader draws it (centred moment): brightness along the horizontal axis, zoom Z */
 function LZ(){var uK=2.1;return{K:uK,sg:.017*uK}}
 function lightB(a,Z,K){var r=a/Z/1.5,c=1.25*Math.exp(-r*r/(2*Math.pow(.017*K,2)))+.5*Math.exp(-r/(.06*K))+.17*Math.exp(-r/(.26*K))+.05*Math.exp(-r/(.85*K));return c+.55*Math.exp(-a/Z/(.5*K))}
@@ -588,7 +591,7 @@ function dom(x){
  etw.style.transformOrigin=ph?((rb.left+rb.right)/2-er.left).toFixed(1)+'px '+(rb.bottom-er.top).toFixed(1)+'px':(rb.right-er.left).toFixed(1)+'px '+((rb.top+rb.bottom)/2-er.top).toFixed(1)+'px';etw.style.opacity='1';etw.style.transform=etwX||es?'translate3d('+etwX.toFixed(1)+'px,0,0) scale('+(1+es).toFixed(4)+')':'';etw.style.visibility=(inn&&sl<=0)?'hidden':'';
  var fp=sm(GATE(),1,x),fH=innerHeight,fF=fH*.4,fT=fH-fp*(fH+fF);sec.style.setProperty('--mt',fT.toFixed(1)+'px');sec.style.setProperty('--mh',(fT+fF).toFixed(1)+'px');cv.style.transition='none';cv.style.opacity=fp.toFixed(3);
  sec.style.setProperty('--sc',(sm(.95,1.4,x)*(1-sm(2.3,2.8,x))).toFixed(3));
- nv.style.opacity=(G?sm(3.9,3.99,x):sm(2.7,3.9,x)).toFixed(3)}
+ nv.style.opacity=(G?sm(XE()-.1,XE(),x):sm(2.7,3.9,x)).toFixed(3)}
 function build(T){
  var R;try{R=new T.WebGLRenderer({canvas:cv,antialias:false,alpha:false,powerPreference:'high-performance'})}catch(e){return}
  R.setClearColor(0,1);
