@@ -562,15 +562,19 @@ Array.prototype.forEach.call(sec.querySelectorAll('.jr'),function(e,i){e.style.s
 function GATE(){return Math.min(.5,89/innerHeight)}
 function X(){var r=sec.getBoundingClientRect(),vh=innerHeight,ph=pin.offsetHeight||vh;if(r.top>=0)return Math.max(-1,(vh-r.top)/vh);return 1+c01(-r.top/Math.max(1,sec.offsetHeight-ph))*3}
 var G=null,tried=0,vis=false,raf=0,lastX=-1,small=innerWidth<=900;
-var etwX=0;
+var etwX=0,AS=1.5,LP={x:0,y:0,k:''};
+/* light centre: desktop = midpoint of text-right..screen-right, centred in the area below the header; phone = screen centre, centred or in the free band below the text */
+function lpCalc(rr,rbm,W0,H0){var T=Math.max(0,Math.min(H0-120,Math.round((d.getElementById('bar')||{}).offsetHeight||0))),ph=innerWidth<=900,x,yt;
+ if(ph){x=W0/2;yt=(T+H0)/2;var fb=rbm+36;if(yt-.08*H0<fb)yt=(fb+H0)/2}else{x=(rr+W0)/2;yt=(T+H0)/2}
+ LP.x=x;LP.y=H0-yt;LP.k=x.toFixed(1)+'|'+yt.toFixed(1)+'|'+W0+'|'+H0+'|'+T}
 function dom(x){
  sec.classList.toggle('on',x>=1.12);sec.classList.toggle('pre',x<1);cv.style.visibility=x<GATE()?'hidden':'';
  var W0=pin.clientWidth||innerWidth,H0=pin.clientHeight||innerHeight,aN0=c01((x-2.5)/1.45),inn=aN0>0;
  /* text rides the sphere's visible left edge (gaussian ~50% point = 1.353R), same maths as the shader */
- etw.style.transform='';var rb=(etw.firstElementChild||etw).getBoundingClientRect(),er=etw.getBoundingClientRect(),rest=rb.right,sl=W0*.5*(1+(innerWidth<=900?0:.24))-1.353*.13*Math.exp(5.1*aN0)*H0*.5;
+ etw.style.transform='';var rb=(etw.firstElementChild||etw).getBoundingClientRect(),er=etw.getBoundingClientRect(),rest=rb.right,pl=pin.getBoundingClientRect().left;lpCalc(rb.right-pl,rb.bottom-pin.getBoundingClientRect().top,W0,H0);var sl=LP.x-AS*1.353*.13*Math.exp(5.1*aN0)*H0*.5;
  var es=0,ph=innerWidth<=900,rr=1.353*.13*Math.exp(5.1*aN0)*H0*.5;
  /* one eased progress from x=2.5 (immediately): ends when the blue's left edge reaches x=0 */
- var off=ph?0:.24,aE=Math.min(1,Math.max(.05,Math.log(W0*.5*(1+off)/(1.353*.13*H0*.5))/5.1)),tl=c01(aN0/aE),pp=.5*tl+.5*tl*tl*(3-2*tl);
+ var off=ph?0:.24,aE=Math.min(1,Math.max(.05,Math.log(LP.x/(AS*1.353*.13*H0*.5))/5.1)),tl=c01(aN0/aE),pp=.5*tl+.5*tl*tl*(3-2*tl);
  if(ph){etwX=inn?-pp*(rest+40):0;sl=pp>=1?0:1;es=pp*.55}
  else{etwX=inn?Math.min(-pp*(rest+34),Math.min(0,sl-34-rest)):0;sl=pp>=1?0:sl;es=pp*.95}
  /* zoom toward the blue: scale about the edge facing the sphere (right-centre; phone: bottom-centre) so the edge gap holds */
@@ -620,7 +624,7 @@ function build(T){
   'float fx=exp(-pow(ax/3.2,1.5))*(.4+.6*exp(-ax*1.9));'+
   'float ext=uL;float lm=1.-smoothstep(ext-.35*min(ext,1.),ext+.001,ax);'+
   'float ln=(exp(-py*py/.9)+.22*exp(-py/6.5))*fx*lm*uLa;vec3 col=mix(BLU,IV,exp(-ax*3.)*.7)*ln*1.05;'+
-  'float cc=smoothstep(0.,.18,uAn),ga=1.-smoothstep(.5,.88,uAn);float s=uK*(1.+uGr);float core=exp(-r*r/(2.*pow(.017*s,2.)))*1.25+exp(-r/(.06*s))*.5+exp(-r/(.26*s))*.17+.05*exp(-r/(.85*s));'+
+  'float cc=smoothstep(0.,.18,uAn),ga=1.-smoothstep(.5,.88,uAn);float s=uK*(1.+uGr);r=length(vec2(q.x/1.5,q.y));float core=exp(-r*r/(2.*pow(.017*s,2.)))*1.25+exp(-r/(.06*s))*.5+exp(-r/(.26*s))*.17+.05*exp(-r/(.85*s));'+
   'float fl=exp(-ay/(.011+.004*s))*exp(-ax/(.5*s))*.55*lm;'+
   'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
   'float R=.13*exp(5.1*uAn);float w=smoothstep(0.,.03,uAn);col*=mix(1.,smoothstep(R,1.5*R,r),w);col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf*(1.-w)*(1.-smoothstep(0.,.03,uAn));'+
@@ -630,14 +634,15 @@ function build(T){
   'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b)*(1.-step(.97,uAn));gl_FragColor=vec4(max(col,0.),1.);}'});
  var bg=new T.Mesh(new T.PlaneGeometry(2,2),bm);bg.frustumCulled=false;bg.renderOrder=0;
  scene.add(bg,lines,pts);
- var W=0,H=0,dpr=Math.min(devicePixelRatio||1,2),lx=0,corner=2;
+ var W=0,H=0,dpr=Math.min(devicePixelRatio||1,2),lx=0,corner=2,lk='';
  function size(){var w=pin.clientWidth,h=pin.clientHeight;if(!w||!h)return;small=innerWidth<=900;W=w;H=h;
   /* canvas starts under the fixed header (opaque there anyway): a canvas partly covered by a fixed layer can drop its bottom rows in some compositors */
   var T=Math.max(0,Math.min(h-120,Math.round((d.getElementById('bar')||{}).offsetHeight||0))),hc=h-T;
   R.setPixelRatio(dpr);R.setSize(w,hc,false);cv.style.top=T+'px';cv.style.height=hc+'px';cv.style.width=w+'px';
-  lx=small?0:.24;var nt=cam.near*TAN,wN=2*nt*w/h,hN=2*nt*hc/h,cy=2*(.382*h)/hc-1;
+  etw.style.transform='';var rbs=(etw.firstElementChild||etw).getBoundingClientRect(),pr=pin.getBoundingClientRect();lpCalc(rbs.right-pr.left,rbs.bottom-pr.top,w,h);lk=LP.k;
+  lx=(LP.x-w/2)/(w/2);var nt=cam.near*TAN,wN=2*nt*w/h,hN=2*nt*hc/h,cy=2*LP.y/hc-1;
   cam.aspect=w/hc;cam.projectionMatrix.makePerspective(-wN*(1+lx)/2,wN*(1-lx)/2,hN*(1-cy)/2,-hN*(1+cy)/2,cam.near,cam.far);cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();
-  var asp=w/h;bu.uRes.value.set(w*dpr,h*dpr);bu.uC.value.set(lx*asp,-.236);pm.uniforms.uPx.value=.5*h*dpr/TAN;
+  var asp=w/h;bu.uRes.value.set(w*dpr,h*dpr);bu.uC.value.set((LP.x-w/2)/(h/2),(LP.y-h/2)/(h/2));pm.uniforms.uPx.value=.5*h*dpr/TAN;
   corner=Math.hypot(Math.abs(lx*asp)+asp,1.236)}
  var ft=0,fn=0,t0=0,pxv=X(),svs=0;
  function render(now){
@@ -651,7 +656,7 @@ function build(T){
   bu.uLa.value=sm(.3,.75,x)*(1-sm(.4,.46,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2)*(1-sm(0,.42,aN));
   bu.uAn.value=aN;bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
   u.uTL.value=.0042+.01*vel;u.uV.value=vel;
-  dom(x);R.render(scene,cam);if(!sec.classList.contains('gl'))sec.classList.add('gl')}
+  dom(x);if(LP.k!==lk)size();R.render(scene,cam);if(!sec.classList.contains('gl'))sec.classList.add('gl')}
  G={start:function(){if(!raf&&vis)raf=requestAnimationFrame(render)},size:size,R:R};
  cv.addEventListener('webglcontextlost',function(e){e.preventDefault();sec.classList.remove('gl');G=null;cancelAnimationFrame(raf);raf=0});
  size();if(vis)G.start()}
