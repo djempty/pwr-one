@@ -271,17 +271,22 @@ html.j3d .on .rule.jr{transform:none;transition:transform 1s cubic-bezier(.77,0,
 @media(max-width:600px){.epin{padding:calc(var(--bar) + env(safe-area-inset-top) + 13px) 0 28px}#engine .ent h2{font-size:clamp(34px,10vw,48px);margin:13px 0}#engine .ent p{font-size:15px;line-height:1.58}}
 @media(min-width:901px) and (max-height:820px){#engine .ent p{font-size:16px;line-height:1.6}#engine .ent h2{font-size:clamp(40px,4.6vw,66px)}}
 /* capital video */
-.cap .cvid{position:absolute;inset:0;overflow:hidden;background:#0e1f3c}
-.cap .cvid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:100% 50%;display:block}
+.cap .cvid{position:absolute;inset:0;overflow:hidden;background:#05080f}
+.cap .cvid video{position:absolute;left:0;top:0;width:100%;height:100%;max-width:none;object-fit:cover;display:block}
 .cap .wrap{text-shadow:0 1px 16px rgba(5,10,20,.6)}
-@media(min-width:901px){.cap>.wrap{max-width:none;margin:0;padding:0 clamp(21px,5vw,55px) 0 var(--tx,5vw)}}
+@media(min-width:901px){
+ .cap>.wrap{max-width:none;margin:0;padding:0 clamp(21px,5vw,55px) 0 var(--tx,5vw)}
+ .cap>.wrap>*{max-width:var(--tw,56ch)}
+ .cap h2{font-size:var(--h2s,clamp(40px,6.4vw,96px))}
+ .cap>.wrap>h2{max-width:min(var(--tw,56ch),8.3em)}
+ .cap .wrap p{font-size:var(--ps,18px)}
+}
 @media(max-width:900px){
  .cap{display:block;padding:0 0 55px;min-height:0}
  .cap .cvid{position:relative;inset:auto;width:100%;aspect-ratio:16/10;margin-bottom:21px}
- .cap .cvid video{object-position:60% 50%}
  .cap .wrap{text-shadow:none}
 }
-@media(max-width:600px){.cap .cvid{aspect-ratio:4/5}.cap .cvid video{object-position:56% 50%}}
+@media(max-width:600px){.cap .cvid{aspect-ratio:4/5}}
 </style><meta name="robots" content="noindex,nofollow,noarchive"><link rel="modulepreload" href="/p-view9k3h7m/approach/js/mac3d.min.js"></head><body>
 <header class="bar" id="bar"></header>
 <a class="mk" href="/p-view9k3h7m/" aria-label="Polarity home" style="text-decoration:none"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
@@ -333,16 +338,23 @@ html.j3d .on .rule.jr{transform:none;transition:transform 1s cubic-bezier(.77,0,
 </div></section>
 
 <section class="band cap" id="capital">
- <div class="cvid"><video muted playsinline preload="auto" poster="/p-approach-journey-h3n8/media/capital-wallst-b-poster.jpg" aria-label="A member checking a redemption on the Polarity app on Wall Street at dusk" disablepictureinpicture><source src="/p-approach-journey-h3n8/media/capital-wallst-b.webm" type="video/webm"><source src="/p-approach-journey-h3n8/media/capital-wallst-b.mp4" type="video/mp4"></video></div>
+ <div class="cvid"><video muted playsinline preload="auto" poster="/p-approach-journey-h3n8/media/capital-wallst-e-poster.jpg" aria-label="A member checking a redemption on the Polarity app on Wall Street at dusk" disablepictureinpicture><source src="/p-approach-journey-h3n8/media/capital-wallst-e.webm" type="video/webm"><source src="/p-approach-journey-h3n8/media/capital-wallst-e.mp4" type="video/mp4"></video></div>
  <div class="wrap"><div class="k rv">05 · Access to Capital</div><h2 data-split>Your capital, your terms.</h2><p class="rv">Through the Member Portal, members direct their own deposits and withdrawals and set personal instructions: a monthly payout target, a percentage reinvested to compound, or a mix that changes as life does.</p><i class="rule rl"></i></div>
 </section>
 <script>
-(function(){var sec=document.getElementById('capital');if(!sec)return;var v=sec.querySelector('video');if(!v)return;
-function lay(){var mk=document.querySelector('.mk');if(!mk)return;var r=document.createRange();r.selectNodeContents(mk);sec.style.setProperty('--tx',(r.getBoundingClientRect().right-sec.getBoundingClientRect().left).toFixed(1)+'px')}
-lay();addEventListener('resize',lay);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(lay);addEventListener('load',lay);
+(function(){var sec=document.getElementById('capital');if(!sec)return;var box=sec.querySelector('.cvid'),v=box.querySelector('video');if(!v)return;
+var VW=1586,VH=768,CX=848.3,CY=411.8,PH=450,PL=696.9,TX=.72;
+function lay(){var mk=document.querySelector('.mk'),r=document.createRange(),sr=sec.getBoundingClientRect(),tx=5;if(mk){r.selectNodeContents(mk);tx=r.getBoundingClientRect().right-sr.left}
+ var W=box.clientWidth,H=box.clientHeight,d=innerWidth>900,s=Math.max(W/VW,H/VH),xT,yT;
+ if(d){s=Math.max(s,.82*H/PH);xT=Math.min(TX*W,CX*s);xT=Math.max(xT,W-(VW-CX)*s);yT=H/2}else{xT=.46*W;yT=CY*s}
+ var L=xT-CX*s,T=yT-CY*s;L=Math.min(0,Math.max(W-VW*s,L));T=Math.min(0,Math.max(H-VH*s,T));
+ v.style.cssText='width:'+(VW*s).toFixed(1)+'px;height:'+(VH*s).toFixed(1)+'px;left:'+L.toFixed(1)+'px;top:'+T.toFixed(1)+'px;object-fit:fill';
+ if(d){var pl=L+PL*s,av=Math.max(220,pl-tx-36);sec.style.setProperty('--tx',tx.toFixed(1)+'px');sec.style.setProperty('--tw',av.toFixed(1)+'px');sec.style.setProperty('--h2s',Math.min(Math.max(av/6.9,40),Math.min(innerWidth*.064,96)).toFixed(1)+'px');sec.style.setProperty('--ps',Math.min(18,Math.max(15,av/30)).toFixed(1)+'px')}
+ else{['--tx','--tw','--h2s','--ps'].forEach(function(k){sec.style.removeProperty(k)})}}
+lay();addEventListener('resize',lay);addEventListener('load',lay);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(lay);
 var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(RM||!('IntersectionObserver' in window)){var fin=function(){v.currentTime=Math.max(0,(v.duration||5.875)-.04)};if(v.readyState>0)fin();else v.addEventListener('loadedmetadata',fin)}
-else{var go=new IntersectionObserver(function(es){if(es[0].isIntersecting){go.disconnect();var p=v.play();if(p&&p.catch)p.catch(function(){})}},{threshold:.45});go.observe(sec.querySelector('.cvid'))}
+else{var go=new IntersectionObserver(function(es){if(es[0].isIntersecting){go.disconnect();var p=v.play();if(p&&p.catch)p.catch(function(){})}},{threshold:.45});go.observe(box)}
 })();
 </script>
 
