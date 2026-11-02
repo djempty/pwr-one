@@ -568,9 +568,11 @@ Array.prototype.forEach.call(sec.querySelectorAll('.jr'),function(e,i){e.style.s
 /* timeline x: 0..1 section entering, 1..4 pinned */
 function X(){var r=sec.getBoundingClientRect(),vh=innerHeight,ph=pin.offsetHeight||vh;if(r.top>=0)return c01((vh-r.top)/vh);return 1+c01(-r.top/Math.max(1,sec.offsetHeight-ph))*3}
 var G=null,tried=0,vis=false,raf=0,lastX=-1,small=innerWidth<=900;
+var etwX=0;
 function dom(x){
  sec.classList.toggle('on',x>=1.12);
- var te=sm(2.4,2.62,x);etw.style.opacity=(1-te).toFixed(3);etw.style.transform='translate3d(0,'+(-te*90).toFixed(1)+'px,0)';etw.style.visibility=te>=1?'hidden':'';
+ var W0=pin.clientWidth||innerWidth,H0=pin.clientHeight||innerHeight,ta=Math.min(.6,Math.max(.06,Math.log((W0/3)/(H0/2)/.13)/5.1)),te=c01((x-2.5)/(ta*1.45)),ee=te*te*(3-2*te);
+ var rb=etw.getBoundingClientRect(),dist=rb.right-etwX+24;etwX=te<=0?0:-ee*dist;etw.style.opacity='1';etw.style.transform=te<=0?'':'translate3d('+etwX.toFixed(1)+'px,0,0)';etw.style.visibility=te>=1?'hidden':'';
  sec.style.setProperty('--sc',(sm(.95,1.4,x)*(1-sm(2.3,2.8,x))).toFixed(3));
  nv.style.opacity=(G?sm(3.9,3.99,x):sm(2.7,3.9,x)).toFixed(3)}
 function build(T){
@@ -618,9 +620,9 @@ function build(T){
   'float cc=smoothstep(0.,.18,uAn),ga=1.-smoothstep(.5,.88,uAn);float s=uK*(1.+uGr);float core=exp(-r*r/(2.*pow(.017*s,2.)))*1.25+exp(-r/(.06*s))*.5+exp(-r/(.26*s))*.17+.05*exp(-r/(.85*s));'+
   'float fl=exp(-ay/(.011+.004*s))*exp(-ax/(.5*s))*.55*lm;'+
   'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
-  'float R=.13*exp(5.1*uAn);col=mix(col,col*vec3(.3,.45,.8),smoothstep(0.,.15,uAn))*(1.-smoothstep(0.,.3,uAn))*mix(1.,smoothstep(.8*R,1.8*R,r),smoothstep(0.,.04,uAn));float w=smoothstep(0.,.045,uAn);col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf*(1.-w);'+
+  'float R=.13*exp(5.1*uAn);col=mix(col,col*vec3(.3,.45,.8),smoothstep(0.,.03,uAn))*(1.-smoothstep(0.,.3,uAn))*mix(1.,smoothstep(.8*R,1.8*R,r),smoothstep(0.,.04,uAn));float w=smoothstep(0.,.03,uAn);col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf*(1.-w);'+
   'float I=exp(-pow(max(r-R,0.)/(.6*R),2.)*2.);'+
-  'vec3 CL=vec3(22.,46.,88.)/255.;vec3 C=mix(CL,NAVY,max(smoothstep(0.,R,r),smoothstep(.2,.5,uAn)));C=mix(vec3(1.),C,smoothstep(0.,.05,uAn));'+
+  'vec3 CL=vec3(22.,46.,88.)/255.;vec3 C=mix(CL,NAVY,max(smoothstep(0.,R,r),smoothstep(.2,.5,uAn)));C=mix(vec3(1.),C,smoothstep(0.,.03,uAn));'+
   'col+=C*I*w;col=mix(col,NAVY,smoothstep(.97,1.,uAn));'+
   'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b);gl_FragColor=vec4(max(col,0.),1.);}'});
  var bg=new T.Mesh(new T.PlaneGeometry(2,2),bm);bg.frustumCulled=false;bg.renderOrder=0;
@@ -640,10 +642,10 @@ function build(T){
   var x=X(),t=now/1000,sv=ft?(x-pxv)*1000/Math.max(8,now-ft):0;pxv=x;sv=svs+=(sv-svs)*.2;
   if(ft){var dt=now-ft;fn++;t0+=dt;if(fn>=40){if(t0/fn>23&&dpr>1.01){dpr=Math.max(1,dpr-.35);size()}fn=0;t0=0}}ft=now;
   var s=Math.pow(c01((x-.4)/1.25),1.8);
-  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(.0,.5,x)*(1-sm(0,.1,c01((x-2.5)/1.45)));
+  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(.0,.5,x)*(1-sm(0,.04,c01((x-2.5)/1.45)));
   var aN=c01((x-2.5)/1.45),g=c01(x/2.5),vel=Math.min(1,Math.abs(sv)*.4);
   bu.uHor.value=sm(0,.25,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
-  bu.uLa.value=sm(.3,.75,x)*(1-sm(0,.4,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2);
+  bu.uLa.value=sm(.3,.75,x)*(1-sm(0,.05,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2);
   bu.uAn.value=aN;bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
   u.uTL.value=.0042+.01*vel;u.uV.value=vel;
   dom(x);R.render(scene,cam);if(!sec.classList.contains('gl'))sec.classList.add('gl')}
