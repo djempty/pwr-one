@@ -639,10 +639,19 @@ function build(T){
   'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
   'col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf;'+
   'float fa=uFx*smoothstep(.45,1.6,uK);vec3 fc=vec3(0.);if(fa>.001){'+
-  'fc+=vec3(.55,.72,1.)*(exp(-ay/.0065)*exp(-pow(ax/1.5,1.4))*.2+exp(-ay/.03)*exp(-ax/.5)*.035);'+
-  'float sp=0.;for(int i=0;i<2;i++){float an=(i==0?.5:-.5);vec2 dr=vec2(cos(an),sin(an));float al=abs(dot(q,dr)),pe=abs(q.x*dr.y-q.y*dr.x);sp+=exp(-pe/.0035)*exp(-al/.2)*.07;}fc+=vec3(.75,.85,1.)*sp;'+
-  'vec2 ax0=-uC;float gs[3];gs[0]=.55;gs[1]=1.45;gs[2]=2.1;float gr[3];gr[0]=.07;gr[1]=.13;gr[2]=.045;float ga[3];ga[0]=.04;ga[1]=.03;ga[2]=.04;'+
-  'for(int i=0;i<3;i++){float dd=length(v-(uC+ax0*gs[i]));float rg=exp(-pow((dd-gr[i])/(gr[i]*.22),2.));float ds=exp(-dd*dd/(gr[i]*gr[i]*.9));fc+=mix(vec3(.5,.68,1.),vec3(1.,.96,.88),float(i)*.4)*(rg*.7+ds*.35)*ga[i]*3.;}'+
+  'float fs=clamp(uK/2.1,.45,1.);bool dk=uRes.x>uRes.y*1.1;vec2 dr=dk?normalize(vec2(-.82,-.57)):normalize(vec2(-.3,.95));float tk=dk?1.:.42;'+
+  'vec2 bl=dk?vec2(-1.2,-.03):vec2(-1.,1.);vec2 bh=dk?vec2(-.44,.33):vec2(.12,.98);'+
+  'float bm=smoothstep(bl.x-.08,bl.x+.08,v.x)*(1.-smoothstep(bl.y-.08,bl.y+.08,v.x))*smoothstep(bh.x-.08,bh.x+.08,v.y)*(1.-smoothstep(bh.y-.08,bh.y+.08,v.y));float mk=1.-.85*bm;float ms=1.-.5*bm;'+
+  'float sx=exp(-pow(ax/2.4,1.3));'+
+  'fc+=ms*(vec3(.2,.45,1.)*(exp(-ay/.0045)*sx*.8+exp(-ay/.02)*sx*.2)+vec3(.55,.75,1.)*exp(-ay/.0018)*exp(-ax/.5)*.5);'+
+  'float sb=0.;for(int i=0;i<14;i++){float fi=float(i);float hv=h(vec2(fi,3.7));float an=fi*.4488+(hv-.5)*.18+uK*.02;vec2 d2=vec2(cos(an),sin(an));float al=dot(q,d2);float pe=abs(q.x*d2.y-q.y*d2.x);float L=(.07+.26*hv*hv+.03*mod(fi,3.))*fs;float w=.003+.012*max(al,0.);'+
+  'sb+=step(0.,al)*exp(-pe*pe/(w*w))*exp(-al/L)*(.7+.3*sin(uK*2.+fi*1.9))*(.4+.5*hv);}'+
+  'fc+=ms*vec3(.5,.7,1.)*sb*1.5+vec3(.3,.55,1.)*exp(-r/(.12*fs))*.18;'+
+  'vec2 hc=uC+dr*.3*fs;float hd=length(v-hc)/(.62*fs);vec3 hr=vec3(exp(-pow((hd-1.06)/.07,2.)),exp(-pow((hd-1.)/.07,2.)),exp(-pow((hd-.94)/.07,2.)));'+
+  'fc+=mk*(hr*vec3(.8,.75,1.)*.065+vec3(.25,.4,.9)*.035*exp(-pow(hd,2.)*2.));'+
+  'for(int i=0;i<6;i++){float fi=float(i);float hv=h(vec2(fi,9.1));float rr=(.03+.012*fi+.003*fi*fi)*fs;vec2 p=v-(uC+dr*(.22+.2*fi)*tk*fs);vec2 pa=abs(p);float hx=max(dot(pa,vec2(.866,.5)),pa.y)/rr;'+
+  'fc+=mk*mix(vec3(.3,.55,1.),vec3(.55,.4,1.),mod(fi,2.)*.6)*(smoothstep(1.,.75,hx)*.35+exp(-pow((hx-.95)/.12,2.))*.6)*.24*(.7+.3*hv);}'+
+  'vec2 pg=v-(uC+dr*1.3*tk*fs);float al2=dot(pg,dr),pe2=pg.x*dr.y-pg.y*dr.x;fc+=mk*vec3(.3,.5,1.)*exp(-pow(al2/(.3*fs),2.)-pow(pe2/(.05*fs),2.))*.16;'+
   'col+=fc*fa*vf;}'+
   'const vec3 IVO=vec3(248.,244.,239.)/255.;col=mix(min(col,1.),IVO,smoothstep(.86,1.,uAn));'+
   'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b)*(1.-step(.86,uAn));gl_FragColor=vec4(max(col,0.),1.);}'});
