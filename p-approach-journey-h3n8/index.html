@@ -679,6 +679,28 @@ if('IntersectionObserver' in window){
  new IntersectionObserver(function(es){if(es[0].isIntersecting)init()},{rootMargin:'120% 0px'}).observe(sec)}
 else init();
 dom(X());
+/* committed transition: past the centred moment the engulf auto-completes (and rewinds) so it never rests half-way */
+if(J){(function(){
+ var tr=d.getElementById('transparency'),bar=d.getElementById('bar'),CX=2.5,TH=.03,lock=false,until=0,lastY=pageYOffset,rm=matchMedia('(prefers-reduced-motion:reduce)');
+ function Y(x){var ph=pin.offsetHeight||innerHeight;return sec.getBoundingClientRect().top+pageYOffset+(x-1)/(XE()-1)*(sec.offsetHeight-ph)}
+ function endY(){return tr?tr.getBoundingClientRect().top+pageYOffset-(bar?bar.offsetHeight:0):Y(XE())}
+ function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+ function go(to){var from=pageYOffset,dist=Math.abs(to-from);if(dist<2)return;
+  if(rm.matches){scrollTo(0,to);lastY=pageYOffset;until=performance.now()+300;return}
+  lock=true;var full=Math.abs(endY()-Y(CX)),dur=Math.max(700,Math.min(1600,1600*dist/Math.max(1,full))),t0=0;
+  function step(n){if(!t0)t0=n;var p=Math.min(1,(n-t0)/dur);scrollTo(0,from+(to-from)*ease(p));
+   if(p<1)requestAnimationFrame(step);else{scrollTo(0,to);lastY=pageYOffset;lock=false;until=performance.now()+300}}
+  requestAnimationFrame(step)}
+ function chk(){if(lock||performance.now()<until){lastY=pageYOffset;return}
+  var y=pageYOffset,dy=y-lastY;lastY=y;if(!dy)return;
+  var a=Y(CX+TH),e=endY(),b=Y(CX),tp=e-(a-b);
+  if(dy>0&&y>=a&&y<e-2)go(e);
+  else if(dy<0&&y<e-(a-b)&&y>a)go(b)}
+ addEventListener('scroll',chk,{passive:true});
+ function stop(ev){if(lock||performance.now()<until)ev.preventDefault()}
+ addEventListener('wheel',stop,{passive:false});addEventListener('touchmove',stop,{passive:false});
+ addEventListener('keydown',function(ev){if(lock&&/^(Arrow|Page|Home|End| |Space)/.test(ev.key))ev.preventDefault()});
+})()}
 window.__eng={X:X,g:function(){return G}};
 })();
 </script>
