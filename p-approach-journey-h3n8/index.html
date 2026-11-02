@@ -250,10 +250,9 @@ html.j3d .epin{position:sticky;top:0;height:100vh;height:100svh;min-height:0}
 html.j3d #engl{display:block;position:absolute;left:0;bottom:0;width:100%;opacity:0;transition:opacity .7s}
 html.j3d #vision{position:relative}
 html.j3d #vision>.wrap{position:relative;z-index:6}
-#vstars{display:none}
-html.j3d #vstars{display:block;position:absolute;left:0;bottom:-12vh;width:100%;height:84vh;z-index:5;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 62%,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 62%,#000 78%,transparent 100%)}
 html.j3d #engl{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 var(--mh,0px));mask-image:linear-gradient(180deg,transparent 0,#000 var(--mh,0px))}
 html.j3d #engine.gl #engl{opacity:1}
+html.j3d #engine.pre #engl{position:fixed;left:0;z-index:2}
 html.j3d #engine.gl .efb{opacity:0;transition:opacity .7s .2s}
 html.j3d .escrim{opacity:var(--sc,0)}
 html.j3d .eiv{display:block;position:absolute;inset:0;z-index:3;background:#f8f4ef;opacity:0;pointer-events:none}
@@ -284,7 +283,7 @@ html.j3d .on .rule.jr{transform:none;transition:transform 1s cubic-bezier(.77,0,
  <div class="cue" aria-hidden="true"></div>
 </section>
 
-<section class="sec blk a rev" id="vision"><canvas id="vstars" aria-hidden="true"></canvas><div class="wrap">
+<section class="sec blk a rev" id="vision"><div class="wrap">
  <div class="tx"><div class="k rv">01 · Vision</div><h2 data-split>Ego out.</h2><p class="rv">Markets punish emotion. Fear, greed and gut conviction are the most expensive inputs in investing, and Polarity is built to take them out of the room. Every decision is driven by strict but adaptable rules written in code, not by a hunch or a headline. The goal is simple: a better quality of life for our members, earned together through shared discipline.</p><i class="rule rl"></i></div>
  <div class="v3 rv" role="img" aria-label="A globe of points of light split along the golden section into a large ivory piece and a smaller gold piece, turning to form the Polarity mark"><canvas id="mark3d" aria-hidden="true"></canvas></div>
 </div></section>
@@ -559,11 +558,11 @@ if(!J)return;
 splitJ(sec.querySelector('h2'));
 Array.prototype.forEach.call(sec.querySelectorAll('.jr'),function(e,i){e.style.setProperty('--d',(.28+i*.1)+'s')});
 /* timeline x: 0..1 section entering, 1..4 pinned */
-function X(){var r=sec.getBoundingClientRect(),vh=innerHeight,ph=pin.offsetHeight||vh;if(r.top>=0)return c01((vh-r.top)/vh);return 1+c01(-r.top/Math.max(1,sec.offsetHeight-ph))*3}
+function X(){var r=sec.getBoundingClientRect(),vh=innerHeight,ph=pin.offsetHeight||vh;if(r.top>=0)return Math.max(-1,(vh-r.top)/vh);return 1+c01(-r.top/Math.max(1,sec.offsetHeight-ph))*3}
 var G=null,tried=0,vis=false,raf=0,lastX=-1,small=innerWidth<=900;
 var etwX=0;
 function dom(x){
- sec.classList.toggle('on',x>=1.12);
+ sec.classList.toggle('on',x>=1.12);sec.classList.toggle('pre',x<1);cv.style.visibility=x<=-.99?'hidden':'';
  var W0=pin.clientWidth||innerWidth,H0=pin.clientHeight||innerHeight,aN0=c01((x-2.5)/1.45),inn=aN0>0;
  /* text rides the sphere's visible left edge (gaussian ~50% point = 1.353R), same maths as the shader */
  etw.style.transform='';var rb=(etw.firstElementChild||etw).getBoundingClientRect(),er=etw.getBoundingClientRect(),rest=rb.right,sl=W0*.5*(1+(innerWidth<=900?0:.24))-1.353*.13*Math.exp(5.1*aN0)*H0*.5;
@@ -574,7 +573,7 @@ function dom(x){
  else{etwX=inn?Math.min(-pp*(rest+34),Math.min(0,sl-34-rest)):0;sl=pp>=1?0:sl;es=pp*.95}
  /* zoom toward the blue: scale about the edge facing the sphere (right-centre; phone: bottom-centre) so the edge gap holds */
  etw.style.transformOrigin=ph?((rb.left+rb.right)/2-er.left).toFixed(1)+'px '+(rb.bottom-er.top).toFixed(1)+'px':(rb.right-er.left).toFixed(1)+'px '+((rb.top+rb.bottom)/2-er.top).toFixed(1)+'px';etw.style.opacity='1';etw.style.transform=etwX||es?'translate3d('+etwX.toFixed(1)+'px,0,0) scale('+(1+es).toFixed(4)+')':'';etw.style.visibility=(inn&&sl<=0)?'hidden':'';
- sec.style.setProperty('--mh',(innerHeight*.4*(1-sm(.45,1,x))).toFixed(1)+'px');
+ sec.style.setProperty('--mh',(innerHeight*.95*(1-sm(-.8,1,x))).toFixed(1)+'px');
  sec.style.setProperty('--sc',(sm(.95,1.4,x)*(1-sm(2.3,2.8,x))).toFixed(3));
  nv.style.opacity=(G?sm(3.9,3.99,x):sm(2.7,3.9,x)).toFixed(3)}
 function build(T){
@@ -643,10 +642,10 @@ function build(T){
   raf=0;if(!vis)return;raf=requestAnimationFrame(render);
   var x=X(),t=now/1000,sv=ft?(x-pxv)*1000/Math.max(8,now-ft):0;pxv=x;sv=svs+=(sv-svs)*.2;
   if(ft){var dt=now-ft;fn++;t0+=dt;if(fn>=40){if(t0/fn>23&&dpr>1.01){dpr=Math.max(1,dpr-.35);size()}fn=0;t0=0}}ft=now;
-  var s=Math.pow(c01((x-.4)/1.25),1.8);
-  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(.0,.5,x)*(1-sm(0,.04,c01((x-2.5)/1.45)));
+  var s=Math.pow(c01((x-.4)/1.25),1.8)+.1*c01((x+1)/1.4);
+  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(-.8,.5,x)*(1-sm(0,.04,c01((x-2.5)/1.45)));
   var aN=c01((x-2.5)/1.45),g=c01(x/2.5),vel=Math.min(1,Math.abs(sv)*.4);
-  bu.uHor.value=sm(0,.25,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
+  bu.uHor.value=sm(.45,.9,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
   bu.uLa.value=sm(.3,.75,x)*(1-sm(.4,.46,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2)*(1-sm(0,.42,aN));
   bu.uAn.value=aN;bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
   u.uTL.value=.0042+.01*vel;u.uV.value=vel;
@@ -658,23 +657,14 @@ function init(){if(tried)return;tried=1;
  try{var c=d.createElement('canvas');if(!(c.getContext('webgl2')||c.getContext('webgl')))throw 0}catch(e){return}
  import('/p-view9k3h7m/approach/js/three.module.js').then(build).catch(function(){})}
 var q=0;function tick(){q=0;var x=X();dom(x)}
-addEventListener('scroll',function(){if(!G&&!q)q=requestAnimationFrame(tick)},{passive:true});
+addEventListener('scroll',function(){if((!G||!vis)&&!q)q=requestAnimationFrame(tick)},{passive:true});
 var rt=0;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){if(G){G.size()}dom(X())},120)});
 if('IntersectionObserver' in window){
- new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis){if(G)G.start()}else if(raf){cancelAnimationFrame(raf);raf=0}},{rootMargin:'0px'}).observe(sec);
+ new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis){if(G)G.start()}else if(raf){cancelAnimationFrame(raf);raf=0}},{rootMargin:'0px 0px 100% 0px'}).observe(sec);
  new IntersectionObserver(function(es){if(es[0].isIntersecting)init()},{rootMargin:'120% 0px'}).observe(sec)}
 else init();
 dom(X());
 window.__eng={X:X,g:function(){return G}};
 })();
-</script><script>
-/* static stars bleeding up into Vision so the Engine field has no hard top edge */
-(function(){var c=document.getElementById('vstars');if(!c||!document.documentElement.classList.contains('j3d'))return;
-function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-function draw(){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return;var dp=Math.min(devicePixelRatio||1,2);c.width=Math.round(w*dp);c.height=Math.round(h*dp);var x=c.getContext('2d');x.scale(dp,dp);x.globalCompositeOperation='lighter';
-var r=rng(1597),n=Math.round(w*h/(innerWidth<=600?2600:2300));
-for(var i=0;i<n;i++){var px=r()*w,py=h*Math.pow(r(),.62),sz=.5+2.2*Math.pow(r(),2.6),bl=r()<.22,a=.35+.65*r(),rad=sz*(r()<.1?5:2.6);
-var col=bl?'160,190,250':'248,244,239',g=x.createRadialGradient(px,py,0,px,py,rad);g.addColorStop(0,'rgba(255,255,255,'+a+')');g.addColorStop(.18,'rgba('+col+','+a*.8+')');g.addColorStop(1,'rgba('+col+',0)');x.fillStyle=g;x.fillRect(px-rad,py-rad,rad*2,rad*2)}}
-draw();var t=0,lw=innerWidth;addEventListener('resize',function(){if(innerWidth===lw)return;lw=innerWidth;clearTimeout(t);t=setTimeout(draw,150)})})();
 </script>
 </body></html>
