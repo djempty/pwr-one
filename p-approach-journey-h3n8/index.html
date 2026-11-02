@@ -645,7 +645,7 @@ function build(T){
   'float bm=smoothstep(bl.x-.08,bl.x+.08,v.x)*(1.-smoothstep(bl.y-.08,bl.y+.08,v.x))*smoothstep(bh.x-.08,bh.x+.08,v.y)*(1.-smoothstep(bh.y-.08,bh.y+.08,v.y));float mk=1.-.85*bm;float ms=1.-.5*bm;'+
   'float sx=exp(-pow(zx/2.4,1.3));float sk=1.+.6*smoothstep(0.,.12,uAn)*(1.-smoothstep(.12,.4,uAn));float sex=swp*4.;sx*=1.-smoothstep(sex-.3,sex+.001,zx);'+
   'fc+=sk*ms*(vec3(.2,.45,1.)*(exp(-zy/.0045)*sx*.8+exp(-zy/.02)*sx*.2)+vec3(.55,.75,1.)*exp(-zy/.0018)*exp(-zx/.5)*.5);'+
-  'float sb=0.;for(int i=0;i<14;i++){float fi=float(i);float hv=h(vec2(fi,3.7));float an=fi*.4488+(hv-.5)*.18+uK*.02+(1.-rgn)*.14+.22*EE;vec2 d2=vec2(cos(an),sin(an));float al=dot(ql,d2);float pe=abs(ql.x*d2.y-ql.y*d2.x);float L=(.07+.26*hv*hv+.03*mod(fi,3.))*fs*(1.+.18*EE*sin(uAn*11.+fi*1.3));float w=.003+.012*max(al,0.);'+
+  'float sb=0.;for(int i=0;i<14;i++){float fi=float(i);float hv=h(vec2(fi,3.7));float an=fi*.4488+(hv-.5)*.18+uK*.02+(1.-rgn)*.14-.22*EE;vec2 d2=vec2(cos(an),sin(an));float al=dot(ql,d2);float pe=abs(ql.x*d2.y-ql.y*d2.x);float L=(.07+.26*hv*hv+.03*mod(fi,3.))*fs*(1.+.18*EE*sin(uAn*11.+fi*1.3));float w=.003+.012*max(al,0.);'+
   'sb+=step(0.,al)*exp(-pe*pe/(w*w))*exp(-max(al,0.)/max(L,.001))*(.7+.3*sin(uK*2.+fi*1.9+(uK-2.1)*(5.+fi)+uAn*(14.+3.*fi)))*(.4+.5*hv);}'+
   'fc+=ms*vec3(.5,.7,1.)*sb*1.5+vec3(.3,.55,1.)*exp(-length(ql)/(.12*fs))*.18;'+
   'vec2 hc=uC+dr*.3*fs;float hd=length(vz-hc)/(.62*fs*(.88+.12*hsn)*(1.+1.6*EE*EE+.6*EE));vec3 hr=vec3(exp(-sq((hd-1.06)/.07)),exp(-sq((hd-1.)/.07)),exp(-sq((hd-.94)/.07)));'+
