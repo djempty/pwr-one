@@ -618,9 +618,9 @@ function build(T){
   'float cc=smoothstep(0.,.18,uAn),ga=1.-smoothstep(.5,.88,uAn);float s=uK*(1.+uGr);float core=exp(-r*r/(2.*pow(.017*s,2.)))*1.25+exp(-r/(.06*s))*.5+exp(-r/(.26*s))*.17+.05*exp(-r/(.85*s));'+
   'float fl=exp(-ay/(.011+.004*s))*exp(-ax/(.5*s))*.55*lm;'+
   'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
-  'float w=smoothstep(0.,.12,uAn);col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf*(1.-w);'+
-  'float R=.13*exp(5.1*uAn);float Rg=2.*R;float I=exp(-pow(r/Rg,2.)*2.4);'+
-  'vec3 C=mix(vec3(1.),vec3(110.,150.,230.)/255.,smoothstep(0.,.2,uAn));C=mix(C,NAVY,smoothstep(.6,1.,uAn));'+
+  'float R=.13*exp(5.1*uAn);col=mix(col,col*vec3(.3,.45,.8),smoothstep(0.,.15,uAn))*(1.-smoothstep(0.,.3,uAn))*mix(1.,smoothstep(.8*R,1.8*R,r),smoothstep(0.,.04,uAn));float w=smoothstep(0.,.045,uAn);col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf*(1.-w);'+
+  'float I=exp(-pow(max(r-R,0.)/(.6*R),2.)*2.);'+
+  'vec3 CL=vec3(22.,46.,88.)/255.;vec3 C=mix(CL,NAVY,max(smoothstep(0.,R,r),smoothstep(.2,.5,uAn)));C=mix(vec3(1.),C,smoothstep(0.,.05,uAn));'+
   'col+=C*I*w;col=mix(col,NAVY,smoothstep(.97,1.,uAn));'+
   'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b);gl_FragColor=vec4(max(col,0.),1.);}'});
  var bg=new T.Mesh(new T.PlaneGeometry(2,2),bm);bg.frustumCulled=false;bg.renderOrder=0;
@@ -640,7 +640,7 @@ function build(T){
   var x=X(),t=now/1000,sv=ft?(x-pxv)*1000/Math.max(8,now-ft):0;pxv=x;sv=svs+=(sv-svs)*.2;
   if(ft){var dt=now-ft;fn++;t0+=dt;if(fn>=40){if(t0/fn>23&&dpr>1.01){dpr=Math.max(1,dpr-.35);size()}fn=0;t0=0}}ft=now;
   var s=Math.pow(c01((x-.4)/1.25),1.8);
-  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(.0,.5,x)*(1-sm(0,.5,c01((x-2.5)/1.45)));
+  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(.0,.5,x)*(1-sm(0,.1,c01((x-2.5)/1.45)));
   var aN=c01((x-2.5)/1.45),g=c01(x/2.5),vel=Math.min(1,Math.abs(sv)*.4);
   bu.uHor.value=sm(0,.25,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
   bu.uLa.value=sm(.3,.75,x)*(1-sm(0,.4,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2);
