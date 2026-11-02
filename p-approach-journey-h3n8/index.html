@@ -645,16 +645,16 @@ function build(T){
   'float sx=exp(-pow(ax/2.4,1.3));'+
   'fc+=ms*(vec3(.2,.45,1.)*(exp(-ay/.0045)*sx*.8+exp(-ay/.02)*sx*.2)+vec3(.55,.75,1.)*exp(-ay/.0018)*exp(-ax/.5)*.5);'+
   'float sb=0.;for(int i=0;i<14;i++){float fi=float(i);float hv=h(vec2(fi,3.7));float an=fi*.4488+(hv-.5)*.18+uK*.02;vec2 d2=vec2(cos(an),sin(an));float al=dot(q,d2);float pe=abs(q.x*d2.y-q.y*d2.x);float L=(.07+.26*hv*hv+.03*mod(fi,3.))*fs;float w=.003+.012*max(al,0.);'+
-  'sb+=step(0.,al)*exp(-pe*pe/(w*w))*exp(-al/L)*(.7+.3*sin(uK*2.+fi*1.9))*(.4+.5*hv);}'+
+  'sb+=step(0.,al)*exp(-pe*pe/(w*w))*exp(-max(al,0.)/max(L,.001))*(.7+.3*sin(uK*2.+fi*1.9))*(.4+.5*hv);}'+
   'fc+=ms*vec3(.5,.7,1.)*sb*1.5+vec3(.3,.55,1.)*exp(-r/(.12*fs))*.18;'+
   'vec2 hc=uC+dr*.3*fs;float hd=length(v-hc)/(.62*fs);vec3 hr=vec3(exp(-sq((hd-1.06)/.07)),exp(-sq((hd-1.)/.07)),exp(-sq((hd-.94)/.07)));'+
   'fc+=mk*(hr*vec3(.8,.75,1.)*.065+vec3(.25,.4,.9)*.035*exp(-hd*hd*2.));'+
   'for(int i=0;i<6;i++){float fi=float(i);float hv=h(vec2(fi,9.1));float rr=(.03+.012*fi+.003*fi*fi)*fs;vec2 p=v-(uC+dr*(.22+.2*fi)*tk*fs);vec2 pa=abs(p);float hx=max(dot(pa,vec2(.866,.5)),pa.y)/rr;'+
   'fc+=mk*mix(vec3(.3,.55,1.),vec3(.55,.4,1.),mod(fi,2.)*.6)*((1.-smoothstep(.75,1.,hx))*.35+exp(-sq((hx-.95)/.12))*.6)*.24*(.7+.3*hv);}'+
   'vec2 pg=v-(uC+dr*1.3*tk*fs);float al2=dot(pg,dr),pe2=pg.x*dr.y-pg.y*dr.x;fc+=mk*vec3(.3,.5,1.)*exp(-sq(al2/(.3*fs))-sq(pe2/(.05*fs)))*.16;'+
-  'col+=fc*fa*vf;}'+
+  'fc=clamp(fc,0.,4.);col+=fc*fa*vf;}'+
   'const vec3 IVO=vec3(248.,244.,239.)/255.;col=mix(min(col,1.),IVO,smoothstep(.86,1.,uAn));'+
-  'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b)*(1.-step(.86,uAn));gl_FragColor=vec4(max(col,0.),1.);}'});
+  'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b)*(1.-step(.86,uAn));col=clamp(col,0.,1.);gl_FragColor=vec4(col,1.);}'});
  var bg=new T.Mesh(new T.PlaneGeometry(2,2),bm);bg.frustumCulled=false;bg.renderOrder=0;
  scene.add(bg,lines,pts);
  var W=0,H=0,dpr=Math.min(devicePixelRatio||1,2),lx=0,corner=2,lk='';
