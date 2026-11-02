@@ -638,7 +638,7 @@ function build(T){
   'float fl=exp(-abs(ql.y)/(.011+.004*s))*exp(-abs(ql.x)/(.5*s))*.55*mix(lm,1.,step(.001,uAn));'+
   'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
   'col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf;'+
-  'float flk=1.+.035*sin(uK*47.)*(1.-smoothstep(1.7,2.05,uK));float fa=uFx*smoothstep(1.25,1.9,uK)*flk;float swp=smoothstep(1.3,1.62,uK);float rgn=smoothstep(1.25,2.1,uK);float hsn=smoothstep(1.55,2.1,uK);vec3 fc=vec3(0.);if(fa>.001){'+
+  'float uq=1.25+(uK-.58)*.559;float flk=1.+.035*sin(uK*47.)*(1.-smoothstep(1.7,2.05,uq));float fa=uFx*smoothstep(1.25,1.9,uq)*(.35+.65*smoothstep(.58,1.6,uK))*flk;float swp=smoothstep(1.3,1.62,uq);float rgn=smoothstep(1.25,2.1,uq);float hsn=smoothstep(1.55,2.1,uq);vec3 fc=vec3(0.);if(fa>.001){'+
   'float fs=1.;bool dk=uRes.x>uRes.y*1.1;vec2 dr=dk?normalize(vec2(-.82,-.57)):normalize(vec2(-.3,.95));float tk=dk?1.:.42;'+
   'vec2 bl=dk?vec2(-1.2,-.03):vec2(-1.,1.);vec2 bh=dk?vec2(-.44,.33):vec2(.12,.98);'+
   'float bm=smoothstep(bl.x-.08,bl.x+.08,v.x)*(1.-smoothstep(bl.y-.08,bl.y+.08,v.x))*smoothstep(bh.x-.08,bh.x+.08,v.y)*(1.-smoothstep(bh.y-.08,bh.y+.08,v.y));float mk=1.-.85*bm;float ms=1.-.5*bm;'+
@@ -649,9 +649,9 @@ function build(T){
   'fc+=ms*vec3(.5,.7,1.)*sb*1.5+vec3(.3,.55,1.)*exp(-r/(.12*fs))*.18;'+
   'vec2 hc=uC+dr*.3*fs;float hd=length(v-hc)/(.62*fs*(.88+.12*hsn));vec3 hr=vec3(exp(-sq((hd-1.06)/.07)),exp(-sq((hd-1.)/.07)),exp(-sq((hd-.94)/.07)));'+
   'fc+=mk*hsn*(hr*vec3(.8,.75,1.)*.065+vec3(.25,.4,.9)*.035*exp(-hd*hd*2.));'+
-  'for(int i=0;i<6;i++){float fi=float(i);float hv=h(vec2(fi,9.1));float rr=(.03+.012*fi+.003*fi*fi)*fs;float tm=mix(.12,1.,smoothstep(1.15+.06*fi,2.1,uK));vec2 p=v-(uC+dr*(.22+.2*fi)*tk*fs*tm);vec2 pa=abs(p);float hx=max(dot(pa,vec2(.866,.5)),pa.y)/rr;'+
+  'for(int i=0;i<6;i++){float fi=float(i);float hv=h(vec2(fi,9.1));float rr=(.03+.012*fi+.003*fi*fi)*fs;float tm=mix(.12,1.,smoothstep(1.15+.06*fi,2.1,uq));vec2 p=v-(uC+dr*(.22+.2*fi)*tk*fs*tm);vec2 pa=abs(p);float hx=max(dot(pa,vec2(.866,.5)),pa.y)/rr;'+
   'fc+=mk*mix(vec3(.3,.55,1.),vec3(.55,.4,1.),mod(fi,2.)*.6)*((1.-smoothstep(.75,1.,hx))*.35+exp(-sq((hx-.95)/.12))*.6)*.24*(.7+.3*hv);}'+
-  'float tmg=mix(.12,1.,smoothstep(1.1,2.1,uK));vec2 pg=v-(uC+dr*1.3*tk*fs*tmg);float al2=dot(pg,dr),pe2=pg.x*dr.y-pg.y*dr.x;fc+=mk*vec3(.3,.5,1.)*exp(-sq(al2/(.3*fs))-sq(pe2/(.05*fs)))*.16;'+
+  'float tmg=mix(.12,1.,smoothstep(1.1,2.1,uq));vec2 pg=v-(uC+dr*1.3*tk*fs*tmg);float al2=dot(pg,dr),pe2=pg.x*dr.y-pg.y*dr.x;fc+=mk*vec3(.3,.5,1.)*exp(-sq(al2/(.3*fs))-sq(pe2/(.05*fs)))*.16;'+
   'fc=clamp(fc,0.,4.);col+=fc*fa*vf;}'+
   'const vec3 IVO=vec3(248.,244.,239.)/255.;col=mix(min(col,1.),IVO,smoothstep(.86,1.,uAn));'+
   'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b)*(1.-step(.86,uAn));col=clamp(col,0.,1.);gl_FragColor=vec4(col,1.);}'});
