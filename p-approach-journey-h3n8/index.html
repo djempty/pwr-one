@@ -270,6 +270,28 @@ html.j3d .on .rule.jr{transform:none;transition:transform 1s cubic-bezier(.77,0,
 @media(max-width:900px){.epin{--lx:50%;align-items:stretch}.epin>.wrap{display:flex}.etw{flex:1;display:flex;flex-direction:column;justify-content:space-between}.ent{max-width:none}.escrim{background:linear-gradient(180deg,rgba(0,0,0,.62) 0,rgba(0,0,0,.5) 36%,rgba(0,0,0,0) 50%,rgba(0,0,0,0) 69%,rgba(0,0,0,.62) 80%,rgba(0,0,0,.66) 100%)}}
 @media(max-width:600px){.epin{padding:calc(var(--bar) + env(safe-area-inset-top) + 13px) 0 28px}#engine .ent h2{font-size:clamp(34px,10vw,48px);margin:13px 0}#engine .ent p{font-size:15px;line-height:1.58}}
 @media(min-width:901px) and (max-height:820px){#engine .ent p{font-size:16px;line-height:1.6}#engine .ent h2{font-size:clamp(40px,4.6vw,66px)}}
+/* capital video */
+.cap .cvid{position:absolute;top:0;bottom:0;left:18vw;right:-4vw;overflow:hidden;background:#0e1f3c}
+.cap .cvid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:100% 50%;display:block}
+.cap .cvid::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,#0e1f3c 0,rgba(14,31,60,0) 144px),linear-gradient(0deg,rgba(14,31,60,.5) 0,rgba(14,31,60,0) 18%),linear-gradient(90deg,#0e1f3c 0,rgba(14,31,60,.92) 6%,rgba(14,31,60,.55) 12%,rgba(14,31,60,0) 24%)}
+.cap .cscr{position:absolute;left:0;top:0;width:390px;height:844px;transform-origin:0 0;opacity:0;z-index:2;border-radius:47px;overflow:hidden;background:#f8f4ef;filter:brightness(.9) sepia(.16) saturate(.92) contrast(.98);will-change:transform,opacity;pointer-events:none}
+.cap .cscr img{display:block;width:100%;height:100%}
+.cap .cscr::before{content:"";position:absolute;z-index:1;left:50%;top:0;width:44%;height:3.7%;transform:translateX(-50%);background:#05070c;border-radius:0 0 18px 18px}
+.cap{align-items:center}
+.cap>.wrap{max-width:none;margin:0;padding-left:clamp(21px,5vw,72px);padding-right:clamp(21px,5vw,72px)}
+.cap>.wrap>*{max-width:min(31vw,560px)}
+.cap>.wrap>p{max-width:min(31vw,48ch)}
+.cap h2{font-size:clamp(36px,4.2vw,68px)}
+@media(max-width:900px){
+ .cap{display:block;padding:0 0 55px;min-height:0}
+ .cap .cvid{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:100%;aspect-ratio:16/10;margin-bottom:-21px}
+ .cap .cvid video{object-position:60% 50%}
+ .cap .cvid::after{background:linear-gradient(180deg,#0e1f3c 0,rgba(14,31,60,0) 120px),linear-gradient(0deg,#0e1f3c 0,rgba(14,31,60,.7) 10%,rgba(14,31,60,0) 28%)}
+ .cap>.wrap{padding-left:clamp(21px,5vw,55px);padding-right:clamp(21px,5vw,55px)}
+ .cap>.wrap>*,.cap>.wrap>p{max-width:56ch}
+ .cap h2{font-size:clamp(34px,10vw,48px)}
+}
+@media(max-width:600px){.cap .cvid{aspect-ratio:4/5}.cap .cvid video{object-position:56% 50%}}
 </style><meta name="robots" content="noindex,nofollow,noarchive"><link rel="modulepreload" href="/p-view9k3h7m/approach/js/mac3d.min.js"></head><body>
 <header class="bar" id="bar"></header>
 <a class="mk" href="/p-view9k3h7m/" aria-label="Polarity home" style="text-decoration:none"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
@@ -321,10 +343,29 @@ html.j3d .on .rule.jr{transform:none;transition:transform 1s cubic-bezier(.77,0,
 </div></section>
 
 <section class="band cap" id="capital">
- <div class="px" data-par="0.14" style="position:absolute"><picture><source media="(max-width:700px)" srcset="/p-view9k3h7m/approach/img/capital-columns-m.webp"><img class="" src="/p-view9k3h7m/approach/img/capital-columns.webp" alt="Stone columns and shafts of gold light in a vault-like hall" decoding="async" loading="lazy"></picture></div>
- <div class="shade"></div>
+ <div class="cvid"><video muted playsinline preload="auto" poster="/p-approach-journey-h3n8/media/capital-wallst-poster.jpg" aria-label="A member checking a redemption on the Polarity app on Wall Street at dusk" disablepictureinpicture><source src="/p-approach-journey-h3n8/media/capital-wallst.webm" type="video/webm"><source src="/p-approach-journey-h3n8/media/capital-wallst.mp4" type="video/mp4"></video><div class="cscr" aria-hidden="true"><img src="/p-approach-journey-h3n8/media/capital-redeem-screen.webp" alt="" width="390" height="844" decoding="async"></div></div>
  <div class="wrap"><div class="k rv">05 · Access to Capital</div><h2 data-split>Your capital, your terms.</h2><p class="rv">Through the Member Portal, members direct their own deposits and withdrawals and set personal instructions: a monthly payout target, a percentage reinvested to compound, or a mix that changes as life does.</p><i class="rule rl"></i></div>
 </section>
+<script>
+(function(){var sec=document.getElementById('capital');if(!sec)return;var box=sec.querySelector('.cvid'),v=box.querySelector('video'),o=box.querySelector('.cscr');if(!v||!o)return;
+var VW=1366,VH=768,FPS=24,F0=118,D=5.875,FD=.6,T=[[508.6,283,660.1,273.3,757.6,597.9,600.5,624.3],[508,280.1,660.8,270.5,759.4,598.8,600.5,624.5],[507.1,277.2,661.6,268,760.8,598.9,600.6,625.1],[506.2,274.7,662.3,265.5,761.8,598.8,600.7,625.9],[505.4,272,662.9,262.7,762.6,598.3,600.5,626.7],[504.4,269,663.4,259.7,763.7,598.1,600.2,627.2],[503.1,266,663.6,256.8,764.8,598.2,599.9,627.4],[501.5,263,663.6,254.1,765.7,598.2,599.6,627.8],[499.9,260.1,663.5,251.9,766.3,598.1,599,628.4],[498.3,257.7,663.3,249.7,766.9,598.4,598.2,629],[496.6,255.6,663,247.4,767.6,598.9,597.3,629.4],[495.1,253.5,662.7,244.9,768.3,599.1,596.8,629.9],[493.9,251.4,662.7,242.1,768.8,598.8,596.7,630.8],[493,249,662.8,239.1,769.6,598.6,596.3,631.5],[492,246.4,662.8,236.1,770.7,598.4,596.1,632],[491.1,244,662.9,233.3,771.6,598.2,595.9,632.2],[490.4,241.8,663.1,230.7,772.7,598.3,595.7,632.2],[489.7,239.8,663.2,228.2,773.8,598.4,595.5,632.3],[488.9,237.8,663.5,225.7,774.9,598.3,595.5,632.4],[488.3,235.8,663.7,223.2,776,598.4,595.5,632.5],[487.9,233.7,663.9,220.8,777.2,598.5,595.7,632.6],[487.3,231.4,664.4,218.7,778.3,598.5,595.9,632.7],[486.8,228.9,665,216.7,779.5,598.3,595.9,632.7]];
+var W=0,Hh=0,S=1,OX=0,OY=0,RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function lay(){W=box.clientWidth;Hh=box.clientHeight;var p=(getComputedStyle(v).objectPosition||'50% 50%').split(' '),fx=parseFloat(p[0])/100,fy=parseFloat(p[1]||'50')/100;if(isNaN(fx))fx=.5;if(isNaN(fy))fy=.5;S=Math.max(W/VW,Hh/VH);OX=(W-VW*S)*fx;OY=(Hh-VH*S)*fy}
+function hom(d){var s=[0,0,390,0,390,844,0,844],A=[],i,j,k;for(i=0;i<4;i++){var x=s[2*i],y=s[2*i+1],u=d[2*i],w=d[2*i+1];A.push([x,y,1,0,0,0,-u*x,-u*y,u]);A.push([0,0,0,x,y,1,-w*x,-w*y,w])}
+ for(i=0;i<8;i++){var m=i;for(j=i+1;j<8;j++)if(Math.abs(A[j][i])>Math.abs(A[m][i]))m=j;var t=A[i];A[i]=A[m];A[m]=t;for(j=i+1;j<8;j++){var f=A[j][i]/A[i][i];for(k=i;k<9;k++)A[j][k]-=f*A[i][k]}}
+ var h=[];for(i=7;i>=0;i--){var r=A[i][8];for(j=i+1;j<8;j++)r-=A[i][j]*h[j];h[i]=r/A[i][i]}return h}
+function put(t){var f=Math.max(0,Math.min(T.length-1,t*FPS-F0)),i=Math.floor(f),n=Math.min(T.length-1,i+1),k=f-i,c=[],q;for(q=0;q<8;q++)c.push((T[i][q]*(1-k)+T[n][q]*k)*S+(q%2?OY:OX));
+ var h=hom(c);o.style.transform='matrix3d('+[h[0],h[3],0,h[6],h[1],h[4],0,h[7],0,0,1,0,h[2],h[5],0,1].join(',')+')';
+ var a=Math.max(0,Math.min(1,(t-(D-FD))/FD));o.style.opacity=(a*a*(3-2*a)).toFixed(3)}
+function upd(){put(v.currentTime||0)}
+function loop(){upd();if(!v.paused&&!v.ended){if(v.requestVideoFrameCallback)v.requestVideoFrameCallback(loop);else requestAnimationFrame(loop)}}
+lay();addEventListener('resize',function(){lay();upd()});
+v.addEventListener('ended',function(){v.pause();put(D)});v.addEventListener('seeked',upd);v.addEventListener('play',loop);
+if(RM||!('IntersectionObserver' in window)){var fin=function(){v.currentTime=Math.max(0,(v.duration||D)-.04)};if(v.readyState>0)fin();else v.addEventListener('loadedmetadata',fin)}
+else{var go=new IntersectionObserver(function(es){if(es[0].isIntersecting){go.disconnect();var p=v.play();if(p&&p.catch)p.catch(function(){})}},{threshold:.45});go.observe(box)}
+})();
+</script>
+
 
 
 <section class="band mem" id="membership">
