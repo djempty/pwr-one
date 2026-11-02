@@ -569,6 +569,7 @@ function LZ(){var uK=2.1;return{K:uK,sg:.017*uK}}
 function lightB(a,Z,K){var r=a/Z/1.5,c=1.25*Math.exp(-r*r/(2*Math.pow(.017*K,2)))+.5*Math.exp(-r/(.06*K))+.25*Math.exp(-r/(.26*K))+.08*Math.exp(-r/(.85*K));return c+.55*Math.exp(-a/Z/(.5*K))}
 function zMax(W0,H0){var K=2.1,m=0,i,cx=[0,W0],cy=[0,H0];for(i=0;i<4;i++){var dx=(cx[i&1]-LP.x)/(H0/2),dy=(cy[i>>1]-(H0-LP.y))/(H0/2);m=Math.max(m,Math.hypot(dx/1.5,dy))}return 1.2*m/(.55*.017*K)}
 function zAt(a,W0,H0){var t=Math.min(1,a/.84);return Math.exp(Math.log(zMax(W0,H0))*t)}
+function FA0(W,H){var ae=aEf(W,H);return ae+.55*(.86-ae)}
 function edgePx(Z,H0){var K=2.1,pk=lightB(0,Z,K),lo=0,hi=40*Z,m,i;for(i=0;i<40;i++){m=(lo+hi)/2;if(lightB(m,Z,K)>.5*pk)lo=m;else hi=m}return lo*H0*.5}
 function aEf(W0,H0){var lo=0,hi=.84,m,i;for(i=0;i<22;i++){m=(lo+hi)/2;if(edgePx(zAt(m,W0,H0),H0)<LP.x)lo=m;else hi=m}return Math.max(.05,hi)}
 var G=null,tried=0,vis=false,raf=0,lastX=-1,small=innerWidth<=900;
@@ -639,19 +640,19 @@ function build(T){
   'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
   'col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf;'+
   'float uq=1.25+(uK-.58)*.559;float flk=1.+.035*sin(uK*47.)*(1.-smoothstep(1.7,2.05,uq));float fa=uFx*smoothstep(1.25,1.9,uq)*(.35+.65*smoothstep(.58,1.6,uK))*flk;float swp=smoothstep(1.3,1.62,uq);float rgn=smoothstep(1.25,2.1,uq);float hsn=smoothstep(1.55,2.1,uq);vec3 fc=vec3(0.);if(fa>.001){'+
-  'float fs=1.;bool dk=uRes.x>uRes.y*1.1;vec2 dr=dk?normalize(vec2(-.82,-.57)):normalize(vec2(-.3,.95));float tk=dk?1.:.42;'+
+  'float zx=abs(ql.x),zy=abs(ql.y);vec2 vz=uC+ql;float fs=1.;bool dk=uRes.x>uRes.y*1.1;vec2 dr=dk?normalize(vec2(-.82,-.57)):normalize(vec2(-.3,.95));float tk=dk?1.:.42;'+
   'vec2 bl=dk?vec2(-1.2,-.03):vec2(-1.,1.);vec2 bh=dk?vec2(-.44,.33):vec2(.12,.98);'+
   'float bm=smoothstep(bl.x-.08,bl.x+.08,v.x)*(1.-smoothstep(bl.y-.08,bl.y+.08,v.x))*smoothstep(bh.x-.08,bh.x+.08,v.y)*(1.-smoothstep(bh.y-.08,bh.y+.08,v.y));float mk=1.-.85*bm;float ms=1.-.5*bm;'+
-  'float sx=exp(-pow(ax/2.4,1.3));float sex=swp*4.;sx*=1.-smoothstep(sex-.3,sex+.001,ax);'+
-  'fc+=ms*(vec3(.2,.45,1.)*(exp(-ay/.0045)*sx*.8+exp(-ay/.02)*sx*.2)+vec3(.55,.75,1.)*exp(-ay/.0018)*exp(-ax/.5)*.5);'+
-  'float sb=0.;for(int i=0;i<14;i++){float fi=float(i);float hv=h(vec2(fi,3.7));float an=fi*.4488+(hv-.5)*.18+uK*.02+(1.-rgn)*.14;vec2 d2=vec2(cos(an),sin(an));float al=dot(q,d2);float pe=abs(q.x*d2.y-q.y*d2.x);float L=(.07+.26*hv*hv+.03*mod(fi,3.))*fs;float w=.003+.012*max(al,0.);'+
+  'float sx=exp(-pow(zx/2.4,1.3));float sex=swp*4.;sx*=1.-smoothstep(sex-.3,sex+.001,zx);'+
+  'fc+=ms*(vec3(.2,.45,1.)*(exp(-zy/.0045)*sx*.8+exp(-zy/.02)*sx*.2)+vec3(.55,.75,1.)*exp(-zy/.0018)*exp(-zx/.5)*.5);'+
+  'float sb=0.;for(int i=0;i<14;i++){float fi=float(i);float hv=h(vec2(fi,3.7));float an=fi*.4488+(hv-.5)*.18+uK*.02+(1.-rgn)*.14;vec2 d2=vec2(cos(an),sin(an));float al=dot(ql,d2);float pe=abs(ql.x*d2.y-ql.y*d2.x);float L=(.07+.26*hv*hv+.03*mod(fi,3.))*fs;float w=.003+.012*max(al,0.);'+
   'sb+=step(0.,al)*exp(-pe*pe/(w*w))*exp(-max(al,0.)/max(L,.001))*(.7+.3*sin(uK*2.+fi*1.9+(uK-2.1)*(5.+fi)))*(.4+.5*hv);}'+
-  'fc+=ms*vec3(.5,.7,1.)*sb*1.5+vec3(.3,.55,1.)*exp(-r/(.12*fs))*.18;'+
-  'vec2 hc=uC+dr*.3*fs;float hd=length(v-hc)/(.62*fs*(.88+.12*hsn));vec3 hr=vec3(exp(-sq((hd-1.06)/.07)),exp(-sq((hd-1.)/.07)),exp(-sq((hd-.94)/.07)));'+
+  'fc+=ms*vec3(.5,.7,1.)*sb*1.5+vec3(.3,.55,1.)*exp(-length(ql)/(.12*fs))*.18;'+
+  'vec2 hc=uC+dr*.3*fs;float hd=length(vz-hc)/(.62*fs*(.88+.12*hsn));vec3 hr=vec3(exp(-sq((hd-1.06)/.07)),exp(-sq((hd-1.)/.07)),exp(-sq((hd-.94)/.07)));'+
   'fc+=mk*hsn*(hr*vec3(.8,.75,1.)*.065+vec3(.25,.4,.9)*.035*exp(-hd*hd*2.));'+
-  'for(int i=0;i<6;i++){float fi=float(i);float hv=h(vec2(fi,9.1));float rr=(.03+.012*fi+.003*fi*fi)*fs;float tm=mix(.12,1.,smoothstep(1.15+.06*fi,2.1,uq));vec2 p=v-(uC+dr*(.22+.2*fi)*tk*fs*tm);vec2 pa=abs(p);float hx=max(dot(pa,vec2(.866,.5)),pa.y)/rr;'+
+  'for(int i=0;i<6;i++){float fi=float(i);float hv=h(vec2(fi,9.1));float rr=(.03+.012*fi+.003*fi*fi)*fs;float tm=mix(.12,1.,smoothstep(1.15+.06*fi,2.1,uq));vec2 p=vz-(uC+dr*(.22+.2*fi)*tk*fs*tm);vec2 pa=abs(p);float hx=max(dot(pa,vec2(.866,.5)),pa.y)/rr;'+
   'fc+=mk*mix(vec3(.3,.55,1.),vec3(.55,.4,1.),mod(fi,2.)*.6)*((1.-smoothstep(.75,1.,hx))*.35+exp(-sq((hx-.95)/.12))*.6)*.24*(.7+.3*hv);}'+
-  'float tmg=mix(.12,1.,smoothstep(1.1,2.1,uq));vec2 pg=v-(uC+dr*1.3*tk*fs*tmg);float al2=dot(pg,dr),pe2=pg.x*dr.y-pg.y*dr.x;fc+=mk*vec3(.3,.5,1.)*exp(-sq(al2/(.3*fs))-sq(pe2/(.05*fs)))*.16;'+
+  'float tmg=mix(.12,1.,smoothstep(1.1,2.1,uq));vec2 pg=vz-(uC+dr*1.3*tk*fs*tmg);float al2=dot(pg,dr),pe2=pg.x*dr.y-pg.y*dr.x;fc+=mk*vec3(.3,.5,1.)*exp(-sq(al2/(.3*fs))-sq(pe2/(.05*fs)))*.16;'+
   'fc=clamp(fc,0.,4.);col+=fc*fa*vf;}'+
   'const vec3 IVO=vec3(248.,244.,239.)/255.;col=mix(min(col,1.),IVO,smoothstep(.86,1.,uAn));'+
   'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b)*(1.-step(.86,uAn));col=clamp(col,0.,1.);gl_FragColor=vec4(col,1.);}'});
@@ -677,7 +678,7 @@ function build(T){
   var aN=c01((x-2.5)/1.45),g=c01(x/2.5),vel=Math.min(1,Math.abs(sv)*.4);
   bu.uHor.value=sm(.45,.9,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
   bu.uLa.value=sm(.3,.75,x)*(1-sm(.4,.46,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2)*(1-sm(0,.42,aN));
-  bu.uAn.value=aN;bu.uFx.value=1-sm(0,.126,aN);bu.uZ.value=zAt(aN,W,H);bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
+  bu.uAn.value=aN;bu.uFx.value=1-sm(FA0(W,H),.86,aN);bu.uZ.value=zAt(aN,W,H);bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
   u.uTL.value=.0042+.01*vel;u.uV.value=vel;
   dom(x);if(LP.k!==lk)size();R.render(scene,cam);if(!sec.classList.contains('gl'))sec.classList.add('gl')}
  G={start:function(){if(!raf&&vis)raf=requestAnimationFrame(render)},size:size,R:R};
