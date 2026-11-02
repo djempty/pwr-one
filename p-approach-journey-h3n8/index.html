@@ -624,10 +624,10 @@ function build(T){
  var lg=new T.BufferGeometry();lg.setAttribute('position',new T.BufferAttribute(new Float32Array(NP*6),3));lg.setAttribute('aE',new T.BufferAttribute(E,1));lg.setAttribute('aS',new T.BufferAttribute(lS,4));lg.setAttribute('aW',new T.BufferAttribute(lW,4));lg.setAttribute('aM',new T.BufferAttribute(lM,3));
  var lines=new T.LineSegments(lg,lm);lines.frustumCulled=false;lines.renderOrder=1;
  /* background: horizon, event-horizon bloom, navy disc + ivory ring */
- var bu={uGr:{value:0},uEdge:{value:0},uRes:{value:new T.Vector2(1,1)},uC:{value:new T.Vector2(0,-.236)},uHor:{value:0},uK:{value:1},uL:{value:0},uLa:{value:0},uRb:{value:0},uRg:{value:0},uZ:{value:1},uAn:{value:0},uT:{value:0}};
+ var bu={uGr:{value:0},uEdge:{value:0},uRes:{value:new T.Vector2(1,1)},uC:{value:new T.Vector2(0,-.236)},uHor:{value:0},uK:{value:1},uL:{value:0},uLa:{value:0},uRb:{value:0},uRg:{value:0},uZ:{value:1},uFx:{value:1},uAn:{value:0},uT:{value:0}};
  var bm=new T.ShaderMaterial({depthTest:false,depthWrite:false,uniforms:bu,
   vertexShader:'void main(){gl_Position=vec4(position.xy,0.,1.);}',
-  fragmentShader:'precision highp float;uniform vec2 uRes,uC;uniform float uGr,uEdge,uHor,uK,uL,uLa,uRb,uRg,uAn,uT,uZ;'+
+  fragmentShader:'precision highp float;uniform vec2 uRes,uC;uniform float uGr,uEdge,uHor,uK,uL,uLa,uRb,uRg,uAn,uT,uZ,uFx;'+
   'const vec3 NAVY=vec3(14.,31.,60.)/255.;const vec3 BLU=vec3(.43,.59,.90);const vec3 IV=vec3(.96,.97,1.);'+
   'float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}'+
   'void main(){vec2 v=(gl_FragCoord.xy-.5*uRes)/(.5*uRes.y);vec2 q=v-uC;float r=length(q),ax=abs(q.x),ay=abs(q.y),py=ay*.5*uRes.y;'+
@@ -638,6 +638,12 @@ function build(T){
   'float fl=exp(-abs(ql.y)/(.011+.004*s))*exp(-abs(ql.x)/(.5*s))*.55*mix(lm,1.,step(.001,uAn));'+
   'float vf=uHor*mix(smoothstep(0.,.45,(uRes.y-gl_FragCoord.y)/uRes.y),1.,uEdge);col*=vf;'+
   'col+=mix(BLU*1.05,IV,smoothstep(.2,1.1,core))*(core+fl)*vf;'+
+  'float fa=uFx*smoothstep(.45,1.6,uK);vec3 fc=vec3(0.);if(fa>.001){'+
+  'fc+=vec3(.55,.72,1.)*(exp(-ay/.0065)*exp(-pow(ax/1.5,1.4))*.2+exp(-ay/.03)*exp(-ax/.5)*.035);'+
+  'float sp=0.;for(int i=0;i<2;i++){float an=(i==0?.5:-.5);vec2 dr=vec2(cos(an),sin(an));float al=abs(dot(q,dr)),pe=abs(q.x*dr.y-q.y*dr.x);sp+=exp(-pe/.0035)*exp(-al/.2)*.07;}fc+=vec3(.75,.85,1.)*sp;'+
+  'vec2 ax0=-uC;float gs[3];gs[0]=.55;gs[1]=1.45;gs[2]=2.1;float gr[3];gr[0]=.07;gr[1]=.13;gr[2]=.045;float ga[3];ga[0]=.04;ga[1]=.03;ga[2]=.04;'+
+  'for(int i=0;i<3;i++){float dd=length(v-(uC+ax0*gs[i]));float rg=exp(-pow((dd-gr[i])/(gr[i]*.22),2.));float ds=exp(-dd*dd/(gr[i]*gr[i]*.9));fc+=mix(vec3(.5,.68,1.),vec3(1.,.96,.88),float(i)*.4)*(rg*.7+ds*.35)*ga[i]*3.;}'+
+  'col+=fc*fa*vf;}'+
   'const vec3 IVO=vec3(248.,244.,239.)/255.;col=mix(min(col,1.),IVO,smoothstep(.86,1.,uAn));'+
   'col+=(h(gl_FragCoord.xy+fract(uT)*91.)-.5)/255.*step(.004,col.r+col.g+col.b)*(1.-step(.86,uAn));gl_FragColor=vec4(max(col,0.),1.);}'});
  var bg=new T.Mesh(new T.PlaneGeometry(2,2),bm);bg.frustumCulled=false;bg.renderOrder=0;
@@ -662,7 +668,7 @@ function build(T){
   var aN=c01((x-2.5)/1.45),g=c01(x/2.5),vel=Math.min(1,Math.abs(sv)*.4);
   bu.uHor.value=sm(.45,.9,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
   bu.uLa.value=sm(.3,.75,x)*(1-sm(.4,.46,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2)*(1-sm(0,.42,aN));
-  bu.uAn.value=aN;bu.uZ.value=zAt(aN,W,H);bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
+  bu.uAn.value=aN;bu.uFx.value=1-sm(0,.126,aN);bu.uZ.value=zAt(aN,W,H);bu.uT.value=t;bu.uEdge.value=sm(.8,1.15,x);
   u.uTL.value=.0042+.01*vel;u.uV.value=vel;
   dom(x);if(LP.k!==lk)size();R.render(scene,cam);if(!sec.classList.contains('gl'))sec.classList.add('gl')}
  G={start:function(){if(!raf&&vis)raf=requestAnimationFrame(render)},size:size,R:R};
