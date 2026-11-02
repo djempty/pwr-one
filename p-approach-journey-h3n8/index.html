@@ -440,7 +440,7 @@ else{for(var i=0;i<120;i++)step(1);
 (function(){var cv=document.getElementById('mark3d');if(!cv||!cv.getContext)return;
 var sec=document.getElementById('vision'),ctx=cv.getContext('2d'),
  rm=matchMedia('(prefers-reduced-motion: reduce)').matches,
- S=0,dpr=1,vis=false,run=false,th=0,t=0,ft=0,fn=0,N=0,X,Y,Z,C,F,bk=[];
+ S=0,W=1,H=1,dpr=1,vis=false,run=false,th=0,SX,SY,SD,DL,SW,A=1,vb=null,t=0,ft=0,fn=0,N=0,X,Y,Z,C,F,bk=[];
 /* logo units: radius 40, golden cut at x=9.44, pieces offset (-3.5,5.84) ivory / (3.5,-5.84) gold */
 function build(n){var R=40,CX=R*(-1+2/1.6180339887),GA=Math.PI*(3-Math.sqrt(5)),i,k=0,nf=Math.round(n*.14),ns=n-2*nf;
  N=n;X=new Float32Array(n);Y=new Float32Array(n);Z=new Float32Array(n);C=new Uint8Array(n);F=new Uint8Array(n);
@@ -449,7 +449,12 @@ function build(n){var R=40,CX=R*(-1+2/1.6180339887),GA=Math.PI*(3-Math.sqrt(5)),
  /* flat cut faces, sunflower discs, so each piece reads as solid when turned */
  for(var g=0;g<2;g++){var cr=Math.sqrt(R*R-CX*CX);for(i=0;i<nf;i++){var r=cr*Math.sqrt((i+.5)/nf),b=GA*i;put(CX,r*Math.cos(b),r*Math.sin(b),g,1)}}
 }
-function layout(){var r=cv.getBoundingClientRect();S=Math.max(1,Math.round(r.width));dpr=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(S*dpr);cv.height=Math.round(S*dpr)}
+function layout(){vb=vb||cv.parentNode;if(cv.parentNode!==sec){sec.appendChild(cv);cv.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;z-index:1;pointer-events:none'}
+ S=Math.max(1,Math.round(vb.getBoundingClientRect().width));dpr=Math.min(window.devicePixelRatio||1,S<420?2:1.5);W=Math.max(1,sec.clientWidth);H=Math.max(1,sec.clientHeight);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)}
+function scat(){var s=987654321;function r(){s=(s*1664525+1013904223)>>>0;return s/4294967296}
+ SX=new Float32Array(N);SY=new Float32Array(N);SD=new Float32Array(N);DL=new Float32Array(N);SW=new Float32Array(N);
+ for(var i=0;i<N;i++){SX[i]=-.04+1.08*r();SY[i]=-.02+1.04*r();SD[i]=r();DL[i]=r();SW[i]=(r()<.5?-1:1)*(.9+1.6*r())}}
+function eo3(x){return 1-(1-x)*(1-x)*(1-x)}
 function angle(){var r=sec.getBoundingClientRect(),vh=window.innerHeight,q=((r.top+r.height/2)-vh/2)/(vh/2+r.height/2);
  return -q*2.3+.05*Math.sin(t*.4)}   /* linear in scroll, no clamp or dead zone: face-on when centred, keeps turning the whole time it is in view */
 var COL=['248,244,239','200,161,92'],NB=6,GS=24,SP=[],G=null,bi=[];
@@ -458,15 +463,21 @@ function sprites(){SP=[];var px=Math.round(GS*dpr),c,g,cn,cx;for(c=0;c<2;c++)for
  cx.fillStyle='rgb('+COL[c]+')';cx.font='700 '+Math.round(px*.84)+'px "SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(g?'1':'0',px/2,px*.54);SP.push(cn)}}
 function seed(){G=new Uint8Array(N);var s=12345;for(var i=0;i<N;i++){s=(s*1664525+1013904223)>>>0;G[i]=(s>>>16)&1}}
 function draw(){var t0=performance.now();
- ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,S,S);
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+ var sr=sec.getBoundingClientRect(),vr=vb.getBoundingClientRect(),vh=window.innerHeight,ox=vr.left-sr.left+vr.width/2,oy=vr.top-sr.top+vr.height/2;
+ A=rm?1:Math.max(0,Math.min(1,(vh-sr.top)/(vh*.68)));
  if(!rm)for(var j=0;j<2;j++)G[(Math.random()*N)|0]^=1;
- var c=Math.cos(th),s=Math.sin(th),tl=rm?0:.07*Math.sin(t*.35),ct=Math.cos(tl),st=Math.sin(tl),D=4.2*40,k=S*.4/40,h=S/2,i,b,u,
+ var c=Math.cos(th),s=Math.sin(th),tl=rm?0:.07*Math.sin(t*.35),ct=Math.cos(tl),st=Math.sin(tl),D=4.2*40,k=S*.4/40,i,b,u,
   base=Math.max(.7,S/400)*(S<420?1.1:1)*(S<420?5.6:5.2);
  for(b=0;b<2*NB;b++)bi[b]=bi[b]||[];for(b=0;b<2*NB;b++)bi[b].length=0;
  var PX=draw.px||(draw.px=new Float32Array(N)),PY=draw.py||(draw.py=new Float32Array(N)),PS=draw.ps||(draw.ps=new Float32Array(N));
  for(i=0;i<N;i++){var x=X[i],y=Y[i],z=Z[i],xr=x*c+z*s,z1=-x*s+z*c,yr=y*ct-z1*st,zr=y*st+z1*ct,f=D/(D-zr),dep=Math.max(0,Math.min(1,(zr+46)/92)),
-   back=zr<0?0:1,al=back?.55+.45*dep:.5+.2*dep;if(F[i])al*=.8;
-  PX[i]=h+xr*f*k;PY[i]=h+yr*f*k;PS[i]=base*f*(.82+.33*dep)*(back?1:.95);
+   back=zr<0?0:1,al=back?.55+.45*dep:.5+.2*dep,gx,gy,gs,e=1,m,q;if(F[i])al*=.8;
+  gx=ox+xr*f*k;gy=oy+yr*f*k;gs=base*f*(.82+.33*dep)*(back?1:.95);
+  if(A<1||!rm){q=Math.max(0,Math.min(1,(A-DL[i]*.42)/.58));e=eo3(q)}
+  if(e<1){var ix=SX[i]*W,iy=SY[i]*H+(SD[i]-.5)*sr.top*.35,dx=(ix-gx)*(1-e),dy=(iy-gy)*(1-e),an=(1-e)*(1-e)*SW[i],ca=Math.cos(an),sa=Math.sin(an);
+   PX[i]=gx+dx*ca-dy*sa;PY[i]=gy+dx*sa+dy*ca;PS[i]=gs*((.75+.9*SD[i])*(1-e)+e);al*=.5+.5*e}
+  else{PX[i]=gx;PY[i]=gy;PS[i]=gs}
   bi[back*NB+Math.min(NB-1,Math.floor(al*NB))].push(i)}
  for(b=0;b<2*NB;b++){var a=bi[b],n=a.length;if(!n)continue;ctx.globalAlpha=Math.min(1,((b%NB)+.6)/NB);
   for(u=0;u<n;u++){i=a[u];var sz=PS[i];ctx.drawImage(SP[C[i]*2+G[i]],PX[i]-sz/2,PY[i]-sz/2,sz,sz)}}
@@ -474,7 +485,7 @@ function draw(){var t0=performance.now();
  ft+=performance.now()-t0;if(++fn===30){window.__markMs=ft/fn;ft=0;fn=0}}
 function frame(now){if(!run)return;t=now/1000;th=rm?0:angle();draw();requestAnimationFrame(frame)}
 function go(){var w=vis&&!document.hidden&&!rm;if(w&&!run){run=true;requestAnimationFrame(frame)}else if(!w)run=false}
-build(window.innerWidth<700?1500:2600);layout();sprites();seed();th=0;draw();window.__markN=N;
+build(window.innerWidth<700?1500:2600);layout();sprites();seed();scat();th=0;draw();window.__markN=N;
 if(!rm){addEventListener('resize',function(){layout();sprites()});
  if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting;go()},{rootMargin:'80px'}).observe(sec);else{vis=true;go()}
  document.addEventListener('visibilitychange',go)}
