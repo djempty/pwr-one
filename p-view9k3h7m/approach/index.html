@@ -221,7 +221,24 @@ html.mo .in .mask .ol,html.mo .mask.in .ol{stroke-dashoffset:0;transition:stroke
 .apf body>*:not(.mk):not(.foot){animation:apin .618s .382s ease both}
 @keyframes apin{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.apf body>*:not(.mk):not(.foot){animation:none}}
-a:not([href]){cursor:default}</style><link rel="modulepreload" href="js/mac3d.min.js"></head><body>
+a:not([href]){cursor:default}/* capital video */
+.cap .cvid{position:absolute;inset:0;overflow:hidden;background:#05080f}
+.cap .cvid video{position:absolute;left:0;top:0;width:100%;height:100%;max-width:none;object-fit:cover;display:block}
+.cap .wrap{text-shadow:0 1px 16px rgba(5,10,20,.6)}
+@media(min-width:901px){
+ .cap>.wrap{max-width:none;margin:0;padding:0 clamp(21px,5vw,55px) 0 var(--tx,5vw)}
+ .cap>.wrap>*{max-width:var(--tw,56ch)}
+ .cap h2{font-size:var(--h2s,clamp(40px,6.4vw,96px))}
+ .cap>.wrap>h2{max-width:min(var(--tw,56ch),8.3em)}
+ .cap .wrap p{font-size:var(--ps,18px)}
+}
+@media(max-width:900px){
+ .cap{display:block;padding:0 0 55px;min-height:0}
+ .cap .cvid{position:relative;inset:auto;width:100%;aspect-ratio:16/10;margin-bottom:21px}
+ .cap .wrap{text-shadow:none}
+}
+@media(max-width:600px){.cap .cvid{aspect-ratio:4/5}}
+</style><link rel="modulepreload" href="js/mac3d.min.js"></head><body>
 <header class="bar" id="bar"></header>
 <a class="mk" href="/p-view9k3h7m/" aria-label="Polarity home" style="text-decoration:none"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <nav class="navr" aria-label="Primary"><a href="" aria-current="page">Approach</a><a aria-disabled="true">Membership</a><a href="/p-view9k3h7m/login/"><span class="btn">Member Login</span></a><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26"><path d="M2 2 L24 24 M24 2 L2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></nav>
@@ -262,10 +279,25 @@ a:not([href]){cursor:default}</style><link rel="modulepreload" href="js/mac3d.mi
 </div></section>
 
 <section class="band cap" id="capital">
- <div class="px" data-par="0.14" style="position:absolute"><picture><source media="(max-width:700px)" srcset="img/capital-columns-m.webp"><img class="" src="img/capital-columns.webp" alt="Stone columns and shafts of gold light in a vault-like hall" decoding="async" loading="lazy"></picture></div>
- <div class="shade"></div>
+ <div class="cvid"><video muted playsinline preload="auto" poster="/p-view9k3h7m/approach/media/capital-wallst-e-poster.jpg" aria-label="A member checking a redemption on the Polarity app on Wall Street at dusk" disablepictureinpicture><source src="/p-view9k3h7m/approach/media/capital-wallst-e.webm" type="video/webm"><source src="/p-view9k3h7m/approach/media/capital-wallst-e.mp4" type="video/mp4"></video></div>
  <div class="wrap"><div class="k rv">04 · Access to Capital</div><h2 data-split>Your capital, your terms.</h2><p class="rv">Through the Member Portal, members direct their own deposits and withdrawals and set personal instructions: a monthly payout target, a percentage reinvested to compound, or a mix that changes as life does.</p><i class="rule rl"></i></div>
 </section>
+<script>
+(function(){var sec=document.getElementById('capital');if(!sec)return;var box=sec.querySelector('.cvid'),v=box.querySelector('video');if(!v)return;
+var VW=1586,VH=768,CX=848.3,CY=411.8,PH=450,PL=696.9,TX=.72;
+function lay(){var mk=document.querySelector('.mk'),r=document.createRange(),sr=sec.getBoundingClientRect(),tx=5;if(mk){r.selectNodeContents(mk);tx=r.getBoundingClientRect().right-sr.left}
+ var W=box.clientWidth,H=box.clientHeight,d=innerWidth>900,s=Math.max(W/VW,H/VH),xT,yT;
+ if(d){s=Math.max(s,.82*H/PH);xT=Math.min(TX*W,CX*s);xT=Math.max(xT,W-(VW-CX)*s);yT=H/2}else{xT=.46*W;yT=CY*s}
+ var L=xT-CX*s,T=yT-CY*s;L=Math.min(0,Math.max(W-VW*s,L));T=Math.min(0,Math.max(H-VH*s,T));
+ v.style.cssText='width:'+(VW*s).toFixed(1)+'px;height:'+(VH*s).toFixed(1)+'px;left:'+L.toFixed(1)+'px;top:'+T.toFixed(1)+'px;object-fit:fill';
+ if(d){var pl=L+PL*s,av=Math.max(220,pl-tx-36);sec.style.setProperty('--tx',tx.toFixed(1)+'px');sec.style.setProperty('--tw',av.toFixed(1)+'px');sec.style.setProperty('--h2s',Math.min(Math.max(av/6.9,40),Math.min(innerWidth*.064,96)).toFixed(1)+'px');sec.style.setProperty('--ps',Math.min(18,Math.max(15,av/30)).toFixed(1)+'px')}
+ else{['--tx','--tw','--h2s','--ps'].forEach(function(k){sec.style.removeProperty(k)})}}
+lay();addEventListener('resize',lay);addEventListener('load',lay);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(lay);
+var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(RM||!('IntersectionObserver' in window)){var fin=function(){v.currentTime=Math.max(0,(v.duration||5.875)-.04)};if(v.readyState>0)fin();else v.addEventListener('loadedmetadata',fin)}
+else{var go=new IntersectionObserver(function(es){if(es[0].isIntersecting){go.disconnect();var p=v.play();if(p&&p.catch)p.catch(function(){})}},{threshold:.45});go.observe(box)}
+})();
+</script>
 
 <section class="sec lt a tm" id="transparency"><div class="wrap">
  <div class="tx"><div class="k rv">05 · Transparency</div><h2 data-split>Open by default.</h2><p class="rv">Members see the full trading history, the current directional focus, and how the community's decisions shaped results, good and bad. The one thing we protect is the engine itself: the specifics of the algorithm stay private.</p><i class="rule rl"></i></div>
