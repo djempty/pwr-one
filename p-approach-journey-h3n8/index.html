@@ -338,16 +338,15 @@ html.j3d .on .rule.jr{transform:none;transition:transform 1s cubic-bezier(.77,0,
 </div></section>
 
 <section class="band cap" id="capital">
- <div class="cvid"><video muted playsinline preload="auto" poster="/p-approach-journey-h3n8/media/capital-wallst-e-poster.jpg" aria-label="A member checking a redemption on the Polarity app on Wall Street at dusk" disablepictureinpicture><source src="/p-approach-journey-h3n8/media/capital-wallst-e.webm" type="video/webm"><source src="/p-approach-journey-h3n8/media/capital-wallst-e.mp4" type="video/mp4"></video></div>
+ <div class="cvid"><video muted playsinline preload="auto" poster="/p-approach-journey-h3n8/media/capital-wallst-f-poster.jpg" aria-label="A member checking a redemption on the Polarity app on Wall Street at dusk" disablepictureinpicture><source src="/p-approach-journey-h3n8/media/capital-wallst-f.webm" type="video/webm"><source src="/p-approach-journey-h3n8/media/capital-wallst-f.mp4" type="video/mp4"></video></div>
  <div class="wrap"><div class="k rv">05 · Access to Capital</div><h2 data-split>Your capital, your terms.</h2><p class="rv">Through the Member Portal, members direct their own deposits and withdrawals and set personal instructions: a monthly payout target, a percentage reinvested to compound, or a mix that changes as life does.</p><i class="rule rl"></i></div>
 </section>
 <script>
 (function(){var sec=document.getElementById('capital');if(!sec)return;var box=sec.querySelector('.cvid'),v=box.querySelector('video');if(!v)return;
-var VW=1586,VH=768,CX=848.3,CY=411.8,PH=450,PL=696.9,TX=.72;
+var VW=1344,VH=768,CX=988.6,CY=423.2,PL=795.9,TX=.72;
 function lay(){var mk=document.querySelector('.mk'),r=document.createRange(),sr=sec.getBoundingClientRect(),tx=5;if(mk){r.selectNodeContents(mk);tx=r.getBoundingClientRect().right-sr.left}
- var rc=box.getBoundingClientRect(),W=rc.width,H=rc.height,d=innerWidth>900,s=Math.max((W+2)/VW,(H+2)/VH),xT,yT;
- if(d){s=Math.max(s,.82*H/PH);xT=Math.min(TX*W,CX*s);xT=Math.max(xT,W-(VW-CX)*s);yT=H/2}else{xT=.46*W;yT=CY*s}
- var L=xT-CX*s,T=yT-CY*s;L=Math.min(0,Math.max(W-VW*s,L));T=Math.min(0,Math.max(H-VH*s,T));
+ var rc=box.getBoundingClientRect(),W=rc.width,H=rc.height,d=innerWidth>900,s=Math.max((W+2)/VW,(H+2)/VH),xT=d?TX*W:.56*W,yT=d?H/2:CY*s;
+ var L=Math.min(0,Math.max(W-VW*s,xT-CX*s)),T=Math.min(0,Math.max(H-VH*s,yT-CY*s));
  v.style.cssText='width:'+(VW*s).toFixed(1)+'px;height:'+(VH*s).toFixed(1)+'px;left:'+L.toFixed(1)+'px;top:'+T.toFixed(1)+'px;object-fit:fill';
  if(d){var pl=L+PL*s,av=Math.max(220,pl-tx-36);sec.style.setProperty('--tx',tx.toFixed(1)+'px');sec.style.setProperty('--tw',av.toFixed(1)+'px');sec.style.setProperty('--h2s',Math.min(Math.max(av/6.9,40),Math.min(innerWidth*.064,96)).toFixed(1)+'px');sec.style.setProperty('--ps',Math.min(18,Math.max(15,av/30)).toFixed(1)+'px')}
  else{['--tx','--tw','--h2s','--ps'].forEach(function(k){sec.style.removeProperty(k)})}}
