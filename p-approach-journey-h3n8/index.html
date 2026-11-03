@@ -650,13 +650,13 @@ function build(T){
   W4[i*4]=.25+r()*1.1;W4[i*4+1]=.15+r()*.8;W4[i*4+2]=5+r()*17;W4[i*4+3]=r()*6.2832;
   var hu=r();M2[i*3]=.05+.1*Math.pow(r(),1.8);M2[i*3+1]=r();M2[i*3+2]=hu}
  var common='uniform float uS,uT,uCd,uPx,uSw,uTL,uV;attribute vec4 aS;attribute vec4 aW;attribute vec3 aM;varying float vA;varying vec3 vC;'+
- 'vec3 place(float s,out float d){d=aS.z-(1.0-aS.w)*uCd*s;float st=1.0-.42*smoothstep(0.,1.,s*.8)*aM.y;float ph=aW.w+aW.z*s*1.6+.05*sin(uT*.25+aW.w*3.);float k=(.55+.1*max(d,0.))*(1.+uV*.6);'+
+ 'vec3 place(float s,out float d){d=aS.z-(1.0-aS.w)*uCd*s;float st=1.0-.42*smoothstep(0.,1.,s*.8)*aM.y;float ph=aW.w+aW.z*s*.2+.05*sin(uT*.25+aW.w*3.);float k=(.55+.1*max(d,0.))*(1.+uV*.6);'+
  'vec2 w=vec2(aW.x*sin(ph),aW.y*sin(ph*.83+1.7))*k;return vec3(aS.xy*st+w,-d);}'+
  'vec3 tint(){vec3 iv=vec3(.973,.965,.957),gd=vec3(.62,.75,.98);return mix(iv,gd,smoothstep(.35,.9,aM.z));}';
  var pm=new T.ShaderMaterial({transparent:true,depthTest:false,depthWrite:false,blending:T.AdditiveBlending,
   uniforms:{uS:{value:0},uT:{value:0},uCd:{value:95},uPx:{value:800},uSw:{value:0},uTL:{value:0},uV:{value:0}},
   vertexShader:common+'void main(){float d;vec3 p=place(uS,d);if(d<.45){gl_Position=vec4(2.,2.,2.,1.);gl_PointSize=0.;vA=0.;return;}gl_Position=projectionMatrix*vec4(p,1.);gl_PointSize=clamp(aM.x*2.0*uPx/d,2.4,90.);'+
-  'float tw=.82+.18*sin(uS*40.*aW.z*.2+aW.w*5.);vA=uSw*smoothstep(.5,3.2,d)*(1.-.45*smoothstep(25.,70.,d))*tw;vC=tint();}',
+  'float tw=.93+.07*sin(uT*aW.z*.12+aW.w*5.);vA=uSw*smoothstep(.5,3.2,d)*(1.-.45*smoothstep(25.,70.,d))*tw;vC=tint();}',
   fragmentShader:'varying float vA;varying vec3 vC;void main(){vec2 c=gl_PointCoord-.5;float r2=dot(c,c)*4.;float core=exp(-r2*9.);float halo=exp(-r2*3.2)*.34;float a=(core+halo)*vA;if(a<.003)discard;gl_FragColor=vec4(mix(vC,vec3(1.),core*.55)*a,1.);}'});
  var pg=new T.BufferGeometry();pg.setAttribute('position',new T.BufferAttribute(new Float32Array(NP*3),3));pg.setAttribute('aS',new T.BufferAttribute(S4,4));pg.setAttribute('aW',new T.BufferAttribute(W4,4));pg.setAttribute('aM',new T.BufferAttribute(M2,3));
  var pts=new T.Points(pg,pm);pts.frustumCulled=false;pts.renderOrder=2;
@@ -712,13 +712,14 @@ function build(T){
   cam.aspect=w/hc;cam.projectionMatrix.makePerspective(-wN*(1+lx)/2,wN*(1-lx)/2,hN*(1-cy)/2,-hN*(1+cy)/2,cam.near,cam.far);cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();
   var asp=w/h;bu.uRes.value.set(w*dpr,h*dpr);bu.uC.value.set((LP.x-w/2)/(h/2),(LP.y-h/2)/(h/2));pm.uniforms.uPx.value=.5*h*dpr/TAN;
   corner=Math.hypot(Math.abs(lx*asp)+asp,1.236)}
- var ft=0,fn=0,t0=0,pxv=X(),svs=0;
+ var ft=0,fn=0,t0=0,pxv=X(),svs=0,ss=0,sInit=1;
  function render(now){
   raf=0;if(!vis)return;raf=requestAnimationFrame(render);
-  var x=X(),t=now/1000;if(x<GATE()){dom(x);return}var sv=ft?(x-pxv)*1000/Math.max(8,now-ft):0;pxv=x;sv=svs+=(sv-svs)*.2;
+  var x=X(),t=now/1000,dtS=ft?Math.max(0,now-ft)/1000:.016;if(x<GATE()){dom(x);return}var sv=ft?(x-pxv)*1000/Math.max(8,now-ft):0;pxv=x;sv=svs+=(sv-svs)*.2;
   if(ft){var dt=now-ft;fn++;t0+=dt;if(fn>=40){if(t0/fn>23&&dpr>1.01){dpr=Math.max(1,dpr-.35);size()}fn=0;t0=0}}ft=now;
   var s=Math.pow(c01((x-.4)/1.25),1.8)+.1*c01((x+1)/1.4);
-  var u=pm.uniforms;u.uS.value=s;u.uT.value=t;u.uSw.value=sm(-.8,.5,x)*(1-sm(0,.04,c01((x-2.5)/1.45)));
+  /* damped scroll for the particles only: frame-rate independent, no stepping from wheel ticks */
+  var u=pm.uniforms;ss=sInit?s:ss+(s-ss)*(1-Math.exp(-Math.min(.1,dtS)/.09));sInit=0;if(Math.abs(s-ss)<1e-4)ss=s;u.uS.value=ss;u.uT.value=t;u.uSw.value=sm(-.8,.5,x)*(1-sm(0,.04,c01((x-2.5)/1.45)));
   var aN=c01((x-2.5)/1.45),g=c01(x/2.5),vel=Math.min(1,Math.abs(sv)*.4);
   bu.uHor.value=sm(.45,.9,x);bu.uK.value=.2+1.9*Math.pow(g,1.35);
   bu.uLa.value=sm(.3,.75,x)*(1-sm(.4,.46,aN));bu.uL.value=(Math.abs(lx*(W/H))+W/H+.25)*Math.pow(sm(.3,1.85,x),1.2)*(1-sm(0,.42,aN));
