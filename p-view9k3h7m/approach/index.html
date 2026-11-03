@@ -623,7 +623,7 @@ function lpCalc(rr,rbm,W0,H0){var T=Math.max(0,Math.min(H0-120,Math.round((d.get
  if(ph){x=W0/2;yt=(T+H0)/2;var fb=rbm+36;if(yt-.08*H0<fb)yt=(fb+H0)/2}else{x=(rr+W0)/2;yt=(T+H0)/2}
  LP.x=x;LP.y=H0-yt;LP.k=x.toFixed(1)+'|'+yt.toFixed(1)+'|'+W0+'|'+H0+'|'+T}
 function dom(x){
- sec.classList.toggle('on',x>=1.12);sec.classList.toggle('pre',x<1);cv.style.visibility=x<GATE()*.6?'hidden':'';
+ sec.classList.toggle('on',x>=1.12);sec.classList.toggle('pre',x<1);cv.style.visibility=x<GATE()*.8?'hidden':'';
  var W0=pin.clientWidth||innerWidth,H0=pin.clientHeight||innerHeight,aN0=c01((x-2.5)/1.45),inn=aN0>0;
  /* text rides the sphere's visible left edge (gaussian ~50% point = 1.353R), same maths as the shader */
  etw.style.transform='';var rb=(etw.firstElementChild||etw).getBoundingClientRect(),er=etw.getBoundingClientRect(),rest=rb.right,pl=pin.getBoundingClientRect().left;lpCalc(rb.right-pl,rb.bottom-pin.getBoundingClientRect().top,W0,H0);var sl=LP.x-edgePx(zAt(aN0,W0,H0),H0);
@@ -634,7 +634,7 @@ function dom(x){
  else{etwX=inn?Math.min(-pp*(rest+34),Math.min(0,sl-34-rest)):0;sl=pp>=1?0:sl;es=pp*.95}
  /* zoom toward the blue: scale about the edge facing the sphere (right-centre; phone: bottom-centre) so the edge gap holds */
  etw.style.transformOrigin=ph?((rb.left+rb.right)/2-er.left).toFixed(1)+'px '+(rb.bottom-er.top).toFixed(1)+'px':(rb.right-er.left).toFixed(1)+'px '+((rb.top+rb.bottom)/2-er.top).toFixed(1)+'px';etw.style.opacity='1';etw.style.transform=etwX||es?'translate3d('+etwX.toFixed(1)+'px,0,0) scale('+(1+es).toFixed(4)+')':'';etw.style.visibility=(inn&&sl<=0)?'hidden':'';
- var fp=sm(GATE()*.6,.45,x),fH=innerHeight,fF=fH*.4,fT=fH-fp*(fH+fF);sec.style.setProperty('--mt',fT.toFixed(1)+'px');sec.style.setProperty('--mh',(fT+fF).toFixed(1)+'px');cv.style.transition='none';cv.style.opacity=fp.toFixed(3);
+ var fp=sm(GATE()*.8,.6,x),fH=innerHeight,fF=fH*.4,fT=fH-fp*(fH+fF);sec.style.setProperty('--mt',fT.toFixed(1)+'px');sec.style.setProperty('--mh',(fT+fF).toFixed(1)+'px');cv.style.transition='none';cv.style.opacity=fp.toFixed(3);
  sec.style.setProperty('--sc',(sm(.95,1.4,x)*(1-sm(2.3,2.8,x))).toFixed(3));
  nv.style.opacity=(G?sm(XE()-.1,XE(),x):sm(2.7,3.9,x)).toFixed(3)}
 function build(T){
@@ -715,7 +715,7 @@ function build(T){
  var ft=0,fn=0,t0=0,pxv=X(),svs=0,ss=0,sInit=1;
  function render(now){
   raf=0;if(!vis)return;raf=requestAnimationFrame(render);
-  var x=X(),t=now/1000,dtS=ft?Math.max(0,now-ft)/1000:.016;if(x<GATE()*.6){dom(x);return}var sv=ft?(x-pxv)*1000/Math.max(8,now-ft):0;pxv=x;sv=svs+=(sv-svs)*.2;
+  var x=X(),t=now/1000,dtS=ft?Math.max(0,now-ft)/1000:.016;if(x<GATE()*.8){dom(x);return}var sv=ft?(x-pxv)*1000/Math.max(8,now-ft):0;pxv=x;sv=svs+=(sv-svs)*.2;
   if(ft){var dt=now-ft;fn++;t0+=dt;if(fn>=40){if(t0/fn>23&&dpr>1.01){dpr=Math.max(1,dpr-.35);size()}fn=0;t0=0}}ft=now;
   var s=Math.pow(c01((x-.4)/1.25),1.8)+.1*c01((x+1)/1.4);
   /* damped scroll for the particles only: frame-rate independent, no stepping from wheel ticks */
