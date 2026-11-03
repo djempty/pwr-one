@@ -199,7 +199,7 @@ frame();
  e.preventDefault();
  const o=document.createElement('div');o.className='lgx';o.setAttribute('aria-hidden','true');
  o.style.cssText='position:fixed;inset:0;z-index:40;background:'+col+';opacity:0;pointer-events:none;transition:opacity .85s cubic-bezier(.382,0,.618,1)';
- document.querySelectorAll('.mk,.foot').forEach(x=>{x.style.zIndex=60;x.style.position=getComputedStyle(x).position==='static'?'relative':''});
+ document.querySelectorAll(key==='pxfade-ap'?'.mk':'.mk,.foot').forEach(x=>{x.style.zIndex=60;x.style.position=getComputedStyle(x).position==='static'?'relative':''});
  document.body.appendChild(o);
  requestAnimationFrame(()=>requestAnimationFrame(()=>{o.style.opacity=1;setTimeout(()=>{sessionStorage.setItem(key,'1');location.href=a.href},880)}));
 })));
