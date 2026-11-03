@@ -634,7 +634,7 @@ function dom(x){
  else{etwX=inn?Math.min(-pp*(rest+34),Math.min(0,sl-34-rest)):0;sl=pp>=1?0:sl;es=pp*.95}
  /* zoom toward the blue: scale about the edge facing the sphere (right-centre; phone: bottom-centre) so the edge gap holds */
  etw.style.transformOrigin=ph?((rb.left+rb.right)/2-er.left).toFixed(1)+'px '+(rb.bottom-er.top).toFixed(1)+'px':(rb.right-er.left).toFixed(1)+'px '+((rb.top+rb.bottom)/2-er.top).toFixed(1)+'px';etw.style.opacity='1';etw.style.transform=etwX||es?'translate3d('+etwX.toFixed(1)+'px,0,0) scale('+(1+es).toFixed(4)+')':'';etw.style.visibility=(inn&&sl<=0)?'hidden':'';
- var fp=sm(GATE(),1,x),fH=innerHeight,fF=fH*.4,fT=fH-fp*(fH+fF);sec.style.setProperty('--mt',fT.toFixed(1)+'px');sec.style.setProperty('--mh',(fT+fF).toFixed(1)+'px');cv.style.transition='none';cv.style.opacity=fp.toFixed(3);
+ var fp=sm(GATE(),.68,x),fH=innerHeight,fF=fH*.4,fT=fH-fp*(fH+fF);sec.style.setProperty('--mt',fT.toFixed(1)+'px');sec.style.setProperty('--mh',(fT+fF).toFixed(1)+'px');cv.style.transition='none';cv.style.opacity=fp.toFixed(3);
  sec.style.setProperty('--sc',(sm(.95,1.4,x)*(1-sm(2.3,2.8,x))).toFixed(3));
  nv.style.opacity=(G?sm(XE()-.1,XE(),x):sm(2.7,3.9,x)).toFixed(3)}
 function build(T){
