@@ -157,15 +157,52 @@ main{padding-bottom:89px}
  .agf{padding-left:13px;padding-right:13px}
 }
 @media(prefers-reduced-motion:reduce){.agw,.agw.open,.agl{transition:none!important}.dots i{animation:none}}
+
+/* ===== INBOX ICON + DROPDOWN (all portal pages) ===== */
+.inbtn{all:unset;box-sizing:border-box;position:relative;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.inbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.inbg{position:absolute;top:3px;right:1px;min-width:16px;height:16px;padding:0 4px;box-sizing:border-box;border-radius:8px;background:#b08d4f;color:#0e1f3c;font-size:10px;font-weight:700;line-height:16px;text-align:center;font-family:Helvetica,Arial,sans-serif}
+.inbtn.zero .inbg{display:none}
+.inbtn[data-cur]{border-bottom:2px solid var(--gold)}
+.inbd{position:absolute;top:46px;right:55px;z-index:2}
+.inbm{display:none}
+@media(min-width:901px){main{position:relative}}
+.inbp{position:absolute;z-index:5;top:98px;right:55px;width:360px;max-height:calc(100vh - 130px);display:flex;flex-direction:column;background:#fff;border:1px solid rgba(14,31,60,.15);border-top:3px solid #0e1f3c;box-shadow:0 4px 12px rgba(14,31,60,.1),0 16px 40px rgba(14,31,60,.2);transform-origin:top right;opacity:0;transform:scale(.94) translateY(-4px);visibility:hidden;pointer-events:none;transition:opacity .28s cubic-bezier(.16,1,.3,1),transform .28s cubic-bezier(.16,1,.3,1),visibility 0s .28s}
+.inbp.open{opacity:1;transform:none;visibility:visible;pointer-events:auto;transition:opacity .28s cubic-bezier(.16,1,.3,1),transform .28s cubic-bezier(.16,1,.3,1)}
+.inbh{display:flex;justify-content:space-between;align-items:center;padding:13px 21px;border-bottom:1px solid var(--line);font-size:15px}
+.inbma{all:unset;cursor:pointer;font-size:11px;letter-spacing:1px;color:var(--mute);border-bottom:1px solid var(--gold)}
+.inbma:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.inbl{overflow-y:auto;overscroll-behavior:contain}
+.ii{display:flex;gap:13px;align-items:flex-start;padding:13px 21px;border-bottom:1px solid var(--line);color:var(--ink)}
+.ii:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.ii .dot{flex:none;width:7px;height:7px;border-radius:50%;margin-top:6px;border:1px solid transparent}
+.ii.u .dot{background:var(--gold)}
+.ii .ib{flex:1;min-width:0;display:block}
+.ii .it{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mute)}
+.ii .tt{display:block;font-size:13px;font-weight:400;margin:3px 0 2px;line-height:1.4}
+.ii.u .tt{font-weight:700}
+.ii .pv{display:block;font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ii .dt{flex:none;font-size:11px;color:var(--mute);white-space:nowrap;margin-top:2px}
+.inbf{padding:13px 21px;font-size:12px;text-align:center}
+.inbf a{border-bottom:1px solid var(--gold);padding-bottom:2px}
+@media(hover:hover) and (pointer:fine){.ii:hover{background:var(--cream)}}
+@media(max-width:900px){
+ .inbd{display:none}
+ .inbm{display:flex;position:absolute;right:calc(max(11px,env(safe-area-inset-right)) + 54px);bottom:calc((var(--bar) - 44px)/2);color:#f8f4ef}
+ .inbm.zero .inbg{display:none}
+ .inbp{position:fixed;top:calc(var(--bar) + env(safe-area-inset-top));left:0;right:0;width:auto;max-height:calc(100% - var(--bar) - env(safe-area-inset-top));border-left:0;border-right:0;transform-origin:top center;transform:translateY(-8px)}
+ .inbp.open{transform:none}
+}
+@media(prefers-reduced-motion:reduce){.inbp,.inbp.open{transition:none}}
 </style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
-<header class="bar"><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
+<header class="bar"><button class="inbtn inbm" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="inbp" aria-label="Inbox, 3 unread"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14"/><path d="M2.5 6 12 13.5 21.5 6"/></svg><span class="inbg" aria-hidden="true">3</span></button><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
 <nav class="mm" id="mm" aria-label="Member menu" tabindex="-1"><a href="../welcome/" aria-current="page">Overview</a><a href="../performance/">Performance</a><a href="../deposits/">Deposits &amp; Redemptions</a><a href="../voting/">Voting</a><a href="../documents/">Documents</a><a href="../settings/">Settings</a><a href="../contact/">Contact</a></nav>
 <aside class="side"><nav class="nav" aria-label="Member">
 <a href="../welcome/" aria-current="page">Overview</a><a href="../performance/">Performance</a><a href="../deposits/">Deposits &amp; Redemptions</a><a href="../voting/">Voting</a><a href="../documents/">Documents</a><a href="../settings/">Settings</a><a href="../contact/">Contact</a></nav>
 <div class="who">J. Morrison<span>Member since 2026</span></div></aside>
 <main>
-<div class="k">Sunday, October 11</div><h1>Good morning, James</h1>
+<button class="inbtn inbd" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="inbp" aria-label="Inbox, 3 unread"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14"/><path d="M2.5 6 12 13.5 21.5 6"/></svg><span class="inbg" aria-hidden="true">3</span></button><div class="inbp" id="inbp" role="dialog" aria-label="Inbox" aria-hidden="true"><div class="inbh"><b>Inbox</b><button type="button" class="inbma" id="inbma">Mark all as read</button></div><div class="inbl" id="inbl"></div><div class="inbf"><a href="../inbox/">View all messages</a></div></div><div class="k">Sunday, October 11</div><h1>Good morning, James</h1>
 <div class="grid">
 <section class="card" aria-label="Capital account"><div class="lbl">Your capital account</div>
 <div class="big">$128,406.42</div>
@@ -198,7 +235,37 @@ m.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
 mq.addEventListener('change',function(){if(!mq.matches)set(false)});})();
 document.querySelectorAll('a[href="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault()})});})();
 </script><script>addEventListener('pageshow',function(){var h=document.documentElement;h.style.overflow='';document.body.style.overflow='';h.classList.remove('mm-lock')})</script>
-<button class="agl" id="agl" type="button" aria-expanded="false" aria-controls="agw" aria-label="Open Polarity Agent chat"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>Agent</button><div class="agw" id="agw" role="dialog" aria-label="Polarity Agent" aria-hidden="true"><div class="agh"><span class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg></span><div class="t">Polarity Agent<small>Your own account and the portal</small></div><button class="agx" id="agx" type="button" aria-label="Close chat"><svg width="16" height="16" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="2.6" fill="none"/></svg></button></div><div class="agt" id="agt" role="log" aria-live="polite" aria-label="Conversation"><div class="agm a"><span class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg></span><div class="agb">Good afternoon, James. I can answer questions about your capital account, requests, documents and the portal. Choose a question below or type your own.</div></div></div><div class="agc" id="agc" role="group" aria-label="Suggested questions"><button type="button" class="agchip">When will my October distribution be paid?</button><button type="button" class="agchip">How do I change my standing instruction?</button><button type="button" class="agchip">Where is my latest statement?</button><button type="button" class="agchip">How does assigning a proxy work?</button><button type="button" class="agchip">What is the status of my redemption request?</button></div><form class="agf" id="agf" autocomplete="off"><label class="agsr" for="agq">Ask a question</label><input id="agq" maxlength="200" placeholder="Ask a question"><button type="submit">Send</button></form><div class="agnote">Sees only your own account. Cannot move money, change instructions or vote. Conversations are logged.</div></div><script>
+<script>
+window.PGI=(function(){
+var M=[
+ {id:'vote',ty:'VOTE',f:'vote',t:'New vote open: raise max allocation to longer-dated options',pv:'Raise the limit from 23.6% to 38.2%? Closes October 14.',d:'Oct 11',u:1,h:'../voting/',a:'Open Voting',b:'A vote is open on whether to raise the maximum allocation to longer-dated options from 23.6% to 38.2%. The poll closes on Wednesday, October 14 at 4:00 PM ET. The rationale for each option is shown on the Voting page. Your own vote overrides any proxy you have assigned.'},
+ {id:'sec',ty:'SECURITY',f:'sec',t:'New sign-in from Chrome on macOS',pv:'A sign-in to your account was recorded this morning.',d:'Oct 11',u:1,h:'../settings/',a:'Review sessions',b:'A new sign-in to your account was recorded on Sunday, October 11 at 8:42 AM ET from Chrome on macOS. If this was you, no action is needed. If it was not, sign out other sessions and replace your authenticator in Settings, then call the administrator.'},
+ {id:'adm',ty:'ADMINISTRATOR',f:'adm',t:'Re: Redemption request, October 6',pv:'Received and under review. You will be notified when it is approved.',d:'Oct 7',u:1,h:'../deposits/',a:'Open Deposits & Redemptions',r:'Re: Redemption request, October 6',b:'Your redemption request of $5,000.00 to RBC Chequing ···· 4417 has been received and is under review. You will be notified when it is approved for processing on October 30. Until then you may cancel it from Pending and history.'},
+ {id:'agt',ty:'AGENT',f:'adm',t:'Your question was passed to the administrator',pv:'The administrator replies within one business day.',d:'Oct 6',u:0,h:'../contact/',a:'Open Contact',r:'Question from the Agent',b:'The Polarity Agent could not answer your question and passed it to the club administrator. Replies are sent here, usually within one business day.'},
+ {id:'ntc',ty:'CLUB NOTICE',f:'ntc',t:'Holiday processing schedule',pv:'Month-end processing dates through year end.',d:'Oct 5',u:0,h:'../deposits/',a:'Open Deposits & Redemptions',r:'Holiday processing schedule',b:'Month-end processing will run on October 30, November 30 and December 30. Requests approved after a processing date move to the next one. Requests are always confirmed with your authenticator code.'},
+ {id:'stm',ty:'STATEMENT',f:'doc',t:'September statement available',pv:'Your capital account statement is ready to download.',d:'Oct 2',u:0,h:'../documents/',a:'Open Documents',b:'Your statement for September 2026 is available in Documents. It shows your capital account, monthly result and activity, including the $10,000.00 deposit confirmed on September 30.'}];
+var K='pgr',R;try{R=JSON.parse(sessionStorage.getItem(K))}catch(e){}R=R||[];
+var L=[];function save(){try{sessionStorage.setItem(K,JSON.stringify(R))}catch(e){}}
+function unread(m){return m.u&&R.indexOf(m.id)<0}
+function count(){return M.filter(unread).length}
+function mark(id){if(R.indexOf(id)<0){R.push(id);save();ch()}}
+function all(){M.forEach(function(m){if(R.indexOf(m.id)<0)R.push(m.id)});save();ch()}
+function ch(){document.querySelectorAll('.inbtn').forEach(function(b){var n=count();b.querySelector('.inbg').textContent=n;b.classList.toggle('zero',!n);b.setAttribute('aria-label','Inbox, '+(n?n+' unread':'no unread messages'))});L.forEach(function(f){f()})}
+return{msgs:M,unread:unread,count:count,mark:mark,all:all,on:function(f){L.push(f)},ch:ch}})();
+(function(){var P=PGI,pn=document.getElementById('inbp'),ls=document.getElementById('inbl'),bs=document.querySelectorAll('.inbtn');
+function render(){ls.innerHTML=P.msgs.map(function(m){return '<a class="ii'+(P.unread(m)?' u':'')+'" href="'+m.h+'" data-id="'+m.id+'"><span class="dot"></span><span class="ib"><span class="it">'+m.ty+'</span><b class="tt">'+m.t+'</b><span class="pv">'+m.pv+'</span></span><span class="dt">'+m.d+'</span></a>'}).join('')}
+function vis(){return window.matchMedia('(max-width:900px)').matches?document.querySelector('.inbm'):document.querySelector('.inbd')}
+var last=null;
+function set(o,quiet){pn.classList.toggle('open',o);pn.setAttribute('aria-hidden',!o);bs.forEach(function(b){b.setAttribute('aria-expanded',o)});
+ if(o){last=vis();if(!quiet)setTimeout(function(){var f=ls.querySelector('a');if(f)f.focus()},30)}else if(!quiet&&last)last.focus()}
+bs.forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();set(!pn.classList.contains('open'))})});
+ls.addEventListener('click',function(e){var a=e.target.closest('a');if(a)P.mark(a.dataset.id)});
+document.getElementById('inbma').addEventListener('click',function(){P.all();document.getElementById('inbma').focus()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pn.classList.contains('open')){set(false)}});
+document.addEventListener('click',function(e){if(pn.classList.contains('open')&&!pn.contains(e.target))set(false,true)});
+P.on(render);render();P.ch();
+})();
+</script><button class="agl" id="agl" type="button" aria-expanded="false" aria-controls="agw" aria-label="Open Polarity Agent chat"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>Agent</button><div class="agw" id="agw" role="dialog" aria-label="Polarity Agent" aria-hidden="true"><div class="agh"><span class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg></span><div class="t">Polarity Agent<small>Your own account and the portal</small></div><button class="agx" id="agx" type="button" aria-label="Close chat"><svg width="16" height="16" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="2.6" fill="none"/></svg></button></div><div class="agt" id="agt" role="log" aria-live="polite" aria-label="Conversation"><div class="agm a"><span class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg></span><div class="agb">Good afternoon, James. I can answer questions about your capital account, requests, documents and the portal. Choose a question below or type your own.</div></div></div><div class="agc" id="agc" role="group" aria-label="Suggested questions"><button type="button" class="agchip">When will my October distribution be paid?</button><button type="button" class="agchip">How do I change my standing instruction?</button><button type="button" class="agchip">Where is my latest statement?</button><button type="button" class="agchip">How does assigning a proxy work?</button><button type="button" class="agchip">What is the status of my redemption request?</button></div><form class="agf" id="agf" autocomplete="off"><label class="agsr" for="agq">Ask a question</label><input id="agq" maxlength="200" placeholder="Ask a question"><button type="submit">Send</button></form><div class="agnote">Sees only your own account. Cannot move money, change instructions or vote. Conversations are logged.</div></div><script>
 (function(){var KEY='pgs',L=document.getElementById('agl'),W=document.getElementById('agw'),T=document.getElementById('agt'),Q=document.getElementById('agq'),CH=document.getElementById('agc'),MARK=W.querySelector('.av').innerHTML;
 var S;try{S=JSON.parse(sessionStorage.getItem(KEY))}catch(e){}S=S||{o:0,m:[]};
 function save(){try{sessionStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
