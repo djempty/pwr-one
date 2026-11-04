@@ -44,6 +44,9 @@
 .navr{transform:translateZ(0);will-change:transform;isolation:isolate}.navr .btn,.navr a .btn,.navr span{transition:none!important}.navr a{display:inline-block;margin-left:34px;cursor:pointer;line-height:1;transform:translateZ(0);backface-visibility:hidden}.navr a .btn{backface-visibility:hidden;-webkit-font-smoothing:antialiased}.navr a .btn{display:inline-block;margin-left:0}.navr a:hover .btn{background:#b08d4f;color:#0e1f3c}
 @media(max-width:600px){.navr a{display:none!important}}
 a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;-webkit-font-smoothing:antialiased;isolation:isolate}
+.an .a{opacity:0}.an .ln{display:inline-block;transform:translateY(13px)}
+.an.go .a{opacity:1;transition:opacity 987ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
+.an.go .ln{transform:none;transition:opacity 987ms cubic-bezier(.16,1,.3,1) var(--d,0ms),transform 987ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
 .foot.cpr{left:auto;right:55px}@media(max-width:600px){.foot.cpr{left:21px;right:auto;bottom:21px}.foot:not(.cpr){bottom:38px}}
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
@@ -52,9 +55,23 @@ a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibi
 <div class="navr"><a href="login/" style="color:inherit;text-decoration:none"><span class="btn">Member Login</span></a></div>
 <div class="copy"><div class="k">Systematic Capital</div><h1>Ego out.<br>Discipline in.</h1><p>A private investment club, powered by a proprietary algorithmic engine and dedicated to the long-term appreciation of members' capital.</p><a class="cta" href="login/" style="cursor:pointer;text-decoration:none">Member Login</a></div>
 <div class="foot">MEMBERSHIP BY INVITATION ONLY</div><div class="foot cpr">&copy; 2026 POLARITY CAPITAL</div>
+<script>
+/* load sequence: classes are applied from JS only, so content stays visible if JS fails; footers stay static */
+(function(){try{
+ var nv=performance.getEntriesByType('navigation')[0];
+ if(matchMedia('(prefers-reduced-motion:reduce)').matches||(nv&&nv.type==='back_forward'))return;
+ var d=document,h=d.documentElement,q=function(s){return d.querySelector(s)};
+ var h1=q('.copy h1'),ls=h1.innerHTML.split('<br>');
+ h1.innerHTML=ls.map(function(l){return '<span class="ln">'+l+'</span>'}).join('<br>');
+ [['.mk',144],['.navr',233],['.copy .k',377],['.copy .ln:nth-of-type(1)',610],['.copy .ln:nth-of-type(2)',699],['.copy p',987],['.copy .cta',1364]].forEach(function(r){var e=q(r[0]);e.classList.add('a');e.style.setProperty('--d',r[1]+'ms')});
+ h.classList.add('an');
+ requestAnimationFrame(function(){requestAnimationFrame(function(){h.classList.add('go')})});
+ setTimeout(function(){h.classList.remove('an','go');d.querySelectorAll('.a').forEach(function(e){e.classList.remove('a');e.style.removeProperty('--d')})},3200);
+}catch(e){}})();
+</script>
 
 <script id="vs" type="x-shader/x-vertex">
- uniform float t,px,lev; attribute vec3 pB,loc; attribute float seed,cid,side;
+ uniform float t,px,lev,ig; attribute vec3 pB,loc; attribute float seed,cid,side;
  varying float vA; varying vec3 vC;
  float e(float x){return x*x*(3.-2.*x);}
  float win(float a,float b,float x){return e(clamp((x-a)/(b-a),0.,1.));}
@@ -82,6 +99,7 @@ a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibi
   p=mix(p,burst,win(12.,15.,x));
   p=mix(p,flock,win(14.5,19.,x));
   p=mix(p,position,win(26.,33.,x));
+  p*=1.+.3*(1.-ig); // intro gather: settles in from slightly dispersed
   float sw=sin(t*.618+seed*6.283)*.05; p+=vec3(sw,sw*.618,-sw);
   vec3 col=cool;
   col=mix(col,ivory,win(2.,5.,x)*.5);
@@ -89,7 +107,7 @@ a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibi
   col=mix(col,cool,win(16.,26.,x));
   vC=col;
   vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv;
-  gl_PointSize=(1.1+seed*2.3)*px*(12./max(-mv.z,.5)); vA=.35+.65*seed;
+  gl_PointSize=(1.1+seed*2.3)*px*(12./max(-mv.z,.5)); vA=(.35+.65*seed)*ig*ig;
  }
 </script>
 <script id="fs" type="x-shader/x-fragment">
@@ -133,12 +151,17 @@ g.setAttribute('position',new THREE.BufferAttribute(A,3));g.setAttribute('pB',ne
 g.setAttribute('loc',new THREE.BufferAttribute(LOC,3));g.setAttribute('seed',new THREE.BufferAttribute(S,1));
 g.setAttribute('cid',new THREE.BufferAttribute(C,1));g.setAttribute('side',new THREE.BufferAttribute(SD,1));
 const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
- uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()},lev:{value:0}},
+ uniforms:{t:{value:0},px:{value:renderer.getPixelRatio()},lev:{value:0},ig:{value:0}},
  vertexShader:document.getElementById('vs').textContent,fragmentShader:document.getElementById('fs').textContent});
 scene.add(new THREE.Points(g,mat));
 const dg=new THREE.BufferGeometry(),dp=new Float32Array(4500);for(let i=0;i<dp.length;i++)dp[i]=(Math.random()-.5)*60;
 dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
-scene.add(new THREE.Points(dg,new THREE.PointsMaterial({color:0x6d7f9e,size:0.03,transparent:true,opacity:0.3})));
+const dmat=new THREE.PointsMaterial({color:0x6d7f9e,size:0.03,transparent:true,opacity:0.3});
+scene.add(new THREE.Points(dg,dmat));
+/* intro: points of light fade in from black and gather (driven by uniform ig, 0 -> 1 over 1.9 s); skipped on reduced motion and back/forward */
+const nav=performance.getEntriesByType('navigation')[0];
+const intro=!reduce&&!(nav&&nav.type==='back_forward');
+let i0=null;
 const comp=new EffectComposer(renderer);comp.addPass(new RenderPass(scene,cam));
 comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.85,0.618,0.0));
 let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
@@ -150,6 +173,9 @@ function frame(){
   // continuous doubling from 12 s to 21 s, no holds between splits
   const lev=0;
   mat.uniforms.t.value=t; mat.uniforms.lev.value=lev;
+  let ig=1;
+  if(intro){const n=performance.now();if(i0===null)i0=n;const k=Math.min(1,(n-i0)/1900);ig=1-Math.pow(1-k,3);}
+  mat.uniforms.ig.value=ig; dmat.opacity=0.3*ig*ig;
   const z=13-win(6,9,x)*2.2*(1-win(12,15,x))+lev*0.8*(1-win(22,32,x));
   cam.position.z+=(z-cam.position.z)*0.05;
   // park the globe in the open space to the right of the copy block (desktop only)
