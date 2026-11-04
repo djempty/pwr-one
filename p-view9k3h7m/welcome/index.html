@@ -246,10 +246,10 @@ var cards=[q('.grid>.card')].concat(qa('.col>.card'));
 cards.forEach(function(c,i){an(c,[{opacity:0,transform:'translateY(13px)'},{opacity:1,transform:'none'}],{duration:610,delay:d0+i*55})});
 /* 2. balance counts up from ~98%, then the delta fades in */
 var fin=128406.42,st=fin*.98,f=function(v){return '$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})},fix=big.textContent;
-var cd=d0+144,h=document.createElement('i'),pa=h.animate([{opacity:0},{opacity:1}],{duration:1200,delay:cd,easing:E,fill:'both'});
+var cd=d0+144,t0=performance.now()+cd;
+function ease(x){var cx=.48,bx=.42-cx,ax=1-cx-bx,t=x,i,v;function X(t){return((ax*t+bx)*t+cx)*t}function dX(t){return(3*ax*t+2*bx)*t+cx}for(i=0;i<8;i++){v=X(t)-x;if(Math.abs(v)<1e-5)break;var d=dX(t);if(Math.abs(d)<1e-6)break;t-=v/d}t=Math.min(1,Math.max(0,t));return((1*t+-3)*t+3)*t}
 big.textContent=f(st);
-(function tick(){var p=+getComputedStyle(h).opacity;big.textContent=f(st+(fin-st)*p);if(pa.playState!=='finished')requestAnimationFrame(tick);else big.textContent=fix})();
-pa.finished.then(function(){big.textContent=fix});
+(function tick(now){var p=Math.min(1,Math.max(0,(now-t0)/1200));if(p>=1){big.textContent=fix;return}big.textContent=f(st+(fin-st)*ease(p));requestAnimationFrame(tick)})(performance.now());
 an(q('.grid>.card .delta'),[{opacity:0},{opacity:1}],{duration:610,delay:cd+1200-233});
 /* 3. chart line draws left to right, then area fades in and the dot appears */
 var r=sv.getBoundingClientRect(),P=pts(),L=0,i;for(i=1;i<P.length;i++)L+=Math.hypot((P[i][0]-P[i-1][0])*r.width/100,(P[i][1]-P[i-1][1])*r.height/100);
