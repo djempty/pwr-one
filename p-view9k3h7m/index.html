@@ -64,8 +64,8 @@ a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibi
  var h1=q('.copy h1'),ls=h1.innerHTML.split('<br>');
  h1.innerHTML=ls.map(function(l){return '<span class="ln">'+l+'</span>'}).join('<br>');
  var so=false;try{so=!!d.referrer&&new URL(d.referrer).origin===location.origin}catch(x){}
- var L=[['.mk',89],['.navr',144],['.copy .k',144],['.copy .ln:nth-of-type(1)',233],['.copy .ln:nth-of-type(2)',288],['.copy p',466],['.copy .cta',699]];
- if(!so||nv.type==='reload'){L.push(['.foot:not(.cpr)',466],['.foot.cpr',466])}
+ var dr=!so||nv.type==='reload';var L=dr?[['.mk',89]]:[];L=L.concat([['.navr',144],['.copy .k',144],['.copy .ln:nth-of-type(1)',233],['.copy .ln:nth-of-type(2)',288],['.copy p',466],['.copy .cta',699]]);
+ if(dr){L.push(['.foot:not(.cpr)',466],['.foot.cpr',466])}
  L.forEach(function(r){var e=q(r[0]);e.classList.add('a');e.style.setProperty('--d',r[1]+'ms')});
  h.classList.add('an');
  requestAnimationFrame(function(){requestAnimationFrame(function(){h.classList.add('go')})});
