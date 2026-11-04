@@ -74,10 +74,10 @@ button:hover{background:transparent;color:#f8f4ef}
 .mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}
 @media(max-width:600px){.mk{left:21px;top:21px}}
 @media(orientation:landscape) and (max-height:500px){.mk{left:max(28px,env(safe-area-inset-left));top:14px;font-size:17px}.mk svg{width:26px;height:26px;vertical-align:-6px;margin-right:14px}}
-body>*:not(.mk):not(.foot){animation:pin .3s ease both}
-.nobg body>*:not(.mk):not(.foot){animation:pin .618s .382s ease both}
+body>*:not(.mk):not(.foot):not(.footrow){animation:pin .3s ease both}
+.nobg body>*:not(.mk):not(.foot):not(.footrow){animation:pin .618s .382s ease both}
 @keyframes pin{from{opacity:0}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){body>*:not(.mk):not(.foot),.nobg body>*:not(.mk):not(.foot){animation:none}}
+@media(prefers-reduced-motion:reduce){body>*:not(.mk):not(.foot):not(.footrow),.nobg body>*:not(.mk):not(.foot):not(.footrow){animation:none}}
 .vt body,.vt body>*{animation:none!important}
 .nobg,.nobg body{background:#0e1f3c!important}
 @media(max-width:900px){input{font-size:16px!important}}
