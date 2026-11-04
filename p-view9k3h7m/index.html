@@ -45,8 +45,9 @@
 @media(max-width:600px){.navr a{display:none!important}}
 a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;-webkit-font-smoothing:antialiased;isolation:isolate}
 .an .a{opacity:0}.an .ln{display:inline-block;transform:translateY(13px)}
-.an.go .a{opacity:1;transition:opacity 377ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
-.an.go .ln{transform:none;transition:opacity 377ms cubic-bezier(.16,1,.3,1) var(--d,0ms),transform 377ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
+.an.go .a{opacity:1;transition:opacity 610ms cubic-bezier(.33,0,.2,1) var(--d,0ms)}
+.an.go .ln{transform:none;transition:opacity 610ms cubic-bezier(.33,0,.2,1) var(--d,0ms),transform 610ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
+.copy h1 .ln{display:inline-block}
 .foot.cpr{left:auto;right:55px}@media(max-width:600px){.foot.cpr{left:21px;right:auto;bottom:21px}.foot:not(.cpr){bottom:38px}}
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
@@ -69,7 +70,7 @@ a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibi
  L.forEach(function(r){var e=q(r[0]);e.classList.add('a');e.style.setProperty('--d',r[1]+'ms')});
  h.classList.add('an');
  requestAnimationFrame(function(){requestAnimationFrame(function(){h.classList.add('go')})});
- setTimeout(function(){h.classList.remove('an','go');d.querySelectorAll('.a').forEach(function(e){e.classList.remove('a');e.style.removeProperty('--d')})},1200);
+ setTimeout(function(){h.classList.remove('an','go');d.querySelectorAll('.a').forEach(function(e){e.classList.remove('a');e.style.removeProperty('--d')})},1400);
 }catch(e){}})();
 </script>
 
