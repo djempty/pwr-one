@@ -21,7 +21,8 @@ button{font-family:inherit}
 .side,.bar,.mm{--ink:rgba(248,244,239,.92);--mute:rgba(248,244,239,.618);--hair:hsl(218.2 38.2% 21%);color:var(--ink)}
 .mk{position:fixed;left:55px;top:34px;display:inline-block;font-weight:700;letter-spacing:0;font-size:21px;line-height:1;color:#f8f4ef;z-index:5;white-space:nowrap}
 .mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}
-.adm{font-size:9px;font-weight:400;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:3px 5px;line-height:1;margin-left:8px;vertical-align:3px}
+.ry{position:relative}
+.adm{position:absolute;left:0;top:100%;margin-top:5px;box-sizing:border-box;width:100%;font-size:9px;font-weight:400;letter-spacing:3px;text-align:left;white-space:nowrap;color:var(--gold);border:1px solid var(--gold);padding:3px 5px;line-height:1}
 .side{position:fixed;left:0;top:0;bottom:0;width:var(--side);background:var(--side-bg);padding:calc(55px + 34px + 34px) 0 max(34px,env(safe-area-inset-bottom));display:flex;flex-direction:column;z-index:1;overflow-y:auto}
 html[data-theme=dark] .side{border-right:1px solid var(--hair)}
 .nav{display:flex;flex-direction:column;gap:8px;padding:0 21px}
@@ -113,6 +114,7 @@ ul.plain li:first-child{padding-top:0}ul.plain li:last-child{border-bottom:0;pad
 [aria-disabled=true],.btn:disabled{opacity:.382;cursor:not-allowed}
 @media(hover:hover) and (pointer:fine){.btn[aria-disabled=true]:hover{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-ink)}.btn.ghost[aria-disabled=true]:hover,.btn.risk[aria-disabled=true]:hover{background:transparent}}
 .acts{display:flex;gap:8px;flex-wrap:wrap}
+@media(min-width:601px){.tbl td.ac .acts{flex-wrap:nowrap}.tbl td.ac .btn.sm{padding:5px 8px}.tbl td.ac{white-space:nowrap}}
 
 /* ---- tables ---- */
 .tw{overflow-x:auto}
@@ -241,6 +243,8 @@ html[data-theme=light] #tip{background:var(--navy);color:var(--ivory)}
 .bar,.mm{display:none}
 @media(max-width:900px){
  :root{--side:0px}
+ .mk{top:21px}
+ .adm{margin-top:3px}
  body{padding-top:calc(var(--bar) + env(safe-area-inset-top))}
  .side{display:none}
  .bar{display:block;position:fixed;left:0;right:0;top:0;z-index:4;height:calc(var(--bar) + env(safe-area-inset-top));background:var(--side-bg)}

@@ -61,6 +61,13 @@ function applyRole(){
 }
 var rsel=q('#rolesel');if(rsel)rsel.addEventListener('change',function(){view=rsel.value;ss('pgadmin-role',view);applyRole()});
 
+/* ---------- ADMIN tag: spans exactly the RITY portion of the wordmark ---------- */
+function fitAdm(){var ry=q('.ry'),ad=q('.adm');if(!ry||!ad)return;var t=ry.firstChild,r=document.createRange();r.setStart(t,0);r.setEnd(t,t.length);var b=r.getBoundingClientRect(),o=ry.getBoundingClientRect();
+ ad.style.left=(b.left-o.left)+'px';ad.style.width=b.width+'px';ad.style.letterSpacing='0px';
+ var n=ad.firstChild,r2=document.createRange();r2.setStart(n,0);r2.setEnd(n,n.length);var w0=r2.getBoundingClientRect().width;
+ ad.style.letterSpacing=((b.width-12-w0)/(n.length-1))+'px'}
+fitAdm();addEventListener('resize',fitAdm);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAdm);
+
 /* ---------- theme ---------- */
 var tb=q('#thm');
 function setTheme(t){H.setAttribute('data-theme',t);try{localStorage.setItem('pgadmin-theme',t)}catch(e){}if(tb)tb.textContent=t==='dark'?'Light':'Dark'}
