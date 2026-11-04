@@ -1,7 +1,10 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="data:,"><title>Inbox · Polarity</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
 <meta name="theme-color" content="#0e1f3c">
-<style>
+<script>/*pg-theme*/(function(){var K='pgtheme',h=document.documentElement,mq=matchMedia('(prefers-color-scheme:dark)');function pref(){var v;try{v=localStorage.getItem(K)}catch(e){}return v==='light'||v==='dark'?v:'system'}
+function apply(){var p=pref();h.setAttribute('data-theme',p==='system'?(mq.matches?'dark':'light'):p);h.setAttribute('data-pref',p)}
+apply();if(mq.addEventListener)mq.addEventListener('change',apply);addEventListener('storage',function(e){if(e.key===K)apply()});addEventListener('pageshow',apply);
+window.PGTheme={get:pref,set:function(v){try{localStorage.setItem(K,v)}catch(e){}apply()}}})()</script><style>
 *{box-sizing:border-box}
 :root{--navy:#0e1f3c;--cream:#f8f4ef;--gold:#b08d4f;--green:#3c876c;--ink:#0e1f3c;--mute:rgba(14,31,60,.618);--line:rgba(14,31,60,.1);--side:280px}
 html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
@@ -335,6 +338,82 @@ main{padding-bottom:89px}
  .inbp.open{transform:none}
 }
 @media(prefers-reduced-motion:reduce){.inbp,.inbp.open{transition:none}}
+
+/* ===== DARK MODE (html[data-theme=dark]) =====
+   Added tones, derived from navy hue 218.2 on the Fibonacci lightness steps: L3 sidebar, L5 page, L8 card, L13 raised, L21 hairline. Gain/loss lifted for contrast. */
+html[data-theme=dark]{color-scheme:dark;
+ --bg:hsl(218.2 61.8% 5%);--side-bg:hsl(218.2 61.8% 3%);--card:hsl(218.2 61.8% 8%);--raise:hsl(218.2 61.8% 13%);--hair:hsl(218.2 38.2% 21%);
+ --ink:rgba(248,244,239,.92);--mute:rgba(248,244,239,.618);--line:hsl(218.2 38.2% 21% / .618);
+ --green:hsl(158 38.2% 56%);--loss:hsl(0 38.2% 64%)}
+html[data-theme=dark],html[data-theme=dark] body{background:var(--bg);color:var(--ink)}
+html[data-theme=dark] .side{background:var(--side-bg);border-right:1px solid var(--hair)}
+html[data-theme=dark] .bar,html[data-theme=dark] .mm{background:var(--side-bg)}
+html[data-theme=dark] .bar{border-bottom:1px solid var(--hair)}
+html[data-theme=dark] .nav a[aria-current],html[data-theme=dark] .mm a[aria-current]{background:var(--raise)}
+html[data-theme=dark] .card{background:var(--card);border-color:var(--hair);box-shadow:none}
+html[data-theme=dark] .lbl,html[data-theme=dark] .delta,html[data-theme=dark] .ft{color:var(--mute)}
+html[data-theme=dark] .ft{border-top-color:var(--hair)}
+html[data-theme=dark] .rng button,html[data-theme=dark] .tabs button{color:var(--mute)}
+html[data-theme=dark] .rng button[aria-pressed=true],html[data-theme=dark] .tabs button[aria-pressed=true]{color:#f8f4ef}
+html[data-theme=dark] .ax,html[data-theme=dark] #ax,html[data-theme=dark] .mgrid b,html[data-theme=dark] .mn{color:var(--mute)!important}
+html[data-theme=dark] #gg,html[data-theme=dark] #gl{stroke:rgba(248,244,239,.1)}
+html[data-theme=dark] #line,html[data-theme=dark] #ln{stroke:#f8f4ef}
+html[data-theme=dark] #area,html[data-theme=dark] #ar{fill:rgba(248,244,239,.04)}
+html[data-theme=dark] .mgrid i.gl{border-top-color:rgba(248,244,239,.1)}
+html[data-theme=dark] .mgrid i.gl.z{border-top-color:rgba(248,244,239,.382)}
+html[data-theme=dark] .edot{border-color:var(--card)}
+html[data-theme=dark] .pbar2,html[data-theme=dark] .pbar{background:rgba(248,244,239,.1)}
+html[data-theme=dark] .pbar i:is([style*="0e1f3c"],[style*="rgb(14, 31, 60)"]){background:#f8f4ef!important}
+html[data-theme=dark] .pbar i:is([style*="rgba(14,31,60"],[style*="rgba(14, 31, 60"]){background:rgba(248,244,239,.382)!important}
+html[data-theme=dark] .mb i:is([style*="3c876c"],[style*="rgb(60, 135, 108)"]){background:var(--green)!important}
+html[data-theme=dark] .mb i:is([style*="a4574f"],[style*="rgb(164, 87, 79)"]){background:var(--loss)!important}
+html[data-theme=dark] .btn{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:700}
+html[data-theme=dark] .btn.ghost{background:transparent;color:#f8f4ef;border-color:var(--hair);font-weight:400}
+html[data-theme=dark] .tag{border-color:var(--hair)}
+html[data-theme=dark] .tag.ok{border-color:hsl(158 38.2% 56% / .5)}
+html[data-theme=dark] .tag.dn{border-color:hsl(0 38.2% 64% / .5)}
+html[data-theme=dark] .in{background-color:var(--raise);border-color:var(--hair);color:var(--ink)}
+html[data-theme=dark] .bank,html[data-theme=dark] .seg,html[data-theme=dark] .otp input,html[data-theme=dark] .opt{background:var(--raise);border-color:var(--hair);color:var(--ink)}
+html[data-theme=dark] .opt:has(input:checked){border-color:var(--gold)}
+html[data-theme=dark] .seg button+button{border-left-color:var(--hair)}
+html[data-theme=dark] .seg button{color:var(--mute)}
+html[data-theme=dark] .seg button[aria-pressed=true]{background:var(--gold);color:var(--navy)}
+html[data-theme=dark] .in::placeholder,html[data-theme=dark] .agf input::placeholder{color:var(--mute);opacity:1}
+html[data-theme=dark] .amt{background:transparent;border-bottom-color:var(--hair)}
+html[data-theme=dark] select.in{background-image:linear-gradient(45deg,transparent 50%,#f8f4ef 50%),linear-gradient(135deg,#f8f4ef 50%,transparent 50%)}
+html[data-theme=dark] .bank input,html[data-theme=dark] .ck input,html[data-theme=dark] .opt input{accent-color:var(--gold)}
+html[data-theme=dark] .bank label{color:var(--ink)}
+html[data-theme=dark] .seats i{border-color:var(--hair)}
+html[data-theme=dark] .seats i.f{background:rgba(248,244,239,.5);border-color:transparent}
+html[data-theme=dark] .agn{border-top-color:var(--gold)}
+html[data-theme=dark] .ilist .ii.sel{background:var(--raise)}
+html[data-theme=dark] .agl{background:var(--raise);border:1px solid var(--hair);box-shadow:none}
+html[data-theme=dark] .agw{background:var(--card);border-color:var(--hair);border-top-color:var(--gold);box-shadow:none;color:var(--ink)}
+html[data-theme=dark] .agh{background:var(--raise)}
+html[data-theme=dark] .agw .av{background:var(--raise)}
+html[data-theme=dark] .agt{background:var(--bg)}
+html[data-theme=dark] .agb{background:var(--card);border-color:var(--hair);color:var(--ink)}
+html[data-theme=dark] .agm.u .agb{background:var(--raise);color:#f8f4ef;border-color:var(--hair)}
+html[data-theme=dark] .agb .hbtn{border-color:var(--hair);color:#f8f4ef}
+html[data-theme=dark] .dots i{background:var(--mute)}
+html[data-theme=dark] .agc{background:var(--bg);border-top-color:var(--hair)}
+html[data-theme=dark] .agchip{background:var(--card);border-color:var(--hair);color:var(--ink)}
+html[data-theme=dark] .agf{background:var(--card);border-top-color:var(--hair)}
+html[data-theme=dark] .agf input{background:var(--raise);border-color:var(--hair);color:var(--ink)}
+html[data-theme=dark] .agf button{background:var(--gold);color:var(--navy);font-weight:700}
+html[data-theme=dark] .agnote{background:var(--card);color:var(--mute)}
+html[data-theme=dark] .inbp{background:var(--raise);border-color:var(--hair);border-top-color:var(--gold);box-shadow:none}
+html[data-theme=dark] .ii{color:var(--ink)}
+html[data-theme=dark] .inbh{border-bottom-color:var(--hair)}
+@media(hover:hover) and (pointer:fine){
+ html[data-theme=dark] .btn:hover{background:#f8f4ef;border-color:#f8f4ef;color:var(--navy)}
+ html[data-theme=dark] .btn.ghost:hover{background:rgba(248,244,239,.08);border-color:var(--hair);color:#f8f4ef}
+ html[data-theme=dark] .ii:hover{background:var(--card)}
+ html[data-theme=dark] .ilist .ii:hover{background:var(--raise)}
+ html[data-theme=dark] .rng button:hover,html[data-theme=dark] .tabs button:hover{color:#f8f4ef}
+ html[data-theme=dark] .seg button:not([aria-pressed=true]):hover{color:#f8f4ef}
+ html[data-theme=dark] .agl:hover{border-color:var(--gold);box-shadow:none}
+}
 </style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <header class="bar"><button class="inbtn inbm" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="inbp" aria-label="Inbox, 3 unread"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14"/><path d="M2.5 6 12 13.5 21.5 6"/></svg><span class="inbg" aria-hidden="true">3</span></button><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
