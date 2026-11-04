@@ -215,11 +215,10 @@ main{padding-bottom:89px}
 <div class="big">$128,406.42</div>
 <div class="delta"><span class="up">▲ $2,690.18 (+2.14%)</span> this month<span class="cx"> · 3.21% of club</span></div>
 <div class="rng" role="group" aria-label="Range"><button aria-pressed="true" data-r="1M">1M</button><button aria-pressed="false" data-r="3M">3M</button><button aria-pressed="false" data-r="YTD">YTD</button><button aria-pressed="false" data-r="ALL">ALL</button></div>
-<div class="chart"><div class="ax" aria-hidden="true"><i style="top:0">100</i><i style="top:21.4%">78.6</i><i style="top:38.2%">61.8</i><i style="top:50%">50</i><i style="top:61.8%">38.2</i><i style="top:76.4%">23.6</i><i style="top:100%">0</i></div>
+<div class="chart"><div class="ax" aria-hidden="true"><i style="top:90.72%">$126K</i><i style="top:59.09%">$127K</i><i style="top:27.46%">$128K</i></div>
 <svg viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="Capital account value chart (sample data)">
-<g stroke="rgba(14,31,60,.12)" stroke-width="1" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"><line x1="0" x2="100" y1="0" y2="0" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="50" y2="50" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="76.4" y2="76.4" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="100" y2="100" vector-effect="non-scaling-stroke"/></g>
+<g id="gg" stroke="rgba(14,31,60,.12)" stroke-width="1" stroke-dasharray="3 3"><line x1="0" x2="100" y1="90.72" y2="90.72" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="59.09" y2="59.09" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="27.46" y2="27.46" vector-effect="non-scaling-stroke"/></g>
 <path id="area" d="M0.0 99.7 L1.7 97.8 L3.4 98.6 L5.1 95.6 L6.8 92.7 L8.5 98.1 L10.2 100.0 L11.9 94.0 L13.6 95.5 L15.3 96.6 L16.9 86.4 L18.6 85.9 L20.3 80.0 L22.0 80.4 L23.7 78.1 L25.4 82.9 L27.1 79.4 L28.8 73.2 L30.5 73.1 L32.2 69.6 L33.9 67.7 L35.6 74.5 L37.3 69.5 L39.0 67.9 L40.7 70.4 L42.4 75.7 L44.1 67.7 L45.8 66.9 L47.5 62.6 L49.2 56.8 L50.8 54.4 L52.5 49.5 L54.2 52.8 L55.9 49.3 L57.6 51.4 L59.3 45.8 L61.0 42.0 L62.7 49.9 L64.4 54.9 L66.1 57.2 L67.8 48.2 L69.5 48.5 L71.2 45.8 L72.9 48.0 L74.6 46.5 L76.3 46.7 L78.0 47.1 L79.7 43.8 L81.4 41.0 L83.1 34.2 L84.7 31.8 L86.4 26.3 L88.1 22.9 L89.8 18.1 L91.5 18.7 L93.2 26.0 L94.9 21.3 L96.6 16.1 L98.3 12.7 L100.0 14.6 L100 100 L0 100Z" fill="rgba(176,141,79,.1)"/>
-<g stroke="#b08d4f" stroke-width="1.2"><line x1="0" x2="100" y1="38.2" y2="38.2" vector-effect="non-scaling-stroke"/><line x1="0" x2="100" y1="61.8" y2="61.8" vector-effect="non-scaling-stroke"/></g>
 <path id="line" d="M0.0 99.7 L1.7 97.8 L3.4 98.6 L5.1 95.6 L6.8 92.7 L8.5 98.1 L10.2 100.0 L11.9 94.0 L13.6 95.5 L15.3 96.6 L16.9 86.4 L18.6 85.9 L20.3 80.0 L22.0 80.4 L23.7 78.1 L25.4 82.9 L27.1 79.4 L28.8 73.2 L30.5 73.1 L32.2 69.6 L33.9 67.7 L35.6 74.5 L37.3 69.5 L39.0 67.9 L40.7 70.4 L42.4 75.7 L44.1 67.7 L45.8 66.9 L47.5 62.6 L49.2 56.8 L50.8 54.4 L52.5 49.5 L54.2 52.8 L55.9 49.3 L57.6 51.4 L59.3 45.8 L61.0 42.0 L62.7 49.9 L64.4 54.9 L66.1 57.2 L67.8 48.2 L69.5 48.5 L71.2 45.8 L72.9 48.0 L74.6 46.5 L76.3 46.7 L78.0 47.1 L79.7 43.8 L81.4 41.0 L83.1 34.2 L84.7 31.8 L86.4 26.3 L88.1 22.9 L89.8 18.1 L91.5 18.7 L93.2 26.0 L94.9 21.3 L96.6 16.1 L98.3 12.7 L100.0 14.6" fill="none" stroke="#0e1f3c" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg></div>
 </section>
 <div class="col">
@@ -236,7 +235,12 @@ var big=q('.big'),sv=q('.chart svg'),ln=document.getElementById('line'),ch=q('.c
 var dot=document.createElement('span');dot.className='edot';dot.setAttribute('aria-hidden','true');ch.appendChild(dot);
 function pts(){return (ln.getAttribute('d').match(/-?[\d.]+ -?[\d.]+/g)||[]).map(function(p){var a=p.split(' ');return[+a[0],+a[1]]})}
 function place(){var p=pts(),l=p[p.length-1];dot.style.top=(sv.getBoundingClientRect().top-ch.getBoundingClientRect().top+l[1]/100*sv.getBoundingClientRect().height)+'px'}
-place();addEventListener('resize',place);qa('.rng button').forEach(function(b){b.addEventListener('click',function(){setTimeout(place,0)})});
+var V0={'1M':125716.24,'3M':110520,YTD:80000,ALL:80000},VE=128406.42;
+function axis(){var bt=q('.rng button[aria-pressed=true]'),v0=V0[bt?bt.dataset.r:'1M'],p=pts(),ya=p[0][1],ye=p[p.length-1][1],b=(VE-v0)/(ya-ye),vt=v0+ya*b,vb=v0-(100-ya)*b,S=[500,1000,2000,2500,5000,10000,20000,25000,50000],st=S[S.length-1],k,n,g='',a='',v;
+ for(k=0;k<S.length;k++){n=Math.floor(vt/S[k])-Math.ceil(vb/S[k])+1;if(n<=5){st=S[k];break}}
+ for(v=Math.ceil(vb/st)*st;v<=vt+1e-6;v+=st){var y=ya-(v-v0)/b;g+='<line x1="0" x2="100" y1="'+y.toFixed(2)+'" y2="'+y.toFixed(2)+'" vector-effect="non-scaling-stroke"/>';a+='<i style="top:'+y.toFixed(2)+'%">$'+(v/1000)+'K</i>'}
+ document.getElementById('gg').innerHTML=g;q('.ax').innerHTML=a}
+axis();place();addEventListener('resize',place);qa('.rng button').forEach(function(b){b.addEventListener('click',function(){setTimeout(function(){place();axis()},0)})});
 var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,done=false;try{var nv=performance.getEntriesByType('navigation')[0];done=nv&&nv.type==='back_forward'}catch(e){}
 if(rm||done||!document.documentElement.animate)return;
 var d0=/\/login\//.test(document.referrer)?233:0;
