@@ -243,8 +243,7 @@ html[data-theme=light] #tip{background:var(--navy);color:var(--ivory)}
 .bar,.mm{display:none}
 @media(max-width:900px){
  :root{--side:0px}
- .mk{top:21px}
- .adm{margin-top:3px}
+ .adm{position:static;display:inline-block;width:auto!important;left:auto!important;margin:0 0 0 8px;vertical-align:3px;letter-spacing:1px!important}
  body{padding-top:calc(var(--bar) + env(safe-area-inset-top))}
  .side{display:none}
  .bar{display:block;position:fixed;left:0;right:0;top:0;z-index:4;height:calc(var(--bar) + env(safe-area-inset-top));background:var(--side-bg)}
