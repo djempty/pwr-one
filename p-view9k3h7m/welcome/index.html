@@ -237,9 +237,8 @@ var dot=document.createElement('span');dot.className='edot';dot.setAttribute('ar
 function pts(){return (ln.getAttribute('d').match(/-?[\d.]+ -?[\d.]+/g)||[]).map(function(p){var a=p.split(' ');return[+a[0],+a[1]]})}
 function place(){var p=pts(),l=p[p.length-1];dot.style.top=(sv.getBoundingClientRect().top-ch.getBoundingClientRect().top+l[1]/100*sv.getBoundingClientRect().height)+'px'}
 place();addEventListener('resize',place);qa('.rng button').forEach(function(b){b.addEventListener('click',function(){setTimeout(place,0)})});
-var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,done=false;try{done=sessionStorage.getItem('ovanim')}catch(e){}
+var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,done=false;try{var nv=performance.getEntriesByType('navigation')[0];done=nv&&nv.type==='back_forward'}catch(e){}
 if(rm||done||!document.documentElement.animate)return;
-try{sessionStorage.setItem('ovanim','1')}catch(e){}
 var d0=/\/login\//.test(document.referrer)?233:0;
 function an(el,kf,o){return el.animate(kf,Object.assign({easing:E,fill:'backwards'},o))}
 /* 1. cards rise and fade, 55ms apart in reading order */
