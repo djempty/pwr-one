@@ -1,17 +1,21 @@
 (function(){
 var q=function(x,r){return (r||document).querySelector(x)},qa=function(x,r){return [].slice.call((r||document).querySelectorAll(x))};
 var H=document.documentElement,body=document.body,page=body.getAttribute('data-page');
-var ME='S. Whitfield';
+var ME='Mike Telford';
 var RN={owner:'Owner',administrator:'Administrator',board:'Board',support:'Support',auditor:'Auditor'};
 var ALL=['owner','administrator','board','support','auditor'];
 /* what each role can open */
 var PG={dashboard:ALL,approvals:['owner','administrator','auditor'],monthend:['owner','administrator','auditor'],members:['owner','administrator','board','auditor'],voting:['owner','administrator','board','auditor'],documents:['owner','administrator','board','auditor'],messages:ALL,audit:['owner','administrator','auditor'],admins:['owner'],settings:['owner','administrator','board','auditor']};
 /* what each role can do */
-var CAP={approve:['owner','administrator'],monthend:['owner','administrator'],vote:['owner','board'],nominate:['owner','board'],publish:['owner','administrator','board'],notice:['owner','administrator','board'],reply:['owner','administrator','support'],faq:['owner','administrator','support'],admins:['owner'],settings:['owner']};
+var CAP={approve:['owner','administrator'],monthend:['owner','administrator'],vote:['owner','administrator','board'],nominate:['owner','board'],publish:['owner','administrator','board'],notice:['owner','administrator','board'],reply:['owner','administrator','support'],faq:['owner','administrator','support'],admins:['owner'],settings:['owner']};
 function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);sessionStorage.setItem(k,v)}catch(e){}}
-var role=ss('pgadmin-role');if(!RN[role])role='owner';
+var VIEWS={mike:['owner','board','support','auditor'],eric:ALL,owner:['owner'],administrator:['administrator'],board:['board'],support:['support'],auditor:['auditor']};
+var view=ss('pgadmin-role');if(!VIEWS[view])view='mike';
+var roles=VIEWS[view],role=view;
 var theme;try{theme=localStorage.getItem('pgadmin-theme')}catch(e){}
-function can(c){return CAP[c].indexOf(role)>-1}
+function ok(list){return list.some(function(r){return roles.indexOf(r)>-1})}
+function can(c){return ok(CAP[c])}
+function other(){return ME==='Eric Savics'?'Mike Telford':'Eric Savics'}
 function reqText(c){var l=CAP[c].map(function(r){return RN[r]});return 'Requires '+(l.length>1?l.slice(0,-1).join(', ')+' or '+l[l.length-1]:l[0])}
 
 /* ---------- tooltip ---------- */
@@ -29,32 +33,33 @@ function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);t
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[aria-disabled=true]');if(b){e.preventDefault();e.stopImmediatePropagation()}},true);
 
 /* ---------- role application ---------- */
-var blockExtra=[];
 function applyRole(){
- H.setAttribute('data-role',role);
- var sel=q('#rolesel');if(sel)sel.value=role;
- qa('[data-pg]').forEach(function(a){a.hidden=PG[a.getAttribute('data-pg')].indexOf(role)<0});
- qa('.ngw').forEach(function(g){var vis=qa('[data-pg]',g).some(function(a){return !a.hidden});g.hidden=!vis});
- qa('.ng').forEach(function(g){var n=g.nextElementSibling,vis=false;while(n&&!n.classList.contains('ng')){if(n.hasAttribute('data-pg')&&!n.hidden)vis=true;n=n.nextElementSibling}g.hidden=!vis});
- qa('[data-needs]').forEach(function(el){el.hidden=PG[el.getAttribute('data-needs')].indexOf(role)<0});
- var okPage=PG[page].indexOf(role)>-1;
- var pb=q('#pagebody'),rs=q('#restricted');if(pb)pb.hidden=!okPage;if(rs){rs.hidden=okPage;if(!okPage){var need=PG[page].map(function(r){return RN[r]});q('#rneed').textContent='Requires '+need.join(', ')+'.'}}
- var ur=q('#userroles');if(ur)ur.textContent=role==='owner'?'Owner · Administrator':RN[role];
- var st=q('#rolestrip');if(st){st.hidden=role==='owner';q('b',st).textContent=RN[role];q('#rsnote',st).textContent=role==='auditor'?'Read-only on everything, including the audit log.':'Navigation and actions follow this role.'}
+ roles=VIEWS[view];role=view;ME=view==='eric'?'Eric Savics':'Mike Telford';
+ var single=roles.length===1,onlyAud=single&&roles[0]==='auditor';
+ H.setAttribute('data-role',view);
+ var sel=q('#rolesel');if(sel)sel.value=view;
+ qa('[data-pg]').forEach(function(a){a.hidden=!ok(PG[a.getAttribute('data-pg')])});
+ qa('[data-needs]').forEach(function(el){el.hidden=!ok(PG[el.getAttribute('data-needs')])});
+ var okPage=ok(PG[page]);
+ var pb=q('#pagebody'),rs=q('#restricted');if(pb)pb.hidden=!okPage;if(rs){rs.hidden=okPage;if(!okPage){q('#rneed').textContent='Requires '+PG[page].map(function(r){return RN[r]}).join(', ')+'.'}}
+ var rl=roles.map(function(r){return RN[r]}).join(' \u00b7 ');
+ ['#usrname','#whoName'].forEach(function(i){var e=q(i);if(e)e.textContent=ME});
+ var ur=q('#userroles');if(ur)ur.textContent=rl;var u2=q('#userroles2');if(u2)u2.textContent=rl;
+ var st=q('#rolestrip');if(st){st.hidden=!single;q('b',st).textContent=RN[roles[0]];q('#rsnote',st).textContent=onlyAud?'Read-only on everything, including the audit log.':'Navigation and actions follow this role.'}
+ qa('[data-who]').forEach(function(e){e.textContent=e.getAttribute('data-who')===ME?' (you)':''});
  qa('[data-cap]').forEach(function(el){
-  var c=el.getAttribute('data-cap'),ok=can(c),why=el.getAttribute('data-block'),dis=false,msg='';
-  if(!ok){dis=true;msg=role==='auditor'?'Auditor is read-only. '+reqText(c)+'.':reqText(c)+'.'}
+  var c=el.getAttribute('data-cap'),why=el.getAttribute('data-block'),prep=el.getAttribute('data-prep'),dis=false,msg='';
+  if(!can(c)){dis=true;msg=(onlyAud?'Auditor is read-only. ':'')+reqText(c)+'.'}
+  else if(prep&&prep===ME){dis=true;msg='You prepared this. '+other()+' must approve.'}
   else if(why){dis=true;msg=why}
   if(dis){el.setAttribute('aria-disabled','true');el.setAttribute('data-tip',msg);el.setAttribute('tabindex','0')}
   else{el.removeAttribute('aria-disabled');el.removeAttribute('data-tip');el.removeAttribute('tabindex')}
  });
- qa('[data-capzone]').forEach(function(z){var ok=can(z.getAttribute('data-capzone'));qa('input,select,textarea',z).forEach(function(i){i.disabled=!ok});var n=q('.zn',z);if(n){n.hidden=ok;n.textContent=(role==='auditor'?'Read-only for the Auditor role. ':'Read-only for this role. ')+reqText(z.getAttribute('data-capzone'))+' to change these.'}});
- /* Board may publish notices only */
- var cat=q('#docCat');if(cat){qa('option',cat).forEach(function(o){o.disabled=role==='board'&&o.value!=='Notice'});if(role==='board')cat.value='Notice';var bh=q('#boardHint');if(bh)bh.hidden=role!=='board'}
- var sb=q('#sbmsg');if(sb){}
+ qa('[data-capzone]').forEach(function(z){var okz=can(z.getAttribute('data-capzone'));qa('input,select,textarea',z).forEach(function(i){i.disabled=!okz});var n=q('.zn',z);if(n){n.hidden=okz;n.textContent=(onlyAud?'Read-only for the Auditor role. ':'Read-only for this role. ')+reqText(z.getAttribute('data-capzone'))+' to change these.'}});
+ var cat=q('#docCat');if(cat){var bo=!ok(['owner','administrator'])&&ok(['board']);qa('option',cat).forEach(function(o){o.disabled=bo&&o.value!=='Notice'});if(bo)cat.value='Notice';var bh=q('#boardHint');if(bh)bh.hidden=!bo}
  document.dispatchEvent(new Event('rolechange'));
 }
-var rsel=q('#rolesel');if(rsel)rsel.addEventListener('change',function(){role=rsel.value;ss('pgadmin-role',role);applyRole()});
+var rsel=q('#rolesel');if(rsel)rsel.addEventListener('change',function(){view=rsel.value;ss('pgadmin-role',view);applyRole()});
 
 /* ---------- theme ---------- */
 var tb=q('#thm');
@@ -103,7 +108,7 @@ function modal(o){
  scrim.classList.add('on');md.classList.add('on');md.setAttribute('aria-hidden','false');
  setTimeout(function(){var f=q('textarea,input,#cont',md);f&&f.focus()},60);
 }
-window.AdminUI={modal:modal,say:say,esc:esc,can:can,role:function(){return role},ME:ME,applyRole:applyRole,openDrawer:openDrawer,closeDrawer:closeDrawer,drawer:dr};
+window.AdminUI={modal:modal,say:say,esc:esc,can:can,role:function(){return role},me:function(){return ME},applyRole:applyRole,openDrawer:openDrawer,closeDrawer:closeDrawer,drawer:dr};
 
 /* generic mock buttons */
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-mock]');if(!b||b.getAttribute('aria-disabled')==='true')return;say(b.getAttribute('data-mock'))});
@@ -136,5 +141,5 @@ applyRole();
 
 /* ---------- page modules ---------- */
 var mod=window.PageModules||{};
-if(mod[page])mod[page]({q:q,qa:qa,modal:modal,say:say,esc:esc,can:can,role:function(){return role},ME:ME,openDrawer:openDrawer,closeDrawer:closeDrawer});
+if(mod[page])mod[page]({q:q,qa:qa,modal:modal,say:say,esc:esc,can:can,role:function(){return role},me:function(){return ME},other:other,openDrawer:openDrawer,closeDrawer:closeDrawer});
 })();
