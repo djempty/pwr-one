@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="data:,"><title>Deposits &amp; Redemptions · Polarity</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="theme-color" content="#0e1f3c">
+<style>
+*{box-sizing:border-box}
+:root{--navy:#0e1f3c;--cream:#f8f4ef;--gold:#b08d4f;--green:#3c876c;--ink:#0e1f3c;--mute:rgba(14,31,60,.618);--line:rgba(14,31,60,.1);--side:280px}
+html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.mk{position:fixed;left:55px;top:34px;display:inline-block;font-weight:700;letter-spacing:0;font-size:21px;line-height:1;color:#f8f4ef;z-index:5}
+.mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}
+.side{position:fixed;left:0;top:0;bottom:0;width:var(--side);background:var(--navy);padding:calc(55px + 34px + 34px) 0 max(34px,env(safe-area-inset-bottom));display:flex;flex-direction:column;z-index:1}
+.nav{display:flex;flex-direction:column;gap:8px;padding:0 21px 0 21px}
+.nav a{display:block;padding:13px 21px 13px 21px;font-size:15px;color:rgba(248,244,239,.618);border-left:2px solid transparent}
+.nav a[aria-current]{background:rgba(248,244,239,.08);color:#f8f4ef;border-left-color:var(--gold)}
+.who{margin-top:auto;padding:0 55px;font-size:13px;line-height:1.5;color:#f8f4ef}
+.who span{display:block;font-size:11px;color:rgba(248,244,239,.382)}
+.bar{display:none}
+.mm{display:none}
+main{margin-left:var(--side);padding:max(34px,env(safe-area-inset-top)) max(55px,env(safe-area-inset-right)) 55px 55px;max-width:calc(var(--side) + 1100px)}
+.k{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+h1{font-weight:400;font-size:40px;line-height:1.15;margin:13px 0 34px;letter-spacing:0}
+.grid{display:grid;grid-template-columns:1.618fr 1fr;gap:21px;align-items:start}
+.col{display:grid;gap:21px}
+.card{background:#fff;border:1px solid var(--line);padding:21px 21px}
+.lbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mute)}
+.big{font-size:55px;font-weight:700;line-height:1.1;margin:13px 0 8px;letter-spacing:0}
+.delta{font-size:13px;color:var(--mute)}.up{color:var(--green)}
+.rng{display:flex;gap:21px;margin:21px 0 13px;font-size:11px;letter-spacing:2px}
+.rng button{all:unset;cursor:pointer;color:rgba(14,31,60,.382);padding:3px 0}
+.rng button[aria-pressed=true]{color:var(--ink);font-weight:700}
+.chart{position:relative;padding-left:34px}
+.chart svg{display:block;width:100%;height:233px;overflow:visible}
+.ax{position:absolute;left:0;top:0;height:233px;width:30px;font-size:9px;color:rgba(14,31,60,.382)}
+.ax i{position:absolute;right:0;font-style:normal;transform:translateY(-50%)}
+.nav2{font-size:28px;font-weight:700;margin:13px 0 8px;letter-spacing:0}
+.vote{border-left:3px solid var(--gold)}
+.vote p{margin:13px 0 13px;font-size:15px;font-weight:700;line-height:1.4}
+.vr{display:flex;align-items:center;gap:13px;font-size:13px;color:var(--mute)}
+.btn{background:var(--navy);color:#f8f4ef;border:1px solid var(--navy);border-radius:0;font:inherit;font-size:13px;padding:8px 21px;cursor:pointer}
+.act{margin-top:8px}
+.act div{display:flex;justify-content:space-between;padding:13px 0;font-size:13px;border-bottom:1px solid var(--line)}
+.act div:last-child{border-bottom:0;padding-bottom:0}
+@media(hover:hover) and (pointer:fine){
+ .nav a:not([aria-current]):hover{color:#f8f4ef}
+ .btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+ .rng button:hover{color:var(--ink)}
+}
+@media(max-width:900px){
+ :root{--side:0px}
+ .side{display:none}
+ main{margin:0;padding:calc(34px + 34px + 21px + 21px + env(safe-area-inset-top)) max(21px,env(safe-area-inset-right)) calc(34px + env(safe-area-inset-bottom)) max(21px,env(safe-area-inset-left))}
+ .grid{grid-template-columns:1fr}
+ .big{font-size:40px}
+ h1{font-size:34px;margin-bottom:21px}
+ .chart svg,.ax{height:144px}
+ .cx{display:none}
+}
+@media(max-width:600px){.mk{left:21px;top:21px}main{padding-top:calc(76px + 21px + env(safe-area-inset-top))}}
+@media(orientation:landscape) and (max-height:500px){
+ .mk{left:max(28px,env(safe-area-inset-left));top:14px;font-size:17px}.mk svg{width:26px;height:26px;vertical-align:-6px;margin-right:14px}
+ main{padding-top:calc(54px + 13px + env(safe-area-inset-top));padding-bottom:calc(34px + env(safe-area-inset-bottom))}
+ h1{font-size:28px;margin:8px 0 13px}
+ .grid{grid-template-columns:1.618fr 1fr}
+ .big{font-size:34px;margin:8px 0 5px}
+ .rng{margin:13px 0 8px}
+ .chart svg,.ax{height:55px}
+ .cx,.ax{display:none}
+ .chart{padding-left:0}
+}
+
+.ft{margin-top:55px;padding-top:21px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:21px;flex-wrap:wrap;font-size:11px;letter-spacing:1px;color:rgba(14,31,60,.382)}
+a.btn{display:inline-block}
+/* ===== MOBILE HEADER + MENU PATTERN (reusable for all internal pages) =====
+   Needs: <a class="mk"> logo (fixed), <header class="bar"> with .hb button, <nav id="mm" class="mm">, and the JS block at the end.
+   --bar = header height; page <main> must pad its top by var(--bar) (+ safe area). Shown <=900px only. */
+:root{--bar:76px}
+@media(max-width:900px){
+ .bar{display:block;position:fixed;left:0;right:0;top:0;z-index:4;height:calc(var(--bar) + env(safe-area-inset-top));background:var(--navy)}
+ .hb{all:unset;box-sizing:border-box;position:absolute;right:max(11px,env(safe-area-inset-right));bottom:0;height:var(--bar);width:54px;display:flex;align-items:center;justify-content:center;color:#f8f4ef;cursor:pointer;transition:color .25s}
+ .hb svg{display:block;fill:currentColor}
+ .hb:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
+ .hb .x{display:none}
+ .hb[aria-expanded=true] .x{display:block}.hb[aria-expanded=true] .h{display:none}
+ .mm{display:flex;flex-direction:column;position:fixed;inset:0;z-index:3;background:var(--navy);padding:calc(var(--bar) + env(safe-area-inset-top) + 13px) max(21px,env(safe-area-inset-right)) max(21px,env(safe-area-inset-bottom)) max(21px,env(safe-area-inset-left));overflow-y:auto;overscroll-behavior:contain;visibility:hidden;opacity:0;transition:opacity .25s,visibility 0s .25s}
+ .mm.open{visibility:visible;opacity:1;transition:opacity .25s}
+ .mm a{display:block;padding:13px 21px;font-size:18px;color:rgba(248,244,239,.618);border-left:2px solid transparent}
+ .mm a+a{margin-top:4px}
+ .mm a[aria-current]{background:rgba(248,244,239,.08);color:#f8f4ef;border-left-color:var(--gold)}
+ html.mm-lock,html.mm-lock body{overflow:hidden}
+}
+@media(max-width:900px) and (hover:hover){.mm a:not([aria-current]):hover{color:#f8f4ef}}
+@media(orientation:landscape) and (max-height:500px){:root{--bar:54px}}
+@media(prefers-reduced-motion:reduce){.mm,.hb{transition:none!important}}
+
+.mm:not(.open){display:none!important}
+@media(max-width:900px){
+ /* iOS-safe: content scrolls in its own container under the pinned header, independent of document scroll */
+ html,body{height:100%;overflow:hidden}
+ main{position:fixed;left:0;right:0;bottom:0;top:calc(var(--bar) + env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-top:34px!important}
+}
+
+/* ===== PORTAL PAGE COMPONENTS (shared by all internal pages) ===== */
+body{font-variant-numeric:tabular-nums}
+:root{--loss:#a4574f}
+.dn{color:var(--loss)}
+a.btn{display:inline-block;text-align:center}
+.btn.ghost{background:transparent;color:var(--navy)}
+.btn.lg{width:100%;padding:15px 21px;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.btn[disabled]{opacity:.382;cursor:default}
+@media(hover:hover) and (pointer:fine){.btn.ghost:hover{background:var(--navy);border-color:var(--navy);color:#f8f4ef}}
+.h2r{display:flex;justify-content:space-between;align-items:baseline;gap:21px;margin:34px 0 13px}
+.h2r:first-child{margin-top:0}
+h2{font-weight:400;font-size:21px;line-height:1.2;margin:0}
+.h2r .meta{font-size:12px;color:var(--mute);text-align:right}
+.sp{margin-top:21px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:21px}
+.kpis.k3{grid-template-columns:repeat(3,1fr)}
+.kpi .v{font-size:28px;font-weight:700;margin:13px 0 5px;line-height:1.15}
+.note{font-size:12px;line-height:1.62;color:var(--mute);margin:13px 0 0}
+.card h3{font-weight:700;font-size:15px;margin:0 0 5px}
+.card p{margin:0;font-size:13px;line-height:1.62}
+.card .sp{margin-top:21px}
+.card p.note{margin-top:13px}
+.tw+.note,.tw+.demo+.note{margin-top:21px}
+.card p+form,.card .delta+.seats{margin-top:21px}
+.split{margin-top:21px}
+.split:first-child,.h2r+form>.split:first-child{margin-top:0}
+td[data-l=Date],td[data-l=Format],td[data-l=Closed]{white-space:nowrap}
+.rows>div{display:flex;justify-content:space-between;align-items:center;gap:21px;padding:13px 0;font-size:13px;border-bottom:1px solid var(--line)}
+.rows>div:last-child{border-bottom:0;padding-bottom:0}
+.rows>div:first-child{padding-top:0}
+.rows span:first-child{color:var(--mute)}
+.rows span:last-child{text-align:right}
+.rows.tight>div{padding:8px 0}
+.tag{display:inline-block;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.tag.ok{color:var(--green);border-color:rgba(60,135,108,.4)}
+.tag.gd{color:var(--gold);border-color:rgba(176,141,79,.55)}
+.tag.dn{color:var(--loss);border-color:rgba(164,87,79,.4)}
+/* tables */
+.tw{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-weight:400;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mute);text-align:left;padding:0 13px 13px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:13px 13px 13px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0;padding-bottom:0}
+.tbl .r{text-align:right;padding-right:0}
+.tbl td small{display:block;font-size:11px;color:var(--mute);margin-top:3px}
+@media(max-width:600px){
+ .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+ .tbl thead{display:none}
+ .tbl tr{padding:13px 0;border-bottom:1px solid var(--line)}
+ .tbl tr:first-child{padding-top:0}
+ .tbl tr:last-child{border-bottom:0;padding-bottom:0}
+ .tbl td{display:block;overflow:hidden;padding:4px 0;border:0;text-align:right}
+ .tbl td::before{content:attr(data-l);float:left;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mute);text-align:left;padding:2px 21px 0 0}
+ .tbl tr:last-child td{padding-bottom:4px}
+ .tbl tr:last-child td:last-child{padding-bottom:0}
+ .tbl .r{text-align:right}
+ .tbl td small{text-align:right}
+}
+/* forms */
+.fl{display:block;margin:21px 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mute)}
+.fl:first-child{margin-top:0}
+.in{width:100%;display:block;border:1px solid rgba(14,31,60,.25);border-radius:0;background:#fff;color:var(--ink);font:inherit;font-size:16px;padding:13px;-webkit-appearance:none;appearance:none}
+.in:focus{border-color:var(--gold);outline:2px solid var(--gold);outline-offset:0}
+select.in{background-image:linear-gradient(45deg,transparent 50%,var(--navy) 50%),linear-gradient(135deg,var(--navy) 50%,transparent 50%);background-position:calc(100% - 20px) 55%,calc(100% - 15px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+textarea.in{min-height:144px;resize:vertical;line-height:1.5}
+.amt{font-size:44px;font-weight:300;letter-spacing:-1px;border:0;border-bottom:1px solid rgba(14,31,60,.25);padding:8px 0}
+.amt:focus{outline:0;border-bottom-color:var(--gold)}
+.hint{font-size:11px;color:var(--mute);margin-top:6px;line-height:1.5}
+.bank{display:flex;justify-content:space-between;align-items:center;gap:13px;border:1px solid rgba(14,31,60,.25);background:#fff;padding:13px;font-size:14px}
+.bank+.bank{margin-top:8px}
+.bank label{display:flex;align-items:center;gap:13px;margin:0;flex:1;cursor:pointer;letter-spacing:0;text-transform:none;font-size:14px;color:var(--ink)}
+.bank input{accent-color:var(--navy);width:16px;height:16px;margin:0}
+.otp{display:flex;gap:8px}
+.otp input{width:46px;height:55px;padding:0;text-align:center;font-size:22px;font-weight:300;border:1px solid rgba(14,31,60,.25);border-radius:0;background:#fff;color:var(--ink);font-family:inherit}
+.otp input:focus{border-color:var(--gold);outline:2px solid var(--gold);outline-offset:0}
+.demo{min-height:21px;margin:13px 0 0;font-size:13px;line-height:1.5;color:var(--gold)}
+.seg{display:inline-flex;border:1px solid rgba(14,31,60,.25);background:#fff;max-width:100%}
+.seg button{all:unset;cursor:pointer;box-sizing:border-box;padding:8px 21px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(14,31,60,.618);text-align:center}
+.seg button+button{border-left:1px solid rgba(14,31,60,.25)}
+.seg button[aria-pressed=true]{background:var(--navy);color:#f8f4ef}
+.seg button:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
+.seg.wide{display:flex}.seg.wide button{flex:1;padding:8px 5px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:21px}
+.sw{display:flex;justify-content:space-between;align-items:center;gap:21px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}
+.sw:last-child{border-bottom:0;padding-bottom:0}
+.sw:first-child{padding-top:0}
+.sw .t small{display:block;font-size:11px;color:var(--mute);margin-top:3px}
+.ck{display:flex;gap:21px;flex:none}
+.ck label{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mute);margin:0;cursor:pointer}
+.ck input{accent-color:var(--navy);width:16px;height:16px;margin:0}
+.steps{counter-reset:s;list-style:none;margin:21px 0 0;padding:0}
+.steps li{counter-increment:s;position:relative;padding:0 0 21px 34px;font-size:13px;line-height:1.5}
+.steps li:last-child{padding-bottom:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:21px;height:21px;border:1px solid var(--gold);color:var(--gold);font-size:11px;text-align:center;line-height:19px}
+.steps li::after{content:"";position:absolute;left:10px;top:26px;bottom:5px;width:1px;background:var(--line)}
+.steps li:last-child::after{display:none}
+.steps b{display:block;font-weight:700}
+.steps span{color:var(--mute)}
+.tabs{display:flex;gap:21px;margin:0 0 21px;flex-wrap:wrap}
+.tabs button{all:unset;cursor:pointer;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(14,31,60,.382);padding:3px 0}
+.tabs button[aria-pressed=true]{color:var(--ink);font-weight:700}
+@media(hover:hover) and (pointer:fine){.tabs button:hover{color:var(--ink)}.seg button:not([aria-pressed=true]):hover{color:var(--ink)}}
+.ft{margin-top:55px;padding-top:21px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:21px;flex-wrap:wrap;font-size:11px;letter-spacing:1px;color:rgba(14,31,60,.382)}
+.pbar{display:flex;height:8px;background:rgba(14,31,60,.08);margin:13px 0 8px}
+.pbar i{display:block;height:100%}
+@media(max-width:900px){
+ .kpis{grid-template-columns:1fr 1fr}
+ .kpis.k3{grid-template-columns:1fr}
+ .split{grid-template-columns:1fr}
+ .kpi .v{font-size:28px}
+ .ft{margin-top:34px}
+}
+@media(max-width:600px){
+ .kpis{gap:13px}.kpi.card{padding:13px 13px}.kpi .v{font-size:21px}
+ .amt{font-size:34px}
+ .otp input{width:calc((100% - 40px)/6);min-width:0;height:55px}
+ .sw{align-items:flex-start;flex-direction:column;gap:8px}
+ .h2r{flex-direction:column;gap:3px}.h2r .meta{text-align:left}
+}
+@media(orientation:landscape) and (max-height:500px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.bank label{flex:1}
+#p-dep[hidden],#p-red[hidden],#hl tr[hidden]{display:none}
+@media(max-width:600px){#modes button{padding:8px 3px;font-size:9px;letter-spacing:1px}}</style></head><body>
+<a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
+<header class="bar"><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
+<nav class="mm" id="mm" aria-label="Member menu" tabindex="-1"><a href="../welcome/">Overview</a><a href="../performance/">Performance</a><a href="../deposits/" aria-current="page">Deposits &amp; Redemptions</a><a href="../votes/">Votes</a><a href="../documents/">Documents</a><a href="../settings/">Settings</a><a href="../contact/">Contact</a></nav>
+<aside class="side"><nav class="nav" aria-label="Member">
+<a href="../welcome/">Overview</a><a href="../performance/">Performance</a><a href="../deposits/" aria-current="page">Deposits &amp; Redemptions</a><a href="../votes/">Votes</a><a href="../documents/">Documents</a><a href="../settings/">Settings</a><a href="../contact/">Contact</a></nav>
+<div class="who">J. Morrison<span>Member since 2026</span></div></aside>
+<main>
+<div class="k">Next processing date &middot; Friday, October 30</div><h1>Deposits &amp; Redemptions</h1>
+<div class="kpis k3"><section class="card kpi"><div class="lbl">Your capital account</div><div class="v">$128,406.42</div><div class="delta">3.21% of club</div></section><section class="card kpi"><div class="lbl">Available to redeem</div><div class="v">$123,406.42</div><div class="delta">After $5,000.00 pending</div></section><section class="card kpi"><div class="lbl">Next processing date</div><div class="v">Oct 30</div><div class="delta">Requests are processed at month end</div></section></div><div class="grid sp"><div class="col"><section class="card" aria-label="New request"><div class="h2r" style="margin-top:0"><h2>New request</h2></div><div class="seg wide" role="group" aria-label="Request type" style="margin-bottom:34px"><button type="button" aria-pressed="true" data-t="dep">Deposit</button><button type="button" aria-pressed="false" data-t="red">Redeem</button></div><form id="p-dep" data-demo novalidate><label class="fl" for="da">Amount</label><input class="in amt" id="da" inputmode="decimal" value="$10,000" autocomplete="off"><div class="hint">Minimum $1,000.00. Funds are recognised in your capital account at month end once the administrator approves the request.</div><label class="fl" style="margin-top:21px">From</label><div role="radiogroup" aria-label="Source account"><div class="bank"><label><input type="radio" name="dsrc" checked>RBC Chequing &middot;&middot;&middot;&middot; 4417</label><span class="tag ok">Verified</span></div><div class="bank"><label><input type="radio" name="dsrc">TD Savings &middot;&middot;&middot;&middot; 9082</label><span class="tag ok">Verified</span></div></div><div style="margin-top:21px"><label class="fl" for="dep-otp">Confirm with authenticator</label><div class="otp" role="group" aria-label="6-digit authenticator code"><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="one-time-code" aria-label="Digit 1" id="dep-otp"><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 2" ><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 3" ><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 4" ><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 5" ><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 6" ></div><div class="hint">Enter the 6-digit code from your authenticator app.</div></div><div style="margin-top:34px"><button class="btn lg" type="submit">Confirm deposit request</button></div><p class="demo" role="status" aria-live="polite"></p></form><form id="p-red" data-demo novalidate hidden><label class="fl" for="ra">Amount</label><input class="in amt" id="ra" inputmode="decimal" value="$5,000" autocomplete="off"><div class="hint">Available: $123,406.42 &middot; Processed at month end</div><label class="fl" style="margin-top:21px">To</label><div role="radiogroup" aria-label="Destination account"><div class="bank"><label><input type="radio" name="rdst" checked>RBC Chequing &middot;&middot;&middot;&middot; 4417</label><span class="tag ok">Verified</span></div><div class="bank"><label><input type="radio" name="rdst">TD Savings &middot;&middot;&middot;&middot; 9082</label><span class="tag ok">Verified</span></div></div><div style="margin-top:21px"><label class="fl" for="red-otp">Confirm with authenticator</label><div class="otp" role="group" aria-label="6-digit authenticator code"><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="one-time-code" aria-label="Digit 1" id="red-otp"><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 2" ><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 3" ><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 4" ><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 5" ><input type="text" inputmode="numeric" maxlength="1" pattern="[0-9]" autocomplete="off" aria-label="Digit 6" ></div><div class="hint">Enter the 6-digit code from your authenticator app.</div></div><div style="margin-top:34px"><button class="btn lg" type="submit">Confirm redemption</button></div><p class="demo" role="status" aria-live="polite"></p></form></section></div><div class="col"><section class="card" aria-label="How requests are processed"><div class="lbl">How requests are processed</div><ol class="steps sp"><li><b>You submit and confirm</b><span>Confirmed with your authenticator code.</span></li><li><b>Administrator approval</b><span>Every deposit and redemption is reviewed before it is accepted.</span></li><li><b>Month-end processing</b><span>Approved requests settle on October 30. Redemptions are paid only to verified bank accounts.</span></li><li><b>Confirmation</b><span>A notice is sent and the item moves to History below.</span></li></ol></section><section class="card" aria-label="Account summary"><div class="lbl">Capital account summary</div><div class="rows sp"><div><span>Deposits to date</span><span>$115,000.00</span></div><div><span>Redemptions to date</span><span>$0.00</span></div><div><span>Net result to date</span><span class="up">+$13,406.42</span></div><div><span>Capital account</span><span><b>$128,406.42</b></span></div></div></section></div></div><div class="grid sp"><div class="col"><section class="card" aria-label="Standing instructions"><div class="h2r" style="margin-top:0"><h2>Standing instructions</h2><div class="meta">Applied to each monthly distribution</div></div><p style="margin-bottom:21px;color:var(--mute)">Choose how each month&rsquo;s distribution is handled. Changes take effect at the next month-end processing.</p><div class="seg wide" id="modes" role="group" aria-label="Instruction type"><button type="button" aria-pressed="false" data-m="all">Reinvest all</button><button type="button" aria-pressed="true" data-m="tgt">Payout target</button><button type="button" aria-pressed="false" data-m="pct">% reinvested</button><button type="button" aria-pressed="false" data-m="mix">Mix</button></div><form data-demo novalidate><div class="split" style="margin-top:21px"><div><label class="fl" for="tg" style="margin-top:0">Monthly payout target</label><input class="in" id="tg" inputmode="decimal" value="1000" aria-describedby="th"><div class="hint" id="th">Dollars paid to your bank each month. Zero for none.</div></div><div><label class="fl" for="pc" style="margin-top:0">Reinvested after target</label><input class="in" id="pc" type="number" min="0" max="100" step="1" value="100" aria-describedby="ph"><div class="hint" id="ph">Percent of the remainder kept in the club. The rest is paid out.</div></div></div><label class="fl" style="margin-top:21px">Pay to</label><div role="radiogroup" aria-label="Payout account"><div class="bank"><label><input type="radio" name="psrc" checked>RBC Chequing &middot;&middot;&middot;&middot; 4417</label><span class="tag ok">Verified</span></div><div class="bank"><label><input type="radio" name="psrc">TD Savings &middot;&middot;&middot;&middot; 9082</label><span class="tag ok">Verified</span></div></div><div class="card" style="background:var(--cream);margin-top:21px"><div class="lbl">Preview, based on the October distribution of $2,690.18</div><div class="rows sp" id="pv"></div></div><div style="margin-top:21px"><button class="btn" type="submit">Save instructions</button></div><p class="demo" role="status" aria-live="polite"></p></form><p class="note">A payout is made only from the month&rsquo;s distribution. If the distribution is smaller than the target, the smaller amount is paid. Capital is never drawn down by a standing instruction.</p></section></div><div class="col"><section class="card" aria-label="Current instruction"><div class="lbl">Current instruction</div><div class="big" style="font-size:28px">$1,000.00 / month</div><div class="delta">Paid to RBC Chequing &middot;&middot;&middot;&middot; 4417. The remainder is reinvested.</div><div class="rows sp"><div><span>Set on</span><span>Oct 6, 2026</span></div><div><span>Effective</span><span>Oct 30 processing</span></div></div></section></div></div><section class="card sp" aria-label="Pending and history"><div class="h2r" style="margin-top:0"><h2>Pending and history</h2><div class="seg" id="flt" role="group" aria-label="Filter"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="pend">Pending</button><button type="button" aria-pressed="false" data-f="done">Completed</button></div></div><div class="tw"><table class="tbl" id="hl"><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="r">Amount</th><th class="r">Status</th></tr></thead><tbody><tr data-s="pend"><td data-l="Date">Oct 6</td><td data-l="Type"><b>Redemption request</b></td><td data-l="Detail">To RBC Chequing &middot;&middot;&middot;&middot; 4417<small>Processes Oct 30</small></td><td class="r dn" data-l="Amount">&minus;$5,000.00</td><td class="r" data-l="Status"><span class="tag gd">Awaiting approval</span></td></tr><tr data-s="pend"><td data-l="Date">Oct 30</td><td data-l="Type"><b>Standing payout</b></td><td data-l="Detail">To RBC Chequing &middot;&middot;&middot;&middot; 4417<small>Subject to October distribution</small></td><td class="r dn" data-l="Amount">&minus;$1,000.00</td><td class="r" data-l="Status"><span class="tag">Scheduled</span></td></tr><tr data-s="done"><td data-l="Date">Oct 11</td><td data-l="Type"><b>October distribution</b></td><td data-l="Detail">Month to date, reinvested</td><td class="r up" data-l="Amount">+$2,690.18</td><td class="r" data-l="Status"><span class="tag">Accrued</span></td></tr><tr data-s="done"><td data-l="Date">Sep 30</td><td data-l="Type"><b>Deposit</b></td><td data-l="Detail">From RBC Chequing &middot;&middot;&middot;&middot; 4417</td><td class="r up" data-l="Amount">+$10,000.00</td><td class="r" data-l="Status"><span class="tag ok">Confirmed</span></td></tr><tr data-s="done"><td data-l="Date">Sep 30</td><td data-l="Type"><b>September distribution</b></td><td data-l="Detail">Reinvested</td><td class="r up" data-l="Amount">+$1,844.07</td><td class="r" data-l="Status"><span class="tag ok">Credited</span></td></tr><tr data-s="done"><td data-l="Date">Mar 31</td><td data-l="Type"><b>Deposit</b></td><td data-l="Detail">From RBC Chequing &middot;&middot;&middot;&middot; 4417</td><td class="r up" data-l="Amount">+$25,000.00</td><td class="r" data-l="Status"><span class="tag ok">Confirmed</span></td></tr><tr data-s="done"><td data-l="Date">Jan 30</td><td data-l="Type"><b>Initial deposit</b></td><td data-l="Detail">From RBC Chequing &middot;&middot;&middot;&middot; 4417</td><td class="r up" data-l="Amount">+$80,000.00</td><td class="r" data-l="Status"><span class="tag ok">Confirmed</span></td></tr></tbody></table></div><p class="note">A pending request can be cancelled before the administrator approves it. Earlier monthly distributions appear on your statements under Documents.</p></section>
+<footer class="ft"><span>Polarity Private Investment Club</span><span>Sample data for demonstration. Nothing is sent or stored.</span></footer></main>
+<script>
+(function(){
+/* ===== MOBILE MENU PATTERN JS (reusable) ===== */
+(function(){var b=document.getElementById('mm-btn'),m=document.getElementById('mm'),h=document.documentElement,mq=matchMedia('(max-width:900px)');
+function set(o){b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu');m.classList.toggle('open',o);h.classList.toggle('mm-lock',o);
+ if(o){m.querySelector('a').focus()}}
+b.addEventListener('click',function(){set(b.getAttribute('aria-expanded')!=='true')});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&b.getAttribute('aria-expanded')==='true'){set(false);b.focus()}});
+m.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
+mq.addEventListener('change',function(){if(!mq.matches)set(false)});})();
+})();
+
+document.querySelectorAll('.otp').forEach(function(o){var i=[].slice.call(o.querySelectorAll('input'));
+i.forEach(function(x,n){x.addEventListener('input',function(){x.value=x.value.replace(/\D/g,'').slice(0,1);if(x.value&&i[n+1])i[n+1].focus()});
+x.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!x.value&&i[n-1])i[n-1].focus()});
+x.addEventListener('paste',function(e){var t=(e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);if(!t)return;e.preventDefault();i.forEach(function(y,k){y.value=t[k]||''});(i[Math.min(t.length,5)]).focus()})})});
+
+var tb=document.querySelectorAll('[data-t]'),pd=document.getElementById('p-dep'),pr=document.getElementById('p-red');
+tb.forEach(function(b){b.addEventListener('click',function(){tb.forEach(function(x){x.setAttribute('aria-pressed',x===b)});var d=b.dataset.t==='dep';pd.hidden=!d;pr.hidden=d})});
+var fb=document.querySelectorAll('[data-f]');
+fb.forEach(function(b){b.addEventListener('click',function(){fb.forEach(function(x){x.setAttribute('aria-pressed',x===b)});document.querySelectorAll('#hl tbody tr').forEach(function(r){r.hidden=b.dataset.f!=='all'&&r.dataset.s!==b.dataset.f})})});
+var tg=document.getElementById('tg'),pc=document.getElementById('pc'),pv=document.getElementById('pv'),DIST=2690.18;
+function f(x){return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function calc(){var t=Math.max(0,parseFloat(tg.value)||0),p=Math.min(100,Math.max(0,parseFloat(pc.value)||0)),a=Math.min(t,DIST),rem=DIST-a,re=rem*p/100,ex=rem-re;
+ pv.innerHTML='<div><span>Paid to your bank</span><span>'+f(a+ex)+'</span></div><div><span>Reinvested in your capital account</span><span>'+f(re)+'</span></div>'}
+tg.addEventListener('input',calc);pc.addEventListener('input',calc);calc();
+var md=document.querySelectorAll('[data-m]'),PRE={all:[0,100],tgt:[1000,100],pct:[0,50],mix:[1000,50]};
+md.forEach(function(b){b.addEventListener('click',function(){md.forEach(function(x){x.setAttribute('aria-pressed',x===b)});var v=PRE[b.dataset.m];tg.value=v[0];pc.value=v[1];calc()})});
+
+var MSG='Demo only. Nothing is sent or stored.';
+document.querySelectorAll('form[data-demo]').forEach(function(f){f.addEventListener('submit',function(e){e.preventDefault();var d=f.querySelector('.demo');if(d)d.textContent=MSG})});
+document.querySelectorAll('[data-demo-btn]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();var d=b.closest('.card,section').querySelector('.demo');if(d)d.textContent=MSG})});
+document.querySelectorAll('a[href="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault()})});
+
+</script><script>addEventListener('pageshow',function(){var h=document.documentElement;h.style.overflow='';document.body.style.overflow='';h.classList.remove('mm-lock')})</script>
+</body></html>
