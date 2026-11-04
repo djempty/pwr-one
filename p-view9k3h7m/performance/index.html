@@ -69,8 +69,6 @@ h1{font-weight:400;font-size:40px;line-height:1.15;margin:13px 0 34px;letter-spa
  .chart{padding-left:0}
 }
 
-.ft{margin-top:55px;padding-top:21px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:21px;flex-wrap:wrap;font-size:11px;letter-spacing:1px;color:rgba(14,31,60,.382)}
-a.btn{display:inline-block}
 /* ===== MOBILE HEADER + MENU PATTERN (reusable for all internal pages) =====
    Needs: <a class="mk"> logo (fixed), <header class="bar"> with .hb button, <nav id="mm" class="mm">, and the JS block at the end.
    --bar = header height; page <main> must pad its top by var(--bar) (+ safe area). Shown <=900px only. */
@@ -232,6 +230,64 @@ textarea.in{min-height:144px;resize:vertical;line-height:1.5}
 .chart{touch-action:pan-y}
 @media(max-width:900px){.mbars{height:170px;gap:3px}.mv{font-size:9px}.mn{font-size:9px}}
 @media(max-width:600px){.mv{font-size:8px;letter-spacing:-.3px}}
+
+/* ===== POLARITY AGENT WIDGET (all portal pages) ===== */
+.agl{all:unset;box-sizing:border-box;position:fixed;z-index:6;right:max(21px,env(safe-area-inset-right));bottom:max(21px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:10px;height:44px;padding:0 21px 0 13px;background:#0e1f3c;color:#f8f4ef;font-family:Helvetica,Arial,sans-serif;font-size:13px;letter-spacing:1px;border-radius:22px;box-shadow:0 2px 6px rgba(14,31,60,.18),0 8px 24px rgba(14,31,60,.22);cursor:pointer;transition:opacity .2s,transform .2s}
+.agl svg{width:22px;height:22px;flex:none}
+.agl:focus-visible{outline:2px solid #b08d4f;outline-offset:3px}
+.agl[aria-expanded=true]{opacity:0;pointer-events:none;transform:scale(.9)}
+html.mm-lock .agl{display:none}
+@media(hover:hover) and (pointer:fine){.agl:hover{box-shadow:0 2px 6px rgba(14,31,60,.22),0 10px 28px rgba(14,31,60,.3)}}
+.agw{position:fixed;z-index:7;right:max(21px,env(safe-area-inset-right));bottom:max(21px,env(safe-area-inset-bottom));width:380px;height:560px;max-height:calc(100vh - 42px);display:flex;flex-direction:column;background:#fff;border:1px solid rgba(14,31,60,.15);border-top:3px solid #0e1f3c;box-shadow:0 4px 12px rgba(14,31,60,.12),0 20px 56px rgba(14,31,60,.28);transform-origin:bottom right;opacity:0;transform:scale(.9);visibility:hidden;pointer-events:none;transition:opacity .28s cubic-bezier(.16,1,.3,1),transform .28s cubic-bezier(.16,1,.3,1),visibility 0s .28s;font-family:Helvetica,Arial,sans-serif;color:#0e1f3c}
+.agw.open{opacity:1;transform:none;visibility:visible;pointer-events:auto;transition:opacity .28s cubic-bezier(.16,1,.3,1),transform .28s cubic-bezier(.16,1,.3,1)}
+.agw.noanim,.agw.noanim *{transition:none!important}
+.agh{display:flex;align-items:center;gap:13px;padding:13px 13px 13px 21px;background:#0e1f3c;color:#f8f4ef}
+.agh .t{flex:1;font-size:15px;font-weight:700}.agh .t small{display:block;font-weight:400;font-size:11px;color:rgba(248,244,239,.618);margin-top:2px;letter-spacing:0}
+.agx{all:unset;box-sizing:border-box;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:#f8f4ef}
+.agx:focus-visible{outline:2px solid #b08d4f;outline-offset:-3px}
+.agw .av{flex:none;width:34px;height:34px;border-radius:50%;background:#0e1f3c;display:inline-flex;align-items:center;justify-content:center}
+.agh .av{border:1px solid rgba(248,244,239,.25)}
+.agw .av svg{width:20px;height:20px}
+.agt{flex:1;min-height:0;overflow-y:auto;padding:21px;background:#f8f4ef;display:flex;flex-direction:column;gap:21px;overscroll-behavior:contain}
+.agm{display:flex;gap:10px;align-items:flex-start;max-width:92%}
+.agm.u{align-self:flex-end;flex-direction:row-reverse}
+.agm .av{width:26px;height:26px}.agm .av svg{width:15px;height:15px}
+.agb{background:#fff;border:1px solid rgba(14,31,60,.1);padding:13px 16px;font-size:13px;line-height:1.62}
+.agm.u .agb{background:#0e1f3c;color:#f8f4ef;border-color:#0e1f3c}
+.agb a.dl{display:inline-block;margin-top:8px;font-size:12px;border-bottom:1px solid #b08d4f;padding-bottom:2px}
+.agb .hb2{display:block;margin-top:13px}
+.agb .hbtn{all:unset;box-sizing:border-box;cursor:pointer;font-size:12px;padding:5px 13px;border:1px solid #0e1f3c;color:#0e1f3c}
+.agb .hbtn[disabled]{opacity:.5;cursor:default}
+.dots{display:inline-flex;gap:4px;padding:4px 0}
+.dots i{width:5px;height:5px;border-radius:50%;background:rgba(14,31,60,.618);animation:agbl 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes agbl{0%,60%,100%{opacity:.25}30%{opacity:1}}
+.agc{display:flex;flex-direction:column;gap:6px;padding:13px 21px;background:#f8f4ef;border-top:1px solid rgba(14,31,60,.1)}
+.agc.min{flex-direction:row;overflow-x:auto;padding:13px 21px;scrollbar-width:none}.agc.min::-webkit-scrollbar{display:none}
+.agchip{all:unset;box-sizing:border-box;cursor:pointer;font-size:12px;padding:6px 13px;border:1px solid rgba(14,31,60,.25);background:#fff;color:#0e1f3c;text-align:left;line-height:1.4}
+.agc.min .agchip{white-space:nowrap;flex:none}
+.agchip:focus-visible,.agb .hbtn:focus-visible{outline:2px solid #b08d4f;outline-offset:2px}
+@media(hover:hover) and (pointer:fine){.agchip:hover{border-color:#b08d4f}}
+.agf{display:flex;gap:8px;padding:13px 21px max(21px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid rgba(14,31,60,.1)}
+.agf input{flex:1;min-width:0;border:1px solid rgba(14,31,60,.25);border-radius:0;background:#fff;color:#0e1f3c;font:inherit;font-size:16px;padding:10px 13px;-webkit-appearance:none;appearance:none}
+.agf input:focus{border-color:#b08d4f;outline:2px solid #b08d4f;outline-offset:0}
+.agf button{all:unset;box-sizing:border-box;cursor:pointer;background:#0e1f3c;color:#f8f4ef;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:0 21px;display:flex;align-items:center}
+.agf button:focus-visible{outline:2px solid #b08d4f;outline-offset:2px}
+.agnote{font-size:10px;color:rgba(14,31,60,.5);padding:0 21px 8px;background:#fff;line-height:1.5}
+.agsr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+main{padding-bottom:89px}
+@media(max-width:900px){main{padding-bottom:calc(89px + env(safe-area-inset-bottom))!important}}
+@media(max-width:600px){
+ .agw{right:0;bottom:0;left:0;top:0;width:100%;height:100%;max-height:none;border:0;border-top:0;transform-origin:bottom center;transform:translateY(100%);opacity:1}
+ .agw.open{transform:none}
+ .agh{padding-top:max(13px,env(safe-area-inset-top))}
+ .agc,.agc.min{flex-direction:row;overflow-x:auto;scrollbar-width:none;padding:13px}
+ .agc::-webkit-scrollbar{display:none}
+ .agchip{white-space:nowrap;flex:none}
+ .agt{padding:13px}
+ .agf{padding-left:13px;padding-right:13px}
+}
+@media(prefers-reduced-motion:reduce){.agw,.agw.open,.agl{transition:none!important}.dots i{animation:none}}
 </style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <header class="bar"><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
@@ -282,4 +338,46 @@ document.querySelectorAll('[data-demo-btn]').forEach(function(b){b.addEventListe
 document.querySelectorAll('a[href="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault()})});
 
 </script><script>addEventListener('pageshow',function(){var h=document.documentElement;h.style.overflow='';document.body.style.overflow='';h.classList.remove('mm-lock')})</script>
+<button class="agl" id="agl" type="button" aria-expanded="false" aria-controls="agw" aria-label="Open Polarity Agent chat"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>Agent</button><div class="agw" id="agw" role="dialog" aria-label="Polarity Agent" aria-hidden="true"><div class="agh"><span class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg></span><div class="t">Polarity Agent<small>Your own account and the portal</small></div><button class="agx" id="agx" type="button" aria-label="Close chat"><svg width="16" height="16" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="2.6" fill="none"/></svg></button></div><div class="agt" id="agt" role="log" aria-live="polite" aria-label="Conversation"><div class="agm a"><span class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg></span><div class="agb">Good afternoon, James. I can answer questions about your capital account, requests, documents and the portal. Choose a question below or type your own.</div></div></div><div class="agc" id="agc" role="group" aria-label="Suggested questions"><button type="button" class="agchip">When will my October distribution be paid?</button><button type="button" class="agchip">How do I change my standing instruction?</button><button type="button" class="agchip">Where is my latest statement?</button><button type="button" class="agchip">How does assigning a proxy work?</button><button type="button" class="agchip">What is the status of my redemption request?</button></div><form class="agf" id="agf" autocomplete="off"><label class="agsr" for="agq">Ask a question</label><input id="agq" maxlength="200" placeholder="Ask a question"><button type="submit">Send</button></form><div class="agnote">Sees only your own account. Cannot move money, change instructions or vote. Conversations are logged.</div></div><script>
+(function(){var KEY='pgs',L=document.getElementById('agl'),W=document.getElementById('agw'),T=document.getElementById('agt'),Q=document.getElementById('agq'),CH=document.getElementById('agc'),MARK=W.querySelector('.av').innerHTML;
+var S;try{S=JSON.parse(sessionStorage.getItem(KEY))}catch(e){}S=S||{o:0,m:[]};
+function save(){try{sessionStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function LK(h,t){return '<a class="dl" href="'+h+'">'+t+'</a>'}
+var A={
+ dist:['Your October distribution is $2,690.18 to date. Distributions are processed at month end, on Friday, October 30. Under your standing instruction, $1,000.00 is paid to RBC Chequing \u00b7\u00b7\u00b7\u00b7 4417 and the remaining $1,690.18 is reinvested in your capital account.',LK('../deposits/','Open Deposits &amp; Redemptions')],
+ inst:['Your current instruction is a $1,000.00 monthly payout with the remainder reinvested. You can switch between reinvesting all, a payout target, a percentage reinvested, or a mix, in Standing instructions on Deposits &amp; Redemptions. A change takes effect at the next month-end processing. I cannot change it for you.',LK('../deposits/','Open Standing instructions')],
+ stmt:['Your latest statement is September 2026, issued on October 2. Statements, your member agreement and tax slips are in Documents. Your 2026 tax slip is expected in February 2027.',LK('../documents/','Open Documents')],
+ proxy:['You may delegate your vote to the Board or to another member you know. For a member you need their member number and a one-time proxy code that they generate; the code is valid for 72 hours. A member may hold at most 3 proxies, proxies cannot be passed on, and the Board has no limit. A member must accept; a Board proxy takes effect immediately. Your own vote overrides your proxy.',LK('../voting/','Open Assign proxy')],
+ red:['Your redemption request of $5,000.00 to RBC Chequing \u00b7\u00b7\u00b7\u00b7 4417, submitted on October 6, is awaiting administrator approval. If approved it will be processed on October 30. You can cancel it before approval from Pending and history.',LK('../deposits/','Open Deposits &amp; Redemptions')],
+ no:['I am not able to discuss the engine\u2019s logic, upcoming trades or other members. Current positioning and the full trade record are available to you on Performance.',LK('../performance/','Open Performance')]};
+function pick(t){t=t.toLowerCase();
+ if(/algorithm|engine|buying|next trade|strategy logic|signal|other member|who (is|are)|member (name|list)/.test(t))return A.no;
+ if(/redemption|redeem|withdraw/.test(t))return A.red;
+ if(/proxy|proxies|delegate/.test(t))return A.proxy;
+ if(/statement|tax|document|agreement/.test(t))return A.stmt;
+ if(/instruction|reinvest|target|payout mix/.test(t))return A.inst;
+ if(/distribution|paid|payout|pay out/.test(t))return A.dist;return null}
+function row(c,h){var d=document.createElement('div');d.className='agm '+c;d.innerHTML=(c==='a'?'<span class="av">'+MARK+'</span>':'')+'<div class="agb">'+h+'</div>';T.appendChild(d);T.scrollTop=T.scrollHeight;return d}
+function setOpen(o,quiet){W.classList.toggle('open',o);L.setAttribute('aria-expanded',o);W.setAttribute('aria-hidden',!o);S.o=o?1:0;save();
+ if(o){T.scrollTop=S.m.length?T.scrollHeight:0;if(!quiet)setTimeout(function(){Q.focus()},30)}else if(!quiet)L.focus()}
+function ask(t){t=t.trim();if(!t)return;S.m.push({c:'u',t:t});save();row('u',esc(t));CH.classList.add('min');
+ var w=row('a','<span class="dots" aria-label="Preparing a reply"><i></i><i></i><i></i></span>');
+ setTimeout(function(){var r=pick(t),h;
+  if(r)h=r[0]+'<br>'+r[1];else h='I do not have an answer to that. I can pass your question to the club administrator, who replies within one business day.<span class="hb2"><button class="hbtn" type="button" data-q="'+esc(t)+'">Send to administrator</button></span>';
+  w.querySelector('.agb').innerHTML=h;S.m.push({c:'a',h:h});save();T.scrollTop=T.scrollHeight},750)}
+function fill(q){var s=document.getElementById('sb'),m=document.getElementById('ms'),tp=document.getElementById('tp');if(!m)return false;s.value='Question from the Agent';m.value=q;if(tp)tp.selectedIndex=0;var f=document.getElementById('msgform');if(f)f.scrollIntoView({block:'start'});setTimeout(function(){m.focus({preventScroll:true})},50);return true}
+T.addEventListener('click',function(e){var b=e.target.closest('[data-q]');if(!b)return;var q=b.dataset.q;b.disabled=true;
+ if(document.getElementById('ms')){setOpen(false,true);fill(q)}else{S.o=0;save();try{sessionStorage.setItem('pgq',q)}catch(x){}location.href='../contact/#msgform'}});
+CH.querySelectorAll('.agchip').forEach(function(c){c.addEventListener('click',function(){ask(c.textContent)})});
+document.getElementById('agf').addEventListener('submit',function(e){e.preventDefault();var v=Q.value;Q.value='';ask(v)});
+L.addEventListener('click',function(){setOpen(true)});document.getElementById('agx').addEventListener('click',function(){setOpen(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&W.classList.contains('open'))setOpen(false)});
+document.querySelectorAll('[data-agent-open]').forEach(function(b){b.addEventListener('click',function(){setOpen(true)})});
+S.m.forEach(function(m){row(m.c,m.c==='u'?esc(m.t):m.h)});if(S.m.length)CH.classList.add('min');
+if(S.o){W.classList.add('noanim');setOpen(true,true);requestAnimationFrame(function(){requestAnimationFrame(function(){W.classList.remove('noanim')})})}
+var pq;try{pq=sessionStorage.getItem('pgq')}catch(e){}
+if(pq&&document.getElementById('ms')){sessionStorage.removeItem('pgq');setTimeout(function(){fill(pq)},60)}
+})();
+</script>
 </body></html>
