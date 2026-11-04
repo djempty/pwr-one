@@ -1,17 +1,14 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Polarity</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:,"><title>Polarity</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="referrer" content="no-referrer">
 <style>html,body{margin:0;height:100%;background:#000;overflow:hidden}canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 .mk{position:fixed;left:55px;top:34px;font-family:Helvetica,Arial,sans-serif;font-weight:700;letter-spacing:0;color:#f8f4ef;font-size:21px;line-height:1;z-index:2}
 .mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}
-@media(max-width:600px){.mk{left:21px;top:21px;font-size:21px;line-height:1}.mk svg{width:34px;height:34px;vertical-align:-7.79px;margin-right:21px}}
+@media(max-width:600px){.mk{left:21px;top:21px}}
 .navr{position:fixed;right:55px;top:34px;z-index:2;color:#c7cedb;font-size:13px;letter-spacing:1px;font-family:Helvetica,Arial,sans-serif;display:flex;align-items:center}
 .navr span{margin-left:34px;transition:color .25s}
 .navr span:not(.btn):hover{color:#f8f4ef;cursor:default}
 .navr .btn{border:1px solid #b08d4f;color:#f8f4ef;padding:9px 21px;transition:background .25s,color .25s;cursor:pointer}
-.navr .hb{display:none}
-.mm{display:none}
-html.mm-lock,html.mm-lock body{overflow:hidden}
 .navr .btn:hover{background:#b08d4f;color:#0e1f3c}
 .copy{position:fixed;left:55px;top:34%;width:470px;max-width:calc(100vw - 110px);color:#f8f4ef;z-index:2;font-family:Helvetica,Arial,sans-serif}
 .copy .k{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#b08d4f}
@@ -19,34 +16,16 @@ html.mm-lock,html.mm-lock body{overflow:hidden}
 .copy p{color:#a9b2c2;font-size:16px;line-height:1.62;margin:0}
 .cta{display:inline-block;margin-top:21px;background:#b08d4f;border:1px solid #b08d4f;color:#0e1f3c;padding:13px 34px;font-size:13px;letter-spacing:2px;text-transform:uppercase;transition:background .25s,color .25s;cursor:default}
 .cta:hover{background:transparent;color:#f8f4ef}
-.ghost{display:inline-block;margin:21px 0 0 21px;color:#f8f4ef;font-size:13px;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #b08d4f;padding-bottom:4px;transition:color .25s,border-color .25s;cursor:default}
-.ghost:hover{color:#b08d4f;border-color:#f8f4ef}
-.btn2{display:none}
 .foot{position:fixed;left:55px;bottom:34px;color:#5d6a80;font-size:11px;letter-spacing:3px;z-index:2;font-family:Helvetica,Arial,sans-serif}
 @media(max-width:900px){.copy{width:calc(100vw - 110px)}}
 @media(max-width:600px){
   .navr{right:max(11px,env(safe-area-inset-right));top:env(safe-area-inset-top);height:76px}
   .navr span{display:none}
-  .navr .hb{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;width:54px;height:76px;margin:0;color:#f8f4ef;cursor:pointer;z-index:4}
-  .navr .hb .x{display:none}.navr .hb[aria-expanded=true] .x{display:block}.navr .hb[aria-expanded=true] .h{display:none}
-  .navr .hb:focus-visible{outline:2px solid #b08d4f;outline-offset:-4px}
   .navr,.mk{z-index:4}
-  .mm{display:flex;flex-direction:column;position:fixed;inset:0;z-index:3;background:#000;padding:calc(76px + env(safe-area-inset-top) + 13px) max(21px,env(safe-area-inset-right)) max(21px,env(safe-area-inset-bottom)) max(21px,env(safe-area-inset-left));overflow-y:auto;overscroll-behavior:contain;visibility:hidden;opacity:0;transition:opacity .25s,visibility 0s .25s;font-family:Helvetica,Arial,sans-serif}
-  .mm.open{visibility:visible;opacity:1;transition:opacity .25s}
-  .mm a{display:block;padding:13px 21px;font-size:18px;color:rgba(248,244,239,.618);border-left:2px solid transparent;text-decoration:none}
-  .mm a+a{margin-top:5px}
-  .mm span{display:block;padding:13px 21px;font-size:18px;color:rgba(248,244,239,.618);border-left:2px solid transparent;margin-top:5px;cursor:default}
-  .mm a[aria-current]{background:rgba(248,244,239,.08);color:#f8f4ef;border-left-color:#b08d4f}
-  .mm a:not([aria-current]):hover{color:#f8f4ef}
-  .navr .hb svg{display:block;fill:currentColor}
-
   .copy{left:21px;right:21px;top:34%;width:auto;max-width:none}
   .copy h1{font-size:34px;margin:13px 0 13px}
   .copy p{font-size:13px;line-height:1.6}
   .cta{display:block;text-align:center;margin-top:21px;padding:13px;font-size:11px}
-  .ghost{display:none}
-  .btn2{display:block;text-align:center;margin-top:13px;padding:13px;font-size:11px;letter-spacing:2px;text-transform:uppercase;border:1px solid #b08d4f;color:#f8f4ef;transition:background .25s,color .25s;cursor:default}
-  .btn2:hover{background:#b08d4f;color:#0e1f3c}
   .foot{left:21px;right:21px;bottom:21px;font-size:9px;letter-spacing:2px}
 }
 @media(orientation:landscape) and (max-height:500px){
@@ -54,24 +33,19 @@ html.mm-lock,html.mm-lock body{overflow:hidden}
   .mk svg{width:26px;height:26px;vertical-align:-6px;margin-right:14px}
   .navr{right:max(28px,env(safe-area-inset-right));top:14px;height:auto;font-size:11px;letter-spacing:.8px}
   .navr span{display:block;margin-left:22px}
-  .navr .hb{display:none}
   .navr .btn{padding:5px 13px}
   .copy{left:max(28px,env(safe-area-inset-left));right:auto;top:auto;bottom:34px;width:min(400px,54vw);max-width:none}
   .copy .k{font-size:10px;letter-spacing:2.5px}
   .copy h1{font-size:30px;line-height:1.12;margin:8px 0 8px}
   .copy p{font-size:12.5px;line-height:1.5}
   .cta{display:inline-block;width:auto;text-align:left;margin-top:13px;padding:8px 21px;font-size:11px;letter-spacing:1.5px}
-  .ghost{display:inline-block;margin:13px 0 0 13px;font-size:11px;letter-spacing:1.5px;padding-bottom:3px}
-  .btn2{display:none}
   .foot{left:auto;right:max(28px,env(safe-area-inset-right));bottom:12px;font-size:9px;letter-spacing:2px}
 }
 .navr{transform:translateZ(0);will-change:transform;isolation:isolate}.navr .btn,.navr a .btn,.navr span{transition:none!important}.navr a{display:inline-block;margin-left:34px;cursor:pointer;line-height:1;transform:translateZ(0);backface-visibility:hidden}.navr a .btn{backface-visibility:hidden;-webkit-font-smoothing:antialiased}.navr a .btn{display:inline-block;margin-left:0}.navr a:hover .btn{background:#b08d4f;color:#0e1f3c}
 @media(max-width:600px){.navr a{display:none!important}}
-.navr a.nl{display:contents!important}.navr a.nl span:not(.btn),.navr a.nl span:not(.btn):hover{cursor:pointer}
-.leaving .copy,.leaving .navr{visibility:hidden!important}
 a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;-webkit-font-smoothing:antialiased;isolation:isolate}
 </style>
-<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
 <!-- navy-aligned-v10 --></head><body>
 <div class="mk"><svg viewBox="0 0 100 100"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</div>
 <div class="navr"><a href="login/" style="color:inherit;text-decoration:none"><span class="btn">Member Login</span></a></div>
@@ -193,23 +167,16 @@ function frame(){
 }
 frame();
 </script><script>
-/* Member Login + Approach: animation + content dissolve to navy while still moving (plain overlay, no iframe = no extra history entry), then navigate; login form fades in on arrival */
-[['login/','#0e1f3c','pxfade'],['approach/','#0e1f3c','pxfade-ap']].forEach(([p,col,key])=>document.querySelectorAll('a[href^="'+p+'"]').forEach(a=>a.addEventListener('click',e=>{
+/* Member Login: animation + content dissolve to navy while still moving (plain overlay, no iframe = no extra history entry), then navigate; login form fades in on arrival */
+document.querySelectorAll('a[href^="login/"]').forEach(a=>a.addEventListener('click',e=>{
  if(e.metaKey||e.ctrlKey||e.shiftKey||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
  e.preventDefault();
  const o=document.createElement('div');o.className='lgx';o.setAttribute('aria-hidden','true');
- o.style.cssText='position:fixed;inset:0;z-index:40;background:'+col+';opacity:0;pointer-events:none;transition:opacity .85s cubic-bezier(.382,0,.618,1)';
- document.querySelectorAll(key==='pxfade-ap'?'.mk':'.mk,.foot').forEach(x=>{x.style.zIndex=60;x.style.position=getComputedStyle(x).position==='static'?'relative':''});
+ o.style.cssText='position:fixed;inset:0;z-index:40;background:#0e1f3c;opacity:0;pointer-events:none;transition:opacity .85s cubic-bezier(.382,0,.618,1)';
+ document.querySelectorAll('.mk,.foot').forEach(x=>{x.style.zIndex=60;x.style.position=getComputedStyle(x).position==='static'?'relative':''});
  document.body.appendChild(o);
- requestAnimationFrame(()=>requestAnimationFrame(()=>{o.style.opacity=1;setTimeout(()=>{sessionStorage.setItem(key,'1');location.href=a.href},880)}));
-})));
-(function(){var d=document,h=d.documentElement,b=d.getElementById('mm-btn'),m=d.getElementById('mm'),mq=matchMedia('(max-width:600px)');if(!b||!m)return;
-function set(o){b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu');m.classList.toggle('open',o);h.classList.toggle('mm-lock',o);if(o)m.querySelector('a').focus()}
-b.addEventListener('click',function(){set(b.getAttribute('aria-expanded')!=='true')});
-d.addEventListener('keydown',function(e){if(e.key==='Escape'&&b.getAttribute('aria-expanded')==='true'){set(false);b.focus()}});
-m.addEventListener('click',function(e){var c=e.target.closest('a[aria-current]');if(c){e.preventDefault();set(false);return}});
-mq.addEventListener('change',function(){if(!mq.matches)set(false)});
-addEventListener('pageshow',function(){set(false)});})();
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{o.style.opacity=1;setTimeout(()=>{sessionStorage.setItem('pxfade','1');location.href=a.href},880)}));
+}));
 addEventListener('pageshow',()=>{document.querySelectorAll('.lgx').forEach(f=>f.remove());document.querySelectorAll('.mk,.foot').forEach(x=>{x.style.zIndex='';x.style.position=''})});
 </script>
 </body></html>
