@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="data:,"><title>Voting · Admin Console</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="theme-color" content="#0e1f3c">
+<script>/*pg-admin-theme*/(function(){var h=document.documentElement,t;try{t=localStorage.getItem('pgadmin-theme')}catch(e){}h.setAttribute('data-theme',t==='light'?'light':'dark')})()</script>
+<link rel="stylesheet" href="/p-admin-r8v3k6/assets/admin.css?v=1"></head><body data-page="voting">
+<header class="bar"><a class="brand" href="/p-admin-r8v3k6/" aria-label="Admin console home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg><span class="wm">POLARITY</span><span class="adm">Admin</span></a><button class="hb" id="hb" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h2" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x2" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
+<nav class="mm" id="mm" aria-label="Admin menu"><div class="ng">Operations</div><a href="/p-admin-r8v3k6/" data-pg="dashboard">Dashboard</a><a href="/p-admin-r8v3k6/approvals/" data-pg="approvals">Approvals</a><a href="/p-admin-r8v3k6/month-end/" data-pg="monthend">Month-end</a><a href="/p-admin-r8v3k6/members/" data-pg="members">Members</a><div class="ng">Governance</div><a href="/p-admin-r8v3k6/voting/" data-pg="voting" aria-current="page">Voting</a><a href="/p-admin-r8v3k6/documents/" data-pg="documents">Documents</a><a href="/p-admin-r8v3k6/messages/" data-pg="messages">Messages</a><div class="ng">Control</div><a href="/p-admin-r8v3k6/audit-log/" data-pg="audit">Audit log</a><a href="/p-admin-r8v3k6/admin-accounts/" data-pg="admins">Admin accounts</a><a href="/p-admin-r8v3k6/settings/" data-pg="settings">Settings</a></nav>
+<aside class="side"><a class="brand" href="/p-admin-r8v3k6/" aria-label="Admin console home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg><span class="wm">POLARITY</span><span class="adm">Admin</span></a>
+<nav class="nav" aria-label="Admin"><div class="ng">Operations</div><a href="/p-admin-r8v3k6/" data-pg="dashboard">Dashboard</a><a href="/p-admin-r8v3k6/approvals/" data-pg="approvals">Approvals<span class="ct" id="navApr">6</span></a><a href="/p-admin-r8v3k6/month-end/" data-pg="monthend">Month-end</a><a href="/p-admin-r8v3k6/members/" data-pg="members">Members</a><div class="ng">Governance</div><a href="/p-admin-r8v3k6/voting/" data-pg="voting" aria-current="page">Voting</a><a href="/p-admin-r8v3k6/documents/" data-pg="documents">Documents</a><a href="/p-admin-r8v3k6/messages/" data-pg="messages">Messages<span class="ct" id="navMsg">7</span></a><div class="ng">Control</div><a href="/p-admin-r8v3k6/audit-log/" data-pg="audit">Audit log</a><a href="/p-admin-r8v3k6/admin-accounts/" data-pg="admins">Admin accounts</a><a href="/p-admin-r8v3k6/settings/" data-pg="settings">Settings</a></nav>
+<div class="who">S. Whitfield<span id="userroles2">Signed in with security key</span></div></aside>
+<div class="top"><div class="crumb">Console &rsaquo; <b>Voting</b></div>
+<div class="tr"><span class="env" title="This console operates on live member data"><i></i>Production</span>
+<span class="sess" id="sess">Session <b id="sesst">26:00</b></span>
+<label class="pv">Preview as<select id="rolesel" aria-label="Preview as role"><option value="owner">Owner</option><option value="administrator">Administrator</option><option value="board">Board</option><option value="support">Support</option><option value="auditor">Auditor</option></select></label>
+<div class="usr"><b>S. Whitfield</b><span id="userroles">Owner &middot; Administrator</span></div>
+<button class="thm" id="thm" type="button">Light</button></div></div>
+<main>
+<div class="rolestrip" id="rolestrip" hidden>Role preview: <b>Owner</b>. <span id="rsnote"></span> Preview only; nothing changes on the server.</div>
+<div id="pagebody"><div class="k">Strategic direction &middot; one vote per member</div><h1>Voting</h1><p class="sub">Create and run votes. The member portal shows the same question, rationale and considerations.</p>
+<div class="grid">
+<div class="col">
+<section class="card hl"><div class="hd"><div class="lbl" style="color:var(--gold)">Open vote &middot; V-2026-04</div><span class="tag gd">Closes Wed, Oct 14, 4:00 PM ET</span></div>
+<h2 style="font-size:21px;font-weight:400;line-height:1.3">Raise max allocation to longer-dated options from 23.6% to 38.2%?</h2>
+<div class="g2" style="margin-top:21px"><div><div class="lbl">Turnout</div><div class="big"><span class="num" data-v="22">22</span> <span style="font-size:21px;font-weight:400;color:var(--mute)">of 37</span></div><div class="delta">59.5% &middot; quorum 19 of 37 met</div></div>
+<div class="tally" aria-label="Live tally">
+<div class="tr2"><span>Raise to 38.2%</span><span>13</span><div class="pbar2 neutral"><i style="width:59.1%"></i></div></div>
+<div class="tr2"><span>Keep at 23.6%</span><span>7</span><div class="pbar2 neutral"><i style="width:31.8%"></i></div></div>
+<div class="tr2"><span>Abstain</span><span>2</span><div class="pbar2 neutral"><i style="width:9.1%"></i></div></div></div></div>
+<p class="note">Live tally of ballots cast, aggregate counts only. Members see counts; individual ballots are not shown on this screen. Majority of votes cast decides, provided quorum is met.</p>
+<div class="acts" style="margin-top:21px"><button class="btn" type="button" data-cap="vote" data-keyact="Close vote and publish result" data-keysum="V-2026-04 &middot; 22 of 37 voted &middot; closes early, before Oct 14 4:00 PM ET" data-done="Vote closed and result published (mock). Nothing was posted.">Close and publish result</button><button class="btn ghost" type="button" data-cap="vote" data-mock="Reminder queued to the 15 members who have not voted (mock).">Send reminder</button></div></section>
+<section class="card"><div class="hd"><div class="lbl">Proxy register</div><span class="tag">By member number</span></div>
+<div class="tw"><table class="tbl"><thead><tr><th>Grantor</th><th>Delegate</th><th>Scope</th><th>Status</th><th>Since</th></tr></thead><tbody>
+<tr><td data-l="Grantor">PL-0019</td><td data-l="Delegate">Board</td><td data-l="Scope">All votes</td><td data-l="Status"><span class="tag ok">Active</span></td><td data-l="Since">Oct 9</td></tr>
+<tr><td data-l="Grantor">PL-0033</td><td data-l="Delegate">PL-0071</td><td data-l="Scope">This vote</td><td data-l="Status"><span class="tag ok">Active</span></td><td data-l="Since">Oct 11</td></tr>
+<tr><td data-l="Grantor">PL-0105</td><td data-l="Delegate">PL-0071</td><td data-l="Scope">All votes</td><td data-l="Status"><span class="tag ok">Active</span></td><td data-l="Since">Sep 28</td></tr>
+<tr><td data-l="Grantor">PL-0118</td><td data-l="Delegate">PL-0142</td><td data-l="Scope">This vote</td><td data-l="Status"><span class="tag gd">Awaiting acceptance</span></td><td data-l="Since">Oct 11</td></tr>
+<tr><td data-l="Grantor">PL-0149</td><td data-l="Delegate">Board</td><td data-l="Scope">All votes</td><td data-l="Status"><span class="tag ok">Active</span></td><td data-l="Since">Oct 2</td></tr></tbody></table></div>
+<p class="note">4 proxies in force, 1 awaiting acceptance. PL-0071 holds 2 of a maximum 3; the Board has no limit. A proxy to the Board takes effect immediately; a member must accept. Voting yourself overrides your proxy.</p></section>
+<section class="card"><div class="lbl">Past votes</div><div class="tw" style="margin-top:13px"><table class="tbl"><thead><tr><th>Vote</th><th>Closed</th><th>Turnout</th><th>Result</th></tr></thead><tbody>
+<tr><td data-l="Vote">V-2026-03<small>Move allocation review to monthly</small></td><td data-l="Closed" class="nw">Aug 14, 2026</td><td data-l="Turnout">34 of 36</td><td data-l="Result">Passed 24 &ndash; 9, 1 abstained</td></tr>
+<tr><td data-l="Vote">V-2026-02<small>Appoint L. Marchetti to the Board</small></td><td data-l="Closed" class="nw">Jun 12, 2026</td><td data-l="Turnout">33 of 35</td><td data-l="Result">Passed 28 &ndash; 3, 2 abstained</td></tr>
+<tr><td data-l="Vote">V-2026-01<small>Ratify Member Agreement v2.1</small></td><td data-l="Closed" class="nw">Jan 26, 2026</td><td data-l="Turnout">19 of 21</td><td data-l="Result">Passed 19 &ndash; 0</td></tr></tbody></table></div></section>
+</div>
+<div class="col">
+<section class="card" data-capzone="vote"><div class="hd"><div class="lbl">Create a vote</div><span class="tag">Draft</span></div>
+<p class="zn note" hidden style="margin:0 0 13px;color:var(--gold)"></p>
+<label class="fl" for="vTitle">Title</label><input class="in" id="vTitle" value="Allocation review cadence">
+<label class="fl" for="vQ">Question</label><textarea class="in" id="vQ" style="min-height:55px">Review the allocation limits every month instead of every quarter?</textarea>
+<div id="vOpts">
+<div class="optbox"><label class="fl" for="o1">Option 1</label><input class="in" id="o1" value="Review monthly"><label class="fl" for="r1">Rationale</label><textarea class="in" id="r1" style="min-height:55px">Limits are checked against current conditions at each month end.</textarea><label class="fl" for="c1">Considerations</label><textarea class="in" id="c1" style="min-height:55px">More Board time each month and more frequent proposals.</textarea></div>
+<div class="optbox"><label class="fl" for="o2">Option 2</label><input class="in" id="o2" value="Keep quarterly"><label class="fl" for="r2">Rationale</label><textarea class="in" id="r2" style="min-height:55px">Fewer, better-considered changes.</textarea><label class="fl" for="c2">Considerations</label><textarea class="in" id="c2" style="min-height:55px">Slower to respond between reviews.</textarea></div></div>
+<button class="btn ghost sm" type="button" id="addOpt" data-cap="vote">Add option</button>
+<div class="fr" style="margin-top:13px"><div><label class="fl" for="vOpen">Opens</label><input class="in" id="vOpen" value="Oct 20, 2026 9:00 AM"></div><div><label class="fl" for="vClose">Closes</label><input class="in" id="vClose" value="Oct 23, 2026 4:00 PM"></div></div>
+<label class="fl" for="vQuorum">Quorum</label><select class="in" id="vQuorum"><option>Standard: 50% of members (19 of 37)</option><option>Custom</option></select>
+<div class="acts" style="margin-top:21px"><button class="btn" type="button" data-cap="vote" data-keyact="Schedule vote" data-keysum="Allocation review cadence &middot; opens Oct 20 &middot; notice goes to all 37 members" data-done="Vote scheduled (mock). No notice was sent.">Schedule vote</button><button class="btn ghost" type="button" data-cap="vote" data-mock="Draft saved (mock).">Save draft</button></div></section>
+<section class="card"><div class="lbl">Preview &middot; as members will see it</div><div class="pre" style="margin-top:13px" id="vPre"></div></section>
+</div></div>
+</div>
+<section class="card" id="restricted" hidden><div class="lbl">Not available to this role</div><h2 style="margin-top:13px">This page is outside the active role&rsquo;s access.</h2><p class="note" id="rneed"></p><p class="note">Hidden from navigation. A direct link shows this notice and nothing else.</p><p style="margin-top:21px"><a class="btn ghost sm" href="/p-admin-r8v3k6/">Back to Dashboard</a></p></section>
+<footer class="ft"><span>&copy; 2026 Polarity Capital</span><span>Mock back office. Sample data. Nothing is posted, sent or stored.</span></footer></main>
+<div id="tip" role="tooltip"></div><div id="toast" role="status" aria-live="polite"></div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Detail"></aside>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true"></div>
+<script>
+window.PageModules=window.PageModules||{};
+window.PageModules.voting=function(U){var q=U.q,qa=U.qa,esc=U.esc;
+function pre(){var h='<div class="lbl" style="color:var(--gold)">Open vote &middot; opens '+esc(q('#vOpen').value)+'</div><p style="margin:13px 0 5px;font-size:15px;font-weight:700;line-height:1.4">'+esc(q('#vQ').value)+'</p><div class="delta">Closes '+esc(q('#vClose').value)+' &middot; '+esc(q('#vQuorum').value)+'</div><div class="lbl" style="margin-top:21px">Choose one option</div>';
+ qa('#vOpts .optbox').forEach(function(b){var i=qa('input,textarea',b);h+='<div class="popt"><b>'+esc(i[0].value||'Untitled option')+'</b><p><b>Rationale.</b> '+esc(i[1].value)+'</p><p><b>Considerations.</b> '+esc(i[2].value)+'</p></div>'});
+ h+='<div class="popt"><b>Abstain</b><p><b>Rationale.</b> No preference. Your abstention counts toward quorum but not toward either side of the result.</p></div>';q('#vPre').innerHTML=h}
+document.addEventListener('input',function(e){if(e.target.closest('[data-capzone]'))pre()});document.addEventListener('change',function(e){if(e.target.closest('[data-capzone]'))pre()});
+q('#addOpt').addEventListener('click',function(e){if(e.currentTarget.getAttribute('aria-disabled')==='true')return;var n=qa('#vOpts .optbox').length+1,d=document.createElement('div');d.className='optbox';d.innerHTML='<label class="fl" for="o'+n+'">Option '+n+'</label><input class="in" id="o'+n+'"><label class="fl" for="r'+n+'">Rationale</label><textarea class="in" id="r'+n+'" style="min-height:55px"></textarea><label class="fl" for="c'+n+'">Considerations</label><textarea class="in" id="c'+n+'" style="min-height:55px"></textarea>';q('#vOpts').appendChild(d);pre()});
+pre();document.addEventListener('rolechange',pre)};
+</script>
+<script src="/p-admin-r8v3k6/assets/admin.js?v=1"></script>
+</body></html>
