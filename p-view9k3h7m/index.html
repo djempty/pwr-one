@@ -45,8 +45,8 @@
 @media(max-width:600px){.navr a{display:none!important}}
 a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;-webkit-font-smoothing:antialiased;isolation:isolate}
 .an .a{opacity:0}.an .ln{display:inline-block;transform:translateY(13px)}
-.an.go .a{opacity:1;transition:opacity 987ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
-.an.go .ln{transform:none;transition:opacity 987ms cubic-bezier(.16,1,.3,1) var(--d,0ms),transform 987ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
+.an.go .a{opacity:1;transition:opacity 610ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
+.an.go .ln{transform:none;transition:opacity 610ms cubic-bezier(.16,1,.3,1) var(--d,0ms),transform 610ms cubic-bezier(.16,1,.3,1) var(--d,0ms)}
 .foot.cpr{left:auto;right:55px}@media(max-width:600px){.foot.cpr{left:21px;right:auto;bottom:21px}.foot:not(.cpr){bottom:38px}}
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
@@ -63,10 +63,13 @@ a.cta{transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibi
  var d=document,h=d.documentElement,q=function(s){return d.querySelector(s)};
  var h1=q('.copy h1'),ls=h1.innerHTML.split('<br>');
  h1.innerHTML=ls.map(function(l){return '<span class="ln">'+l+'</span>'}).join('<br>');
- [['.mk',144],['.navr',233],['.copy .k',377],['.copy .ln:nth-of-type(1)',610],['.copy .ln:nth-of-type(2)',699],['.copy p',987],['.copy .cta',1364]].forEach(function(r){var e=q(r[0]);e.classList.add('a');e.style.setProperty('--d',r[1]+'ms')});
+ var so=false;try{so=!!d.referrer&&new URL(d.referrer).origin===location.origin}catch(x){}
+ var L=[['.mk',89],['.navr',144],['.copy .k',144],['.copy .ln:nth-of-type(1)',233],['.copy .ln:nth-of-type(2)',288],['.copy p',466],['.copy .cta',699]];
+ if(!so||nv.type==='reload'){L.push(['.foot:not(.cpr)',466],['.foot.cpr',466])}
+ L.forEach(function(r){var e=q(r[0]);e.classList.add('a');e.style.setProperty('--d',r[1]+'ms')});
  h.classList.add('an');
  requestAnimationFrame(function(){requestAnimationFrame(function(){h.classList.add('go')})});
- setTimeout(function(){h.classList.remove('an','go');d.querySelectorAll('.a').forEach(function(e){e.classList.remove('a');e.style.removeProperty('--d')})},3200);
+ setTimeout(function(){h.classList.remove('an','go');d.querySelectorAll('.a').forEach(function(e){e.classList.remove('a');e.style.removeProperty('--d')})},1800);
 }catch(e){}})();
 </script>
 
