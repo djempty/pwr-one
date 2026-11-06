@@ -20,7 +20,7 @@
 <div class="grid"><div class="col">
 <section class="card"><div class="lbl" style="margin-bottom:13px">Compose a notice</div>
 <span class="fl">To</span><div class="optrow"><label class="opt"><input type="radio" name="to" checked> All members (37)</label><label class="opt"><input type="radio" name="to"> One member</label></div>
-<div id="toOne" hidden><label class="fl" for="toNo">Recipient</label><div class="rcp"><input class="in" id="toNo" placeholder="Member number or name" role="combobox" aria-expanded="false" aria-controls="toList" aria-autocomplete="list" autocomplete="off" spellcheck="false"><div class="rcl" id="toList" role="listbox" hidden></div></div><div class="rcf" id="toConf" aria-live="polite" hidden></div><div class="hint">Search by member number or name. Names are visible to administrators only; the member sees a notice addressed to them.</div></div>
+<div id="toOne" hidden><label class="fl" for="toNo">Member number</label><input class="in" id="toNo" placeholder="PL-0087" autocomplete="off" spellcheck="false"><div class="rcf" id="toConf" aria-live="polite" hidden></div><div class="hint">Enter a member number. The name is shown to administrators only; the member sees a notice addressed to them.</div></div>
 <label class="fl" for="mSub">Subject</label><input class="in" id="mSub" placeholder="Notice of month-end processing">
 <label class="fl" for="mBody">Message</label><textarea class="in" id="mBody" placeholder="Plain, short and factual."></textarea>
 <div class="hint">Appears in each member&rsquo;s Inbox as a Club notice or Administrator message. Replies come back through the secure form.</div>
@@ -43,37 +43,22 @@
 window.PageModules=window.PageModules||{};
 window.PageModules.messages=function(U){var q=U.q,qa=U.qa,esc=U.esc,FAQ={"ESC-0112": "What happens to my standing instruction if I redeem my full balance?", "ESC-0111": "Can I name my spouse as a beneficiary on my capital account?", "ESC-0110": "Is the club's year-end audited, and can I get a copy of the report?"},MEM=[["J. Morrison", "PL-0087", "Jan 30, 2026", "Verified", true, "Active"], ["T. Alvarez", "PL-0131", "Mar 12, 2026", "Verified", true, "Active"], ["K. Brennan", "PL-0062", "Jan 30, 2026", "Verified", true, "Active"], ["R. Delacroix", "PL-0054", "Jan 30, 2026", "Verified", true, "Active"], ["M. Osei", "PL-0019", "Jan 12, 2026", "Verified", true, "Active"], ["H. Lindqvist", "PL-0033", "Jan 12, 2026", "Verified", true, "Active"], ["S. Moreau", "PL-0071", "Feb 20, 2026", "Verified", true, "Active"], ["F. Nakamura", "PL-0098", "Apr 3, 2026", "Verified", true, "Active"], ["D. Whitaker", "PL-0105", "May 8, 2026", "Review due", false, "Active"], ["C. Vasquez", "PL-0118", "Jun 18, 2026", "Verified", true, "Active"], ["E. Ibrahim", "PL-0126", "Jul 2, 2026", "Verified", true, "Active"], ["B. Thorne", "PL-0142", "Aug 14, 2026", "Verified", true, "Active"], ["G. Papadakis", "PL-0149", "Sep 22, 2026", "Pending", false, "Onboarding"]];
 qa('input[name=to]').forEach(function(r,i){r.addEventListener('change',function(){q('#toOne').hidden=i===0})});
-var inp=q('#toNo'),lst=q('#toList'),conf=q('#toConf'),sel=null,act=-1,shown=[];
-function norm(v){return v.toLowerCase().replace(/[^a-z0-9]/g,'')}
+var inp=q('#toNo'),conf=q('#toConf'),sel=null;
 function chip(m){return '<span class="tag '+(m[4]?'ok':'gd')+'">'+(m[4]?'Verified':'KYC '+esc(m[3]).toLowerCase())+' &middot; '+esc(m[5])+'</span>'}
-function pick(m){sel=m;inp.value=m[1]+' '+m[0];lst.hidden=true;inp.setAttribute('aria-expanded','false');show()}
-function show(){
- var v=inp.value.trim();
- if(sel){conf.className='rcf ok';conf.innerHTML='<span>To: <b>'+esc(sel[0])+'</b> &middot; '+esc(sel[1])+'</span>'+chip(sel)}
- else if(/^(pl-?)?\d{1,4}$/i.test(v)&&!shown.length){var n=('0000'+v.replace(/\D/g,'')).slice(-4);conf.className='rcf no';conf.innerHTML='<span>No member PL-'+n+'</span>'}
- else if(v&&!shown.length){conf.className='rcf no';conf.innerHTML='<span>No member matches &ldquo;'+esc(v)+'&rdquo;</span>'}
- else{conf.className='rcf';conf.innerHTML='';conf.hidden=true;return}
- conf.hidden=false}
-function render(){
- var v=norm(inp.value),d=inp.value.trim().replace(/\D/g,'');
- shown=v?MEM.filter(function(m){return norm(m[1]).indexOf(v)>=0||norm(m[0]).indexOf(v)>=0||(d&&m[1].slice(3).indexOf(d)>=0)}):MEM.slice();
- act=-1;
- lst.innerHTML=shown.map(function(m,i){return '<div class="rco" role="option" id="rco'+i+'" data-i="'+i+'"><span>'+esc(m[1])+'</span><span class="mu">'+esc(m[0])+'</span></div>'}).join('');
- lst.hidden=!shown.length;inp.setAttribute('aria-expanded',String(!!shown.length))}
-function mark(){qa('.rco',lst).forEach(function(o,i){o.classList.toggle('on',i===act);o.setAttribute('aria-selected',String(i===act))});if(act>=0)inp.setAttribute('aria-activedescendant','rco'+act);else inp.removeAttribute('aria-activedescendant')}
-inp.addEventListener('input',function(){sel=null;render();show()});
-inp.addEventListener('focus',function(){if(!sel){render()}});
-inp.addEventListener('keydown',function(e){
- if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(lst.hidden)render();if(!shown.length)return;e.preventDefault();act=(act+(e.key==='ArrowDown'?1:-1)+shown.length)%shown.length;mark()}
- else if(e.key==='Enter'){if(act>=0){e.preventDefault();pick(shown[act])}else if(shown.length===1){e.preventDefault();pick(shown[0])}}
- else if(e.key==='Escape'){lst.hidden=true;inp.setAttribute('aria-expanded','false')}});
-lst.addEventListener('mousedown',function(e){e.preventDefault()});
-lst.addEventListener('click',function(e){var o=e.target.closest('.rco');if(o)pick(shown[+o.getAttribute('data-i')])});
-document.addEventListener('click',function(e){if(!e.target.closest('.rcp')){lst.hidden=true;inp.setAttribute('aria-expanded','false')}});
+function resolve(final){
+ var v=inp.value.trim().toUpperCase(),d=v.replace(/\D/g,'');sel=null;
+ if(!v){conf.hidden=true;return}
+ if(/^(PL-?)?\d{4}$/.test(v)){var no='PL-'+d;sel=MEM.filter(function(m){return m[1]===no})[0]||null;
+  if(sel){conf.className='rcf ok';conf.innerHTML='<span><b>'+esc(sel[0])+'</b></span>'+chip(sel)}
+  else{conf.className='rcf no';conf.innerHTML='<span>No member '+no+'</span>'}conf.hidden=false}
+ else if(final){conf.className='rcf no';conf.innerHTML='<span>Enter a member number like PL-0087</span>';conf.hidden=false}
+ else conf.hidden=true}
+inp.addEventListener('input',function(){resolve(false)});
+inp.addEventListener('blur',function(){resolve(true)});
 q('#sendNotice').addEventListener('click',function(){
  if(this.getAttribute('aria-disabled')==='true')return;
  var one=qa('input[name=to]')[1].checked,sub=q('#mSub').value.trim()||'Untitled notice';
- if(one&&!sel){inp.focus();if(!inp.value.trim()){conf.className='rcf no';conf.innerHTML='<span>Choose a recipient first</span>';conf.hidden=false}return}
+ if(one&&!sel){inp.focus();resolve(true);if(!inp.value.trim()){conf.className='rcf no';conf.innerHTML='<span>Enter a member number first</span>';conf.hidden=false}return}
  var who=one?esc(sel[0])+' &middot; '+sel[1]:'All members (37)';
  U.modal({k:'Send notice',title:'Send this notice?',html:'<div class="sum"><b>To: '+who+'</b><br>'+esc(sub)+'<span>'+(one?'Delivered to this member only, as an Administrator message in their Inbox.':'Delivered to every member Inbox as a Club notice.')+' Recorded in the audit log.</span></div>',confirm:'Send notice',onDone:function(){U.say('Notice to '+(one?sel[1]+' ('+sel[0]+')':'all members')+' queued (mock). Nothing was sent.')}})});
 
