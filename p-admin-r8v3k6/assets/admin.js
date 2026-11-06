@@ -75,8 +75,11 @@ if(tb){tb.textContent=H.getAttribute('data-theme')==='dark'?'Light':'Dark';tb.ad
 
 /* ---------- session timer ---------- */
 var t0=+ss('pgadmin-t0');if(!t0){t0=Date.now()-4*60000-18000;ss('pgadmin-t0',String(t0))}
-function tick(){var left=Math.max(0,1800-Math.floor((Date.now()-t0)/1000)),m=Math.floor(left/60),s=left%60,el=q('#sesst');if(!el)return;el.textContent=left?(m+':'+(s<10?'0':'')+s):'Expired';q('#sess').classList.toggle('low',left<300)}
+function tick(){var left=Math.max(0,900-Math.floor((Date.now()-t0)/1000)),m=Math.floor(left/60),s=left%60,el=q('#sesst');if(!el)return;el.textContent=left?(m+':'+(s<10?'0':'')+s):'Expired';q('#sess').classList.toggle('low',left<300)}
 tick();setInterval(tick,1000);
+/* idle sign-out: activity resets the 15-minute timer while it is still running */
+var lastAct=0;function act(){var n=Date.now();if(n-lastAct<5000)return;lastAct=n;if(Date.now()-t0<900000){t0=n;ss('pgadmin-t0',String(t0));tick()}}
+['click','keydown','pointerdown'].forEach(function(ev){addEventListener(ev,act,true)});
 
 /* ---------- mobile menu ---------- */
 var hb=q('#hb'),mm=q('#mm');
@@ -91,8 +94,8 @@ if(scrim)scrim.addEventListener('click',function(){if(md.classList.contains('on'
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(md&&md.classList.contains('on'))closeModal();else if(dr&&dr.classList.contains('on'))closeDrawer()}});
 if(dr)dr.addEventListener('click',function(e){if(e.target.closest('[data-x]'))closeDrawer()});
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-var KEYSVG='<svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="17" r="6"/><path d="M18 17h14M27 17v5M23 17v3"/></svg>';
-/* generic modal: opts{k,title,html,confirm,key,onDone,cancelOnly} */
+var BIOSVG='<svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><path d="M4 11V8a4 4 0 0 1 4-4h3M23 4h3a4 4 0 0 1 4 4v3M30 23v3a4 4 0 0 1-4 4h-3M11 30H8a4 4 0 0 1-4-4v-3"/><path d="M12 13v3M22 13v3M17 13v6h-1.5M12.5 23c2.5 2.5 6.5 2.5 9 0"/></svg>';
+/* generic modal: opts{k,title,html,confirm,step,onDone}. step=true re-confirms with Face ID / Touch ID; otherwise a plain confirm. */
 function modal(o){
  lastFocus=document.activeElement;
  md.innerHTML='<div class="k">'+esc(o.k||'Confirm')+'</div><h2 id="mt">'+esc(o.title)+'</h2><div id="mb">'+(o.html||'')+'</div><div class="mf" id="mf"></div>';
@@ -100,18 +103,25 @@ function modal(o){
  var mf=q('#mf',md);
  function btn(t,c,fn,id){var b=document.createElement('button');b.type='button';b.className='btn '+c;b.textContent=t;if(id)b.id=id;b.addEventListener('click',fn);mf.appendChild(b);return b}
  function done(){closeModal();o.onDone&&o.onDone()}
- function keyStep(){
-  var mb=q('#mb',md);mf.innerHTML='';q('.k',md).textContent='Security key required';
-  mb.innerHTML=(o.summary||'')+'<div class="key" id="keyv"><div class="ring">'+KEYSVG+'</div><b>Touch your security key</b><p>Waiting for FIDO2 key (YubiKey 5C, ending 4F21).</p></div>';
+ function stepUp(){
+  var mb=q('#mb',md);mf.innerHTML='';q('.k',md).textContent='High-risk action';q('#mt',md).textContent='Confirm with Face ID or Touch ID';
+  mb.innerHTML=(o.summary||'')+'<div class="key" id="keyv"><div class="ring">'+BIOSVG+'</div><b>Waiting for Face ID or Touch ID</b><p>Re-confirm on this device.</p></div><div class="alt"><a href="#" id="useCode">Use authenticator code instead</a></div>';
+  var finished=false;
+  function ok(){if(finished)return;finished=true;var kv=q('#keyv',md);kv.querySelector('b').textContent='Verifying';kv.querySelector('p').textContent='Checking with the console.';
+   setTimeout(function(){kv.classList.add('ok');kv.querySelector('b').textContent='Confirmed';kv.querySelector('p').textContent='Mock only. Nothing is posted.';setTimeout(done,610)},377)}
+  q('#useCode',md).addEventListener('click',function(e){e.preventDefault();
+   var al=q('.alt',md);al.innerHTML='<div class="code" id="codev" role="group" aria-label="6-digit authenticator code">'+[1,2,3,4,5,6].map(function(n){return '<input inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Digit '+n+'">'}).join('')+'</div>';
+   var bx=qa('input',al);bx[0].focus();
+   bx.forEach(function(x,i){x.addEventListener('input',function(){x.value=x.value.replace(/\D/g,'').slice(0,1);if(x.value&&bx[i+1])bx[i+1].focus();if(bx.every(function(y){return y.value}))ok()});
+    x.addEventListener('keydown',function(ev){if(ev.key==='Backspace'&&!x.value&&bx[i-1])bx[i-1].focus()})});
+   q('#sim',md).onclick=function(){var al2=qa('#codev input',md);'482916'.split('').forEach(function(ch,i){al2[i].value=ch});ok()};
+  });
   btn('Cancel','ghost',closeModal);
-  btn('Simulate touch','',function(){
-   var kv=q('#keyv',md);kv.querySelector('b').textContent='Verifying';kv.querySelector('p').textContent='Checking the assertion with the console.';
-   setTimeout(function(){kv.classList.add('ok');kv.querySelector('b').textContent='Confirmed';kv.querySelector('p').textContent='Mock only. Nothing is posted.';setTimeout(done,610)},377);
-  },'touch');
-  setTimeout(function(){var t=q('#touch');t&&t.focus()},60);
+  btn('Simulate','',function(){ok()},'sim');
+  setTimeout(function(){var t=q('#sim');t&&t.focus()},60);
  }
- if(o.key){btn('Cancel','ghost',closeModal);btn(o.confirm||'Continue','',function(){if(o.validate&&!o.validate(md))return;keyStep()},'cont')}
- else{btn('Cancel','ghost',closeModal);btn(o.confirm||'Confirm','',function(){closeModal();o.onDone&&o.onDone(md)})}
+ btn('Cancel','ghost',closeModal);
+ btn(o.confirm||(o.step?'Continue':'Confirm'),'',function(){if(o.validate&&!o.validate(md))return;if(o.step)stepUp();else{closeModal();o.onDone&&o.onDone(md)}},'cont');
  scrim.classList.add('on');md.classList.add('on');md.setAttribute('aria-hidden','false');
  setTimeout(function(){var f=q('textarea,input,#cont',md);f&&f.focus()},60);
 }
@@ -121,7 +131,8 @@ window.AdminUI={modal:modal,say:say,esc:esc,can:can,role:function(){return role}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-mock]');if(!b||b.getAttribute('aria-disabled')==='true')return;say(b.getAttribute('data-mock'))});
 /* generic key-confirmed actions */
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-keyact]');if(!b||b.getAttribute('aria-disabled')==='true')return;
- modal({k:'Confirm with hardware key',title:b.getAttribute('data-keyact'),html:'<div class="sum">'+esc(b.getAttribute('data-keysum')||'')+'<span>Recorded in the audit log with your admin ID, role and device.</span></div>',key:true,confirm:'Continue',onDone:function(){var d=b.getAttribute('data-done');if(d)say(d);document.dispatchEvent(new CustomEvent('keyact',{detail:b}))}});
+ var su=b.hasAttribute('data-step'),sm='<div class="sum">'+esc(b.getAttribute('data-keysum')||'')+'<span>Recorded in the audit log with your admin ID, role and device.</span></div>';
+ modal({k:su?'High-risk action':'Confirm',title:b.getAttribute('data-keyact')+'?',summary:sm,html:'<p class="note" style="margin-top:0">This is recorded against '+esc(ME)+'.'+(su?' You will re-confirm with Face ID or Touch ID.':'')+'</p>'+sm,step:su,confirm:su?'Continue':'Confirm',onDone:function(){var d=b.getAttribute('data-done');if(d)say(d);document.dispatchEvent(new CustomEvent('keyact',{detail:b}))}});
 });
 
 applyRole();
