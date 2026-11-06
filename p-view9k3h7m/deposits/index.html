@@ -411,7 +411,37 @@ html[data-theme=dark] .wr{border-bottom-color:var(--hair)}
 html[data-theme=dark] .cp{color:var(--ink)}
 html[data-theme=dark] .cp:hover,html[data-theme=dark] .cp.ok{color:var(--gold);border-color:var(--gold)}
 html[data-theme=dark] .wref{border-color:var(--gold);background-color:var(--raise)}
-</style></head><body>
+</style><script>/*pg-proxy*/window.PGPX=(function(){
+var K='pgpx',S;try{S=JSON.parse(sessionStorage.getItem(K))}catch(e){}S=S||{};if(!S.v)S.v='holder';
+var LBL={for:'Raise to 38.2%',against:'Keep at 23.6%',abs:'Abstain'},BR={k:'against',label:'Keep at 23.6%',why:'The current limit is not constraining the engine (17.8% used), and a change can wait for evidence that it is.'};
+function save(){try{sessionStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+function bc(){try{return localStorage.getItem('pgpx-bc')==='1'}catch(e){return false}}
+function held(){if(S.v==='holder')return[{n:'PL-0142',sc:'All votes until revoked',st:'Accepted Sep 2'},{n:'PL-0063',sc:'This vote only',st:'Accepted Oct 8'}];
+ if(S.v==='holdero')return[{n:'PL-0142',sc:'All votes until revoked',st:'Accepted Sep 2'},{n:'PL-0063',sc:'This vote only',st:'Accepted Oct 8',ov:1}];return[]}
+function active(){return held().filter(function(h){return!h.ov})}
+function tally(){var b={for:13,against:8,abs:1},dir=19,mp=3,c=S.cast;
+ if(c){b[c.own]++;dir++;if(c.prox)active().forEach(function(h){var x=c.prox[h.n]||c.own;b[x]++;mp++});
+  if(S.v==='memv'){b.for--;mp--}}
+ var bd=bc()?4:0;b.against+=bd;
+ return{b:b,dir:dir,mp:mp,bd:bd,pend:bd?0:4,total:b.for+b.against+b.abs}}
+function deleg(){return S.to||'PL-0142'}
+return{get:function(){return S},set:function(o){for(var k in o)S[k]=o[k];save()},reset:function(){S={v:S.v};save()},LBL:LBL,BR:BR,held:held,active:active,tally:tally,deleg:deleg,bc:bc,
+ msgs:function(){var m=[],n=held().length;
+  if(n&&!S.cast)m.push({id:'pxh',ty:'VOTE',f:'vote',t:'You hold '+n+' proxies for the open vote',pv:'Cast them with your own vote before October 14.',d:'Oct 11',u:1,h:'../voting/',a:'Open Voting',b:'You hold '+n+' proxies for the open vote on raising the maximum allocation to core holdings from 23.6% to 38.2%: '+held().map(function(h){return h.n+(h.ov?' (the member has voted, so this proxy is overridden)':'')}).join(' and ')+'. By default the option you select is cast for yourself and for each proxy; you can also vote proxies separately. Proxy votes must be cast before the poll closes on Wednesday, October 14 at 4:00 PM ET.'});
+  if(S.v==='memv')m.push({id:'pxv',ty:'VOTE',f:'vote',t:'Your proxy has voted',pv:'Member '+deleg()+' voted on your behalf: Raise to 38.2%.',d:'Oct 11',u:1,h:'../voting/',a:'Open Voting',b:'Member '+deleg()+' voted on your behalf in the open vote: Raise to 38.2%. You can still vote yourself until the poll closes on Wednesday, October 14 at 4:00 PM ET. Your own vote overrides your proxy for this vote.'});
+  return m},
+ agent:function(base,LK){var t=base,v=S.v,n=held().length,x;
+  if(n)t+=' You currently hold '+n+' proxies for the open vote ('+held().map(function(h){return h.n+(h.ov?', overridden because the member voted':'')}).join(', ')+'). The option you select is cast for yourself and for each proxy unless you choose Vote proxies separately.'+(S.cast?' You have cast your votes; the receipt is on Voting.':' They are not cast until you confirm.');
+  else if(v==='mem')t+=' Your vote is currently held by Member '+deleg()+' ('+(S.pend?'awaiting acceptance':'accepted')+'). They have not voted yet. You can still vote yourself until the poll closes, which overrides the proxy.';
+  else if(v==='memv')t+=' Your vote is held by Member '+deleg()+'. Your proxy voted: Raise to 38.2%. You can still vote yourself until the poll closes, which overrides it.';
+  else if(v==='board')t+=' Your vote is held by the Board, which follows its published recommendation on this vote: '+BR.label+'. You can still vote yourself until the poll closes, which overrides it.';
+  if(S.cast&&(v==='mem'||v==='memv'||v==='board'))t+=' You have voted yourself, which overrides your proxy for this vote.';
+  return[t,LK('../voting/','Open Voting')]},
+ over:function(){var v=S.v;if(S.cast&&(v==='mem'||v==='memv'||v==='board'))return'You voted yourself, which overrides your proxy.';
+  if(held().length)return'You hold '+held().length+' proxies for this vote.'+(S.cast?' Cast.':'');
+  if(v==='mem')return'Your vote is held by Member '+deleg()+(S.pend?' · Awaiting acceptance':' · Accepted');
+  if(v==='memv')return'Your proxy voted: Raise to 38.2%.';
+  if(v==='board')return'Held by the Board · follows Board recommendation: '+BR.label;return''}}})();</script></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <header class="bar"><button class="inbtn inbm" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="inbp" aria-label="Inbox, 4 unread"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14"/><path d="M2.5 6 12 13.5 21.5 6"/></svg><span class="inbg" aria-hidden="true">4</span></button><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
 <nav class="mm" id="mm" aria-label="Member menu" tabindex="-1"><a href="../welcome/">Overview</a><a href="../performance/">Performance</a><a href="../deposits/" aria-current="page">Deposits &amp; Redemptions</a><a href="../voting/">Voting</a><a href="../documents/">Documents</a><a href="../settings/">Settings</a><a href="../contact/">Contact</a></nav>
@@ -439,7 +469,7 @@ function count(){return M.filter(unread).length}
 function mark(id){if(R.indexOf(id)<0){R.push(id);save();ch()}}
 function all(){M.forEach(function(m){if(R.indexOf(m.id)<0)R.push(m.id)});save();ch()}
 function ch(){document.querySelectorAll('.inbtn').forEach(function(b){var n=count();b.querySelector('.inbg').textContent=n;b.classList.toggle('zero',!n);b.setAttribute('aria-label','Inbox, '+(n?n+' unread':'no unread messages'))});L.forEach(function(f){f()})}
-return{msgs:M,unread:unread,count:count,mark:mark,all:all,on:function(f){L.push(f)},ch:ch}})();
+try{PGPX.msgs().forEach(function(m){M.unshift(m)})}catch(e){}return{msgs:M,unread:unread,count:count,mark:mark,all:all,on:function(f){L.push(f)},ch:ch}})();
 (function(){var P=PGI,pn=document.getElementById('inbp'),ls=document.getElementById('inbl'),bs=document.querySelectorAll('.inbtn');
 function render(){ls.innerHTML=P.msgs.map(function(m){return '<a class="ii'+(P.unread(m)?' u':'')+'" href="'+m.h+'" data-id="'+m.id+'"><span class="dot"></span><span class="ib"><span class="it">'+m.ty+'</span><b class="tt">'+m.t+'</b><span class="pv">'+m.pv+'</span></span><span class="dt">'+m.d+'</span></a>'}).join('')}
 function vis(){return window.matchMedia('(max-width:900px)').matches?document.querySelector('.inbm'):document.querySelector('.inbd')}
@@ -569,7 +599,7 @@ var A={
  dist:['Your October result is $2,690.18 to date, before the tax reserve. $672.55 of it is withheld to your tax reserve, which leaves $2,017.63 to distribute. Distributions are processed at month end, on Friday, October 30. Under your standing instruction, $1,000.00 is paid to RBC Chequing \u00b7\u00b7\u00b7\u00b7 4417 and the remaining $1,017.63 is reinvested in your capital account.',LK('../deposits/','Open Deposits &amp; Redemptions')],
  inst:['Your current instruction is a $1,000.00 monthly payout with the remainder reinvested. You can switch between reinvesting all, a payout target, a percentage reinvested, or a mix, in Standing instructions on Deposits &amp; Redemptions. A change takes effect at the next month-end processing. I cannot change it for you.',LK('../deposits/','Open Standing instructions')],
  stmt:['Your latest statement is September 2026, issued on October 2. Statements, your member agreement and tax slips are in Documents. Your 2026 tax slip is expected in February 2027.',LK('../documents/','Open Documents')],
- proxy:['You may delegate your vote to the Board or to another member you know. For a member you need their member number and a one-time proxy code that they generate; the code is valid for 72 hours. A member may hold at most 3 proxies, proxies cannot be passed on, and the Board has no limit. A member must accept; a Board proxy takes effect immediately. Your own vote overrides your proxy.',LK('../voting/','Open Assign proxy')],
+ proxy:['You may delegate your vote to the Board or to another member you know. For a member you need their member number and a one-time proxy code that they generate; the code is valid for 72 hours. A member may hold at most 3 proxies, proxies cannot be passed on, and the Board has no limit. A member must accept; a Board proxy takes effect immediately and always votes with the Board’s published recommendation, which is shown on the vote. Your own vote overrides your proxy.',LK('../voting/','Open Assign proxy')],
  red:['Your redemption request of $5,000.00 to RBC Chequing \u00b7\u00b7\u00b7\u00b7 4417, submitted on October 6, is awaiting administrator approval. Once approved, we aim to pay it by the next business day, at the lower of the September 30 month-end value ($4,919.33 for this request) and today’s value ($5,000.00), so you would receive $4,919.33. You can cancel it before approval from Pending and history.',LK('../deposits/','Open Deposits &amp; Redemptions')],
 wire:['You can fund your account by wire from Deposits &amp; Redemptions: choose Deposit, then Wire transfer, enter the amount and confirm with your authenticator code to see the instructions. Your unique wire reference is PL-0087-W and it must be in the memo so the deposit is matched to you. Wires must come from an account in your own name, the minimum is $1,000.00, and the sender pays any bank wire fees. Wires are usually confirmed by the next business day once received and matched. Funds then show as Received, pending allocation until month-end processing on October 30, when your share of club NAV is calculated; until then the deposit does not take part in returns. Polarity will never email or change these instructions, so always confirm them in the portal. I cannot send a wire for you.',LK('../deposits/#wire','Open Wire transfer')],
  dep:['Deposits are usually confirmed by the next business day. Once received, funds show as Received, pending allocation. Your share of club NAV is calculated at month-end processing (next on October 30), so a deposit does not take part in returns until it is allocated. Redemptions are separate: once the administrator approves one, we aim to pay it by the next business day, at the lower of the last month-end value and today’s value of your share. If the club is up this month you receive the month-end value; if it is down you receive today’s value.',LK('../deposits/','Open Deposits &amp; Redemptions')],
@@ -582,7 +612,7 @@ function pick(t){t=t.toLowerCase();
  if(/reserve|withh|capital gain|early release/.test(t))return A.rsv;
  if(/balance|capital account|how much|available to redeem/.test(t))return A.bal;
  if(/redemption|redeem|withdraw/.test(t))return A.red;
- if(/proxy|proxies|delegate/.test(t))return A.proxy;
+ if(/proxy|proxies|delegate|my vote/.test(t))return PGPX.agent(A.proxy,LK);
  if(/statement|tax|document|agreement/.test(t))return A.stmt;
  if(/instruction|reinvest|target|payout mix/.test(t))return A.inst;
  if(/distribution|paid|payout|pay out/.test(t))return A.dist;return null}

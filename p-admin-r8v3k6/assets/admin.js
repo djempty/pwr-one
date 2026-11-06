@@ -135,6 +135,8 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
  modal({k:su?'High-risk action':'Confirm',title:b.getAttribute('data-keyact')+'?',summary:sm,html:'<p class="note" style="margin-top:0">This is recorded against '+esc(ME)+'.'+(su?' You will re-confirm with Face ID or Touch ID.':'')+'</p>'+sm,step:su,confirm:su?'Continue':'Confirm',onDone:function(){var d=b.getAttribute('data-done');if(d)say(d);document.dispatchEvent(new CustomEvent('keyact',{detail:b}))}});
 });
 
+(function(){try{if(page==='dashboard'&&localStorage.getItem('pgpx-bc')==='1'){var n=q('#dTurn');if(n){n.setAttribute('data-v',26);n.textContent=26}var t=q('#dTx');if(t)t.innerHTML='26 of 37 &middot; 70.3%';var b=q('#dBar');if(b)b.style.width='70.3%';var p=q('#dBp');if(p)p.textContent='4 cast'}}catch(e){}})();
+
 applyRole();
 
 /* ---------- load animation: every load, skipped on back/forward and reduced motion ---------- */

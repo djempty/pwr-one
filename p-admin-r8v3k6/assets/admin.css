@@ -287,3 +287,8 @@ html[data-theme=light] #tip{background:var(--navy);color:var(--ivory)}
 .rcf.ok{border-color:var(--green)}
 .rcf.no{border-color:var(--loss);color:var(--loss)}
 .esc .meta small{display:block;margin-top:3px}
+
+/* proxy voting */
+#bpTag{white-space:normal;text-align:right;line-height:1.4}
+#bpAct{white-space:normal;text-align:left;max-width:100%;line-height:1.4}
+#bpx .rows small{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:2px}
