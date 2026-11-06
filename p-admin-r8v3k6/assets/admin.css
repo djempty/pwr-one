@@ -287,3 +287,38 @@ html[data-theme=light] #tip{background:var(--navy);color:var(--ivory)}
 #bpTag{white-space:normal;text-align:right;line-height:1.4}
 #bpAct{white-space:normal;text-align:left;max-width:100%;line-height:1.4}
 #bpx .rows small{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:2px}
+
+/* ---- member profile ---- */
+.pfs{display:grid;gap:13px}
+.pfc{display:none;font-size:12px;color:var(--mute);margin:-13px 0 21px}
+.pfc a{border-bottom:1px solid var(--gold);color:var(--ink)}
+.pfc b{font-weight:400;color:var(--ink)}
+.pfh .kpis{margin-top:8px}
+.pfh .pk .v{font-size:34px;font-weight:700;line-height:1.1;margin:13px 0 5px}
+.pfm{margin-top:21px}
+details.sec{background:var(--card);border:1px solid var(--hair);min-width:0}
+details.sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:13px;padding:17px 21px;flex-wrap:wrap}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+details.sec .lbl{color:var(--ink)}
+details.sec .ss{font-size:13px;color:var(--mute);flex:1;min-width:0;overflow-wrap:anywhere}
+details.sec .sx{margin-left:auto}
+details.sec .chev{width:8px;height:8px;border-right:1.5px solid var(--gold);border-bottom:1.5px solid var(--gold);transform:rotate(-45deg);transition:transform .233s var(--E);flex:none;margin-right:2px}
+details.sec[open]>summary .chev{transform:rotate(45deg)}
+details.sec[open]>summary{border-bottom:1px solid var(--line)}
+details.sec .sb{padding:21px}
+.nm{color:var(--mute);font-size:11px;margin-left:5px}
+.rows .link{white-space:nowrap}
+.pfn{background:var(--card)}
+.note-i{border:1px solid var(--hair);background:var(--bg);padding:13px;margin-bottom:13px}
+.note-i.pinned{border-left:3px solid var(--gold)}
+.note-i .nh{display:flex;gap:13px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--mute);margin-bottom:8px}
+.note-i .nh b{color:var(--ink);font-weight:700}
+.note-i .nt{margin:0 0 8px;font-size:13px;line-height:1.62;white-space:pre-wrap;overflow-wrap:anywhere}
+.note-i textarea{min-height:89px}
+.notecomp textarea{min-height:89px;resize:vertical}
+a.btn{text-decoration:none}
+@media(max-width:900px){.pfc{display:block}.pfh .pk .v{font-size:28px}.pfh .kpis{gap:13px}}
+@media(max-width:600px){details.sec>summary{padding:15px 13px}details.sec .sb{padding:13px}details.sec .ss{flex-basis:100%;order:3;padding-left:21px}}
+.rows small{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:2px}
+.rows>div>span:last-child small{text-align:right}
