@@ -322,3 +322,4 @@ a.btn{text-decoration:none}
 @media(max-width:600px){details.sec>summary{padding:15px 13px}details.sec .sb{padding:13px}details.sec .ss{flex-basis:100%;order:3;padding-left:21px}}
 .rows small{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:2px}
 .rows>div>span:last-child small{text-align:right}
+.rows small.nm{display:inline;margin:0 0 0 5px}

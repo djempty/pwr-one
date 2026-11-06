@@ -2,7 +2,7 @@
 <link rel="icon" href="data:,"><title>Audit log · Admin Console</title><meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
 <meta name="theme-color" content="#0e1f3c">
 <script>/*pg-admin-theme*/(function(){var h=document.documentElement,t;try{t=localStorage.getItem('pgadmin-theme')}catch(e){}h.setAttribute('data-theme',t==='light'?'light':'dark')})()</script>
-<link rel="stylesheet" href="/p-admin-r8v3k6/assets/admin.css?v=6"></head><body data-page="audit">
+<link rel="stylesheet" href="/p-admin-r8v3k6/assets/admin.css?v=7"></head><body data-page="audit">
 <a class="mk" href="/p-admin-r8v3k6/" aria-label="Polarity admin console home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLA<span class="ry">RITY<span class="adm" role="img" aria-label="Admin console">ADMIN</span></span></a>
 <header class="bar"><button class="hb" id="hb" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h2" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x2" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
 <nav class="mm" id="mm" aria-label="Admin menu"><a href="/p-admin-r8v3k6/" data-pg="dashboard">Dashboard</a><a href="/p-admin-r8v3k6/approvals/" data-pg="approvals">Approvals</a><a href="/p-admin-r8v3k6/month-end/" data-pg="monthend">Month-end</a><a href="/p-admin-r8v3k6/members/" data-pg="members">Members</a><a href="/p-admin-r8v3k6/voting/" data-pg="voting">Voting</a><a href="/p-admin-r8v3k6/documents/" data-pg="documents">Documents</a><a href="/p-admin-r8v3k6/messages/" data-pg="messages">Messages</a><a href="/p-admin-r8v3k6/audit-log/" data-pg="audit" aria-current="page">Audit log</a><a href="/p-admin-r8v3k6/admin-accounts/" data-pg="admins">Admin accounts</a><a href="/p-admin-r8v3k6/settings/" data-pg="settings">Settings</a></nav>
@@ -40,5 +40,5 @@ window.PageModules.audit=function(U){var q=U.q,qa=U.qa;(function(){var a=[];try{
 var TOTAL=String(qa('#aTbl tbody tr').length);function f(){var a=q('#fAdm').value,r=q('#fRole').value,c=q('#fCat').value,t=q('#fQ').value.toLowerCase(),n=0;qa('#aTbl tbody tr').forEach(function(x){var ok=(!a||x.getAttribute('data-admin')===a)&&(!r||x.getAttribute('data-role')===r)&&(!c||x.getAttribute('data-cat')===c)&&(!t||x.textContent.toLowerCase().indexOf(t)>-1);x.hidden=!ok;if(ok)n++});q('#aCount').textContent='Showing '+n+' of '+TOTAL+' entries'}
 ['fAdm','fRole','fCat'].forEach(function(i){q('#'+i).addEventListener('change',f)});q('#fQ').addEventListener('input',f)};
 </script>
-<script src="/p-admin-r8v3k6/assets/admin.js?v=6"></script>
+<script src="/p-admin-r8v3k6/assets/admin.js?v=7"></script>
 </body></html>
