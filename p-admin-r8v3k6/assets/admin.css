@@ -278,3 +278,12 @@ html[data-theme=light] #tip{background:var(--navy);color:var(--ivory)}
 
 .key .alt,.alt{margin-top:13px;text-align:center;font-size:12px}.alt a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
 .code{display:flex;gap:8px;justify-content:center}.code input{width:40px;height:48px;text-align:center;font-size:18px;background:transparent;border:1px solid var(--hair);border-radius:0;color:var(--ink);font-family:inherit;font-variant-numeric:tabular-nums}.code input:focus{outline:none;border-color:var(--gold)}
+.rcp{position:relative}
+.rcl{position:absolute;left:0;right:0;top:100%;z-index:30;max-height:233px;overflow:auto;background:var(--card);border:1px solid var(--gold);border-top:0;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.rco{display:flex;justify-content:space-between;gap:13px;padding:8px 13px;font-size:13px;cursor:pointer}
+.rco .mu{color:var(--mute)}
+.rco:hover,.rco.on{background:var(--raise)}
+.rcf{display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap;margin-top:8px;padding:8px 13px;border:1px solid var(--hair);background:var(--bg);font-size:13px}
+.rcf.ok{border-color:var(--green)}
+.rcf.no{border-color:var(--loss);color:var(--loss)}
+.esc .meta small{display:block;margin-top:3px}
