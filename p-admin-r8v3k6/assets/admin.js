@@ -68,11 +68,6 @@ function fitAdm(){var ry=q('.ry'),ad=q('.adm');if(!ry||!ad)return;if(matchMedia(
  ad.style.letterSpacing=((b.width-12-w0)/(n.length-1))+'px'}
 fitAdm();addEventListener('resize',fitAdm);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAdm);
 
-/* ---------- theme ---------- */
-var tb=q('#thm');
-function setTheme(t){H.setAttribute('data-theme',t);try{localStorage.setItem('pgadmin-theme',t)}catch(e){}if(tb)tb.textContent=t==='dark'?'Light':'Dark'}
-if(tb){tb.textContent=H.getAttribute('data-theme')==='dark'?'Light':'Dark';tb.addEventListener('click',function(){setTheme(H.getAttribute('data-theme')==='dark'?'light':'dark')})}
-
 /* ---------- session timer ---------- */
 var t0=+ss('pgadmin-t0');if(!t0){t0=Date.now()-4*60000-18000;ss('pgadmin-t0',String(t0))}
 function tick(){var left=Math.max(0,900-Math.floor((Date.now()-t0)/1000)),m=Math.floor(left/60),s=left%60,el=q('#sesst');if(!el)return;el.textContent=left?(m+':'+(s<10?'0':'')+s):'Expired';q('#sess').classList.toggle('low',left<300)}
