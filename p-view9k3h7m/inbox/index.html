@@ -244,65 +244,6 @@ textarea.in{min-height:144px;resize:vertical;line-height:1.5}
  #ipane h2{font-size:21px}
 }
 .bc{display:flex;gap:8px;align-items:center}.bc a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}.bc a:hover{border-bottom-color:currentColor}.bc span[aria-current]{color:var(--mut,#7a8290)}
-/* ===== POLARITY AGENT WIDGET (all portal pages) ===== */
-.agl{all:unset;box-sizing:border-box;position:fixed;z-index:6;right:max(21px,env(safe-area-inset-right));bottom:max(21px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:10px;height:44px;padding:0 21px 0 13px;background:#0e1f3c;color:#f8f4ef;font-family:Helvetica,Arial,sans-serif;font-size:13px;letter-spacing:1px;border-radius:22px;box-shadow:0 2px 6px rgba(14,31,60,.18),0 8px 24px rgba(14,31,60,.22);cursor:pointer;transition:opacity .2s,transform .2s}
-.agl svg{width:22px;height:22px;flex:none}
-.agl:focus-visible{outline:2px solid #b08d4f;outline-offset:3px}
-.agl[aria-expanded=true]{opacity:0;pointer-events:none;transform:scale(.9)}
-html.mm-lock .agl{display:none}
-@media(hover:hover) and (pointer:fine){.agl:hover{box-shadow:0 2px 6px rgba(14,31,60,.22),0 10px 28px rgba(14,31,60,.3)}}
-.agw{position:fixed;z-index:7;right:max(21px,env(safe-area-inset-right));bottom:max(21px,env(safe-area-inset-bottom));width:380px;height:560px;max-height:calc(100vh - 42px);display:flex;flex-direction:column;background:#fff;border:1px solid rgba(14,31,60,.15);border-top:3px solid #0e1f3c;box-shadow:0 4px 12px rgba(14,31,60,.12),0 20px 56px rgba(14,31,60,.28);transform-origin:bottom right;opacity:0;transform:scale(.9);visibility:hidden;pointer-events:none;transition:opacity .28s cubic-bezier(.16,1,.3,1),transform .28s cubic-bezier(.16,1,.3,1),visibility 0s .28s;font-family:Helvetica,Arial,sans-serif;color:#0e1f3c}
-.agw.open{opacity:1;transform:none;visibility:visible;pointer-events:auto;transition:opacity .28s cubic-bezier(.16,1,.3,1),transform .28s cubic-bezier(.16,1,.3,1)}
-.agw.noanim,.agw.noanim *{transition:none!important}
-.agh{display:flex;align-items:center;gap:13px;padding:13px 13px 13px 21px;background:#0e1f3c;color:#f8f4ef}
-.agh .t{flex:1;font-size:15px;font-weight:700}.agh .t small{display:block;font-weight:400;font-size:11px;color:rgba(248,244,239,.618);margin-top:2px;letter-spacing:0}
-.agx{all:unset;box-sizing:border-box;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:#f8f4ef}
-.agx:focus-visible{outline:2px solid #b08d4f;outline-offset:-3px}
-.agw .av{flex:none;width:34px;height:34px;border-radius:50%;background:#0e1f3c;display:inline-flex;align-items:center;justify-content:center}
-.agh .av{border:1px solid rgba(248,244,239,.25)}
-.agw .av svg{width:20px;height:20px}
-.agt{flex:1;min-height:0;overflow-y:auto;padding:21px;background:#f8f4ef;display:flex;flex-direction:column;gap:21px;overscroll-behavior:contain}
-.agm{display:flex;gap:10px;align-items:flex-start;max-width:92%}
-.agm.u{align-self:flex-end;flex-direction:row-reverse}
-.agm .av{width:26px;height:26px}.agm .av svg{width:15px;height:15px}
-.agb{background:#fff;border:1px solid rgba(14,31,60,.1);padding:13px 16px;font-size:13px;line-height:1.62}
-.agb{position:relative}.agb::before{content:"";position:absolute;top:9px;left:-6px;width:10px;height:10px;background:inherit;border:inherit;border-top:0;border-right:0;transform:rotate(45deg)}.agm.u .agb::before{left:auto;right:-6px;transform:rotate(-135deg)}
-.agm.u .agb{background:#0e1f3c;color:#f8f4ef;border-color:#0e1f3c}
-.agb a.dl{display:inline-block;margin-top:8px;font-size:12px;border-bottom:1px solid #b08d4f;padding-bottom:2px}
-.agb .hb2{display:block;margin-top:13px}
-.agb .hbtn{all:unset;box-sizing:border-box;cursor:pointer;font-size:12px;padding:5px 13px;border:1px solid #0e1f3c;color:#0e1f3c}
-.agb .hbtn[disabled]{opacity:.5;cursor:default}
-.dots{display:inline-flex;gap:4px;padding:4px 0}
-.dots i{width:5px;height:5px;border-radius:50%;background:rgba(14,31,60,.618);animation:agbl 1s infinite}
-.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
-@keyframes agbl{0%,60%,100%{opacity:.25}30%{opacity:1}}
-.agc{display:flex;flex-direction:column;gap:6px;padding:13px 21px;background:#f8f4ef;border-top:1px solid rgba(14,31,60,.1)}
-.agc.min{flex-direction:row;overflow-x:auto;padding:13px 21px;scrollbar-width:none}.agc.min::-webkit-scrollbar{display:none}
-.agchip{all:unset;box-sizing:border-box;cursor:pointer;font-size:12px;padding:6px 13px;border:1px solid rgba(14,31,60,.25);background:#fff;color:#0e1f3c;text-align:left;line-height:1.4}
-.agc.min .agchip{white-space:nowrap;flex:none}
-.agchip:focus-visible,.agb .hbtn:focus-visible{outline:2px solid #b08d4f;outline-offset:2px}
-@media(hover:hover) and (pointer:fine){.agchip:hover{border-color:#b08d4f}}
-.agf{display:flex;gap:8px;padding:13px 21px max(21px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid rgba(14,31,60,.1)}
-.agf input{flex:1;min-width:0;border:1px solid rgba(14,31,60,.25);border-radius:0;background:#fff;color:#0e1f3c;font:inherit;font-size:16px;padding:10px 13px;-webkit-appearance:none;appearance:none}
-.agf input:focus{border-color:#b08d4f;outline:2px solid #b08d4f;outline-offset:0}
-.agf button{all:unset;box-sizing:border-box;cursor:pointer;background:#0e1f3c;color:#f8f4ef;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:0 21px;display:flex;align-items:center}
-.agf button:focus-visible{outline:2px solid #b08d4f;outline-offset:2px}
-.agnote{font-size:10px;color:rgba(14,31,60,.5);padding:0 21px 8px;background:#fff;line-height:1.5}
-.agsr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-main{padding-bottom:89px}
-@media(max-width:900px){main{padding-bottom:calc(89px + env(safe-area-inset-bottom))!important}}
-@media(max-width:600px){
- .agw{right:0;bottom:0;left:0;top:0;width:100%;height:100%;max-height:none;border:0;border-top:0;transform-origin:bottom center;transform:translateY(100%);opacity:1}
- .agw.open{transform:none}
- .agh{padding-top:max(13px,env(safe-area-inset-top))}
- .agc,.agc.min{flex-direction:row;overflow-x:auto;scrollbar-width:none;padding:13px}
- .agc::-webkit-scrollbar{display:none}
- .agchip{white-space:nowrap;flex:none}
- .agt{padding:13px}
- .agf{padding-left:13px;padding-right:13px}
-}
-@media(prefers-reduced-motion:reduce){.agw,.agw.open,.agl{transition:none!important}.dots i{animation:none}}
-
 /* ===== INBOX ICON + DROPDOWN (all portal pages) ===== */
 .inbtn{all:unset;box-sizing:border-box;position:relative;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--ink)}
 .inbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
@@ -381,30 +322,14 @@ html[data-theme=dark] .opt:has(input:checked){border-color:var(--gold)}
 html[data-theme=dark] .seg button+button{border-left-color:var(--hair)}
 html[data-theme=dark] .seg button{color:var(--mute)}
 html[data-theme=dark] .seg button[aria-pressed=true]{background:var(--gold);color:var(--navy)}
-html[data-theme=dark] .in::placeholder,html[data-theme=dark] .agf input::placeholder{color:var(--mute);opacity:1}
+html[data-theme=dark] .in::placeholder{color:var(--mute);opacity:1}
 html[data-theme=dark] .amt{background:transparent;border-bottom-color:var(--hair)}
 html[data-theme=dark] select.in{background-image:linear-gradient(45deg,transparent 50%,#f8f4ef 50%),linear-gradient(135deg,#f8f4ef 50%,transparent 50%)}
 html[data-theme=dark] .bank input,html[data-theme=dark] .ck input,html[data-theme=dark] .opt input{accent-color:var(--gold)}
 html[data-theme=dark] .bank label{color:var(--ink)}
 html[data-theme=dark] .seats i{border-color:var(--hair)}
 html[data-theme=dark] .seats i.f{background:rgba(248,244,239,.5);border-color:transparent}
-html[data-theme=dark] .agn{border-top-color:var(--gold)}
 html[data-theme=dark] .ilist .ii.sel{background:var(--raise)}
-html[data-theme=dark] .agl{background:var(--raise);border:1px solid var(--hair);box-shadow:none}
-html[data-theme=dark] .agw{background:var(--card);border-color:var(--hair);border-top-color:var(--gold);box-shadow:none;color:var(--ink)}
-html[data-theme=dark] .agh{background:var(--raise)}
-html[data-theme=dark] .agw .av{background:var(--raise)}
-html[data-theme=dark] .agt{background:var(--bg)}
-html[data-theme=dark] .agb{background:var(--card);border-color:var(--hair);color:var(--ink)}
-html[data-theme=dark] .agm.u .agb{background:var(--raise);color:#f8f4ef;border-color:var(--hair)}
-html[data-theme=dark] .agb .hbtn{border-color:var(--hair);color:#f8f4ef}
-html[data-theme=dark] .dots i{background:var(--mute)}
-html[data-theme=dark] .agc{background:var(--bg);border-top-color:var(--hair)}
-html[data-theme=dark] .agchip{background:var(--card);border-color:var(--hair);color:var(--ink)}
-html[data-theme=dark] .agf{background:var(--card);border-top-color:var(--hair)}
-html[data-theme=dark] .agf input{background:var(--raise);border-color:var(--hair);color:var(--ink)}
-html[data-theme=dark] .agf button{background:var(--gold);color:var(--navy);font-weight:700}
-html[data-theme=dark] .agnote{background:var(--card);color:var(--mute)}
 html[data-theme=dark] .inbp{background:var(--raise);border-color:var(--hair);border-top-color:var(--gold);box-shadow:none}
 html[data-theme=dark] .ii{color:var(--ink)}
 html[data-theme=dark] .inbh{border-bottom-color:var(--hair)}
@@ -415,39 +340,13 @@ html[data-theme=dark] .inbh{border-bottom-color:var(--hair)}
  html[data-theme=dark] .ilist .ii:hover{background:var(--raise)}
  html[data-theme=dark] .rng button:hover,html[data-theme=dark] .tabs button:hover{color:#f8f4ef}
  html[data-theme=dark] .seg button:not([aria-pressed=true]):hover{color:#f8f4ef}
- html[data-theme=dark] .agl:hover{border-color:var(--gold);box-shadow:none}
 }
-</style><script>/*pg-proxy*/window.PGPX=(function(){
-var K='pgpx',S;try{S=JSON.parse(sessionStorage.getItem(K))}catch(e){}S=S||{};if(!S.v)S.v='holder';
-var LBL={for:'Raise to 38.2%',against:'Keep at 23.6%',abs:'Abstain'},BR={k:'against',label:'Keep at 23.6%',why:'The current limit is not constraining the engine (17.8% used), and a change can wait for evidence that it is.'};
+</style><script>/*pg-votes*/window.PGPX=(function(){
+var K='pgv',S;try{S=JSON.parse(sessionStorage.getItem(K))}catch(e){}S=S||{};
+var LBL={for:'Raise to 12%',against:'Keep at 10%',abs:'Abstain'},BR={k:'against',label:'Keep at 10%',why:'The current limit is not constraining the book (largest position 7.4%), and a change can wait for evidence that it is.'};
 function save(){try{sessionStorage.setItem(K,JSON.stringify(S))}catch(e){}}
-function bc(){try{return localStorage.getItem('pgpx-bc')==='1'}catch(e){return false}}
-function held(){if(S.v==='holder')return[{n:'PL-0142',sc:'All votes until revoked',st:'Accepted Sep 2'},{n:'PL-0063',sc:'This vote only',st:'Accepted Oct 8'}];
- if(S.v==='holdero')return[{n:'PL-0142',sc:'All votes until revoked',st:'Accepted Sep 2'},{n:'PL-0063',sc:'This vote only',st:'Accepted Oct 8',ov:1}];return[]}
-function active(){return held().filter(function(h){return!h.ov})}
-function tally(){var b={for:13,against:8,abs:1},dir=19,mp=3,c=S.cast;
- if(c){b[c.own]++;dir++;if(c.prox)active().forEach(function(h){var x=c.prox[h.n]||c.own;b[x]++;mp++});
-  if(S.v==='memv'){b.for--;mp--}}
- var bd=bc()?4:0;b.against+=bd;
- return{b:b,dir:dir,mp:mp,bd:bd,pend:bd?0:4,total:b.for+b.against+b.abs}}
-function deleg(){return S.to||'PL-0142'}
-return{get:function(){return S},set:function(o){for(var k in o)S[k]=o[k];save()},reset:function(){S={v:S.v};save()},LBL:LBL,BR:BR,held:held,active:active,tally:tally,deleg:deleg,bc:bc,
- msgs:function(){var m=[],n=held().length;
-  if(n&&!S.cast)m.push({id:'pxh',ty:'VOTE',f:'vote',t:'You hold '+n+' proxies for the open vote',pv:'Cast them with your own vote before October 14.',d:'Oct 11',u:1,h:'../voting/',a:'Open Voting',b:'You hold '+n+' proxies for the open vote on raising the maximum allocation to core holdings from 23.6% to 38.2%: '+held().map(function(h){return h.n+(h.ov?' (the member has voted, so this proxy is overridden)':'')}).join(' and ')+'. By default the option you select is cast for yourself and for each proxy; you can also vote proxies separately. Proxy votes must be cast before the poll closes on Wednesday, October 14 at 4:00 PM ET.'});
-  if(S.v==='memv')m.push({id:'pxv',ty:'VOTE',f:'vote',t:'Your proxy has voted',pv:'Member '+deleg()+' voted on your behalf: Raise to 38.2%.',d:'Oct 11',u:1,h:'../voting/',a:'Open Voting',b:'Member '+deleg()+' voted on your behalf in the open vote: Raise to 38.2%. You can still vote yourself until the poll closes on Wednesday, October 14 at 4:00 PM ET. Your own vote overrides your proxy for this vote.'});
-  return m},
- agent:function(base,LK){var t=base,v=S.v,n=held().length,x;
-  if(n)t+=' You currently hold '+n+' proxies for the open vote ('+held().map(function(h){return h.n+(h.ov?', overridden because the member voted':'')}).join(', ')+'). The option you select is cast for yourself and for each proxy unless you choose Vote proxies separately.'+(S.cast?' You have cast your votes; the receipt is on Voting.':' They are not cast until you confirm.');
-  else if(v==='mem')t+=' Your vote is currently held by Member '+deleg()+' ('+(S.pend?'awaiting acceptance':'accepted')+'). They have not voted yet. You can still vote yourself until the poll closes, which overrides the proxy.';
-  else if(v==='memv')t+=' Your vote is held by Member '+deleg()+'. Your proxy voted: Raise to 38.2%. You can still vote yourself until the poll closes, which overrides it.';
-  else if(v==='board')t+=' Your vote is held by the Board, which follows its published recommendation on this vote: '+BR.label+'. You can still vote yourself until the poll closes, which overrides it.';
-  if(S.cast&&(v==='mem'||v==='memv'||v==='board'))t+=' You have voted yourself, which overrides your proxy for this vote.';
-  return[t,LK('../voting/','Open Voting')]},
- over:function(){var v=S.v;if(S.cast&&(v==='mem'||v==='memv'||v==='board'))return'You voted yourself, which overrides your proxy.';
-  if(held().length)return'You hold '+held().length+' proxies for this vote.'+(S.cast?' Cast.':'');
-  if(v==='mem')return'Your vote is held by Member '+deleg()+(S.pend?' · Awaiting acceptance':' · Accepted');
-  if(v==='memv')return'Your proxy voted: Raise to 38.2%.';
-  if(v==='board')return'Held by the Board · follows Board recommendation: '+BR.label;return''}}})();</script><style id="thmcss">.thmb{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink)}.thmb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}.thmb .tm{display:none}html[data-theme=light] .thmb .ts{display:none}html[data-theme=light] .thmb .tm{display:block}.thmb{width:44px;height:44px}.thmd{position:absolute;top:46px;right:11px;z-index:2}.thmm{display:none}@media(max-width:900px){.thmd{display:none}.thmm{display:flex;position:absolute;right:calc(max(11px,env(safe-area-inset-right)) + 54px);bottom:calc((var(--bar) - 44px)/2);color:#f8f4ef}.inbm{right:calc(max(11px,env(safe-area-inset-right)) + 98px)}}</style></head><body>
+function tally(){var b={for:13,against:8,abs:1},c=S.cast;if(c)b[c.own]++;return{b:b,total:b.for+b.against+b.abs}}
+return{get:function(){return S},set:function(o){for(var k in o)S[k]=o[k];save()},reset:function(){S={};save()},LBL:LBL,BR:BR,tally:tally,msgs:function(){return[]},over:function(){return''}}})();</script><style id="thmcss">.thmb{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink)}.thmb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}.thmb .tm{display:none}html[data-theme=light] .thmb .ts{display:none}html[data-theme=light] .thmb .tm{display:block}.thmb{width:44px;height:44px}.thmd{position:absolute;top:46px;right:11px;z-index:2}.thmm{display:none}@media(max-width:900px){.thmd{display:none}.thmm{display:flex;position:absolute;right:calc(max(11px,env(safe-area-inset-right)) + 54px);bottom:calc((var(--bar) - 44px)/2);color:#f8f4ef}.inbm{right:calc(max(11px,env(safe-area-inset-right)) + 98px)}}</style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <header class="bar"><button class="inbtn inbm" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="inbp" aria-label="Inbox, 4 unread"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14"/><path d="M2.5 6 12 13.5 21.5 6"/></svg><span class="inbg" aria-hidden="true">4</span></button><button class="thmb thmm" type="button" aria-label="Switch to light mode" title="Switch to light mode"><svg class="ts" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg><svg class="tm" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg></button><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
 <nav class="mm" id="mm" aria-label="Member menu" tabindex="-1"><a href="../welcome/">Overview</a><a href="../performance/">Performance</a><a href="../deposits/">Deposits &amp; Redemptions</a><a href="../voting/">Voting</a><a href="../documents/">Documents</a><a href="../settings/">Settings</a><a href="../contact/" aria-current="page">Contact</a></nav>
@@ -456,18 +355,17 @@ return{get:function(){return S},set:function(o){for(var k in o)S[k]=o[k];save()}
 <div class="who">J. Morrison<span>Member since 2026</span></div></aside>
 <main>
 <button class="inbtn inbd" data-cur="1" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="inbp" aria-label="Inbox, 4 unread"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14"/><path d="M2.5 6 12 13.5 21.5 6"/></svg><span class="inbg" aria-hidden="true">4</span></button><button class="thmb thmd" type="button" aria-label="Switch to light mode" title="Switch to light mode"><svg class="ts" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg><svg class="tm" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg></button><div class="inbp" id="inbp" role="dialog" aria-label="Inbox" aria-hidden="true"><div class="inbh"><b>Inbox</b><button type="button" class="inbma" id="inbma">Mark all as read</button><button type="button" class="inbx" id="inbx" aria-label="Close inbox"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div><div class="inbl" id="inbl"></div><div class="inbf"><a href="../inbox/">View all messages</a></div></div><div class="k"><nav class="bc" aria-label="Breadcrumb"><a href="../contact/">Contact</a><span aria-hidden="true">&rsaquo;</span><span aria-current="page">Inbox</span></nav></div><h1>Inbox</h1>
-<div class="grid ibx" id="ibx"><section class="card" aria-label="Messages"><div class="tabs" id="ibf" role="group" aria-label="Filter"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="unread">Unread</button><button type="button" aria-pressed="false" data-f="adm">Administrator</button><button type="button" aria-pressed="false" data-f="ntc">Notices</button><button type="button" aria-pressed="false" data-f="vote">Votes</button><button type="button" aria-pressed="false" data-f="doc">Documents</button><button type="button" aria-pressed="false" data-f="sec">Security</button></div><div class="ilist" id="ilist"></div><p class="note" id="iempty" hidden>No messages match this filter.</p></section><section class="card" id="ipane" aria-label="Message" aria-live="polite"></section></div><p class="note">Replies to the administrator are sent through the secure message form on Contact. The Agent and this inbox never show other members.</p>
-<footer class="ft"><span>&copy; 2026 Polarity Capital</span><span>Sample data for demonstration. Nothing is sent or stored.</span></footer></main>
+<div class="grid ibx" id="ibx"><section class="card" aria-label="Messages"><div class="tabs" id="ibf" role="group" aria-label="Filter"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="unread">Unread</button><button type="button" aria-pressed="false" data-f="adm">Administrator</button><button type="button" aria-pressed="false" data-f="ntc">Notices</button><button type="button" aria-pressed="false" data-f="vote">Votes</button><button type="button" aria-pressed="false" data-f="doc">Documents</button><button type="button" aria-pressed="false" data-f="sec">Security</button></div><div class="ilist" id="ilist"></div><p class="note" id="iempty" hidden>No messages match this filter.</p></section><section class="card" id="ipane" aria-label="Message" aria-live="polite"></section></div><p class="note">Replies to the administrator are sent through the secure message form on Contact. This inbox never shows other members.</p>
+<footer class="ft"><span>&copy; 2026 Polarity Investment Club</span><span>Sample data for demonstration. Nothing is sent or stored.</span></footer></main>
 <script>
 window.PGI=(function(){
 var M=[
- {id:'vote',ty:'VOTE',f:'vote',t:'New vote open: raise max allocation to core holdings',pv:'Raise the limit from 23.6% to 38.2%? Closes October 14.',d:'Oct 11',u:1,h:'../voting/',a:'Open Voting',b:'A vote is open on whether to raise the maximum allocation to core holdings (longer-term stocks and index ETFs) from 23.6% to 38.2% of invested NAV. The poll closes on Wednesday, October 14 at 4:00 PM ET. The rationale for each option is shown on the Voting page. Your own vote overrides any proxy you have assigned.'},
+ {id:'vote',ty:'VOTE',f:'vote',t:'Vote open: position limit per name',pv:'Raise the per-name limit from 10% to 12% of NAV? Closes October 14.',d:'Oct 11',u:1,h:'../voting/',a:'Open Voting',b:'A vote is open on whether to raise the maximum position per name from 10% to 12% of NAV. Members set the investment mandate by annual vote, and the mandate changes only by member vote. The poll closes on Wednesday, October 14 at 4:00 PM ET. The rationale for each option is shown on the Voting page.'},
  {id:'sec',ty:'SECURITY',f:'sec',t:'New sign-in from Chrome on macOS',pv:'A sign-in to your account was recorded this morning.',d:'Oct 11',u:1,h:'../settings/',a:'Review sessions',b:'A new sign-in to your account was recorded on Sunday, October 11 at 8:42 AM ET from Chrome on macOS. If this was you, no action is needed. If it was not, sign out other sessions and replace your authenticator in Settings, then call the administrator.'},
- {id:'rsv',ty:'STATEMENT',f:'doc',t:'October reserve: $672.55 withheld',pv:'25% of October’s net gain to date. Posts at month end.',d:'Oct 9',u:1,h:'../deposits/#reserve',a:'Open Tax reserve',b:'$672.55 has been withheld to date for the tax reserve, which is 25% of October’s net gain of $2,690.18. It is posted at month-end processing on October 30. Your reserve after October is $3,351.62, held separately from your capital account and paid to RBC Chequing ···· 4417 on April 1, 2027. You can see each month in Tax reserve on Deposits & Redemptions.'},
- {id:'adm',ty:'ADMINISTRATOR',f:'adm',t:'Re: Redemption request, October 6',pv:'Received and under review. We aim to pay by the next business day once approved.',d:'Oct 7',u:1,h:'../deposits/',a:'Open Deposits & Redemptions',r:'Re: Redemption request, October 6',b:'Your redemption request of $5,000.00 to RBC Chequing ···· 4417 has been received and is under review. Once the administrator approves it you will be notified, and we aim to pay it by the next business day, at the lower of the September 30 month-end value and today’s value of your share. Until it is approved you may cancel it from Pending and history.'},
- {id:'agt',ty:'AGENT',f:'adm',t:'Your question was passed to the administrator',pv:'The administrator replies within one business day.',d:'Oct 6',u:0,h:'../contact/',a:'Open Contact',r:'Question from the Agent',b:'The Polarity Agent could not answer your question and passed it to the club administrator. Replies are sent here, usually within one business day.'},
- {id:'ntc',ty:'CLUB NOTICE',f:'ntc',t:'Holiday processing schedule',pv:'Month-end processing dates through year end.',d:'Oct 5',u:0,h:'../deposits/',a:'Open Deposits & Redemptions',r:'Holiday processing schedule',b:'Month-end processing will run on October 30, November 30 and December 30. Deposits received before a processing date are allocated to your capital account on it; later ones are allocated at the next. Approved redemptions are paid by the next business day and are not held for month-end. Requests are always confirmed with your authenticator code.'},
- {id:'stm',ty:'STATEMENT',f:'doc',t:'September statement available',pv:'Your capital account statement is ready to download.',d:'Oct 2',u:0,h:'../documents/',a:'Open Documents',b:'Your statement for September 2026 is available in Documents. It shows your capital account, monthly result and activity, including the $10,000.00 deposit confirmed on September 30.'}];
+ {id:'trd',ty:'CLUB NOTICE',f:'ntc',t:'Trade report published: October',pv:'Club trades to date, reported after the fact.',d:'Oct 9',u:1,h:'../documents/',a:'Open Documents',b:'The after-the-fact trade report for October to date is now in Documents. Trades are reported to members after they are placed; the Board directs execution within the investment mandate.'},
+ {id:'adm',ty:'ADMINISTRATOR',f:'adm',t:'Re: Redemption request, October 6',pv:'Received and under review. Paid at the next month-end value once approved.',d:'Oct 7',u:1,h:'../deposits/',a:'Open Deposits & Redemptions',r:'Re: Redemption request, October 6',b:'Your redemption request of $5,000.00 to RBC Chequing ···· 4417 has been received and is under review. Once two administrators approve it you will be notified. It is paid at the next month-end value (October 30). Until it is approved you may cancel it from Pending and history.'},
+ {id:'ntc',ty:'CLUB NOTICE',f:'ntc',t:'Holiday processing schedule',pv:'Month-end processing dates through year end.',d:'Oct 5',u:0,h:'../deposits/',a:'Open Deposits & Redemptions',r:'Holiday processing schedule',b:'Month-end processing will run on October 30, November 30 and December 30. Deposits received before a processing date are allocated to your capital account on it; later ones are allocated at the next. Redemptions are paid at the next month-end value. Requests are always confirmed with your authenticator code.'},
+ {id:'stm',ty:'STATEMENT',f:'doc',t:'Q3 statement available',pv:'Your quarterly capital account statement is ready to download.',d:'Oct 2',u:0,h:'../documents/',a:'Open Documents',b:'Your statement for the quarter ended September 30, 2026 is available in Documents. It shows your capital account, the quarter\u2019s result and activity, including the $10,000.00 deposit confirmed on September 30.'}];
 var K='pgr',R;try{R=JSON.parse(sessionStorage.getItem(K))}catch(e){}R=R||[];
 var L=[];function save(){try{sessionStorage.setItem(K,JSON.stringify(R))}catch(e){}}
 function unread(m){return m.u&&R.indexOf(m.id)<0}
@@ -546,57 +444,7 @@ function drawChart(sv,ln,area,dot,z,start){var r=sv.getBoundingClientRect(),P=pt
 
 if(!skip){stag();var li=qa('#ilist .ii'),b=cd(li[0]?li[0].closest('.card'):cards[0])+233;
  rows(li,b,55);an(document.getElementById('ipane'),[{opacity:0},{opacity:1}],{duration:610,delay:b+li.length*55+233})}
-})();</script><button class="agl" id="agl" type="button" aria-expanded="false" aria-controls="agw" aria-label="Open Polarity Agent chat"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>Agent</button><div class="agw" id="agw" role="dialog" aria-label="Polarity Agent" aria-hidden="true"><div class="agh"><span class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg></span><div class="t">Polarity Agent<small>Ask about your account</small></div><button class="agx" id="agx" type="button" aria-label="Close chat"><svg width="16" height="16" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="2.6" fill="none"/></svg></button></div><div class="agt" id="agt" role="log" aria-live="polite" aria-label="Conversation"><div class="agm a"><span class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg></span><div class="agb">Good afternoon, James. I can answer questions about your capital account, requests, documents and the portal. Choose a question below or type your own.</div></div></div><div class="agc" id="agc" role="group" aria-label="Suggested questions"><button type="button" class="agchip">When will my October distribution be paid?</button><button type="button" class="agchip">How do I change my standing instruction?</button><button type="button" class="agchip">Where is my latest statement?</button><button type="button" class="agchip">How does assigning a proxy work?</button><button type="button" class="agchip">What is the status of my redemption request?</button></div><form class="agf" id="agf" autocomplete="off"><label class="agsr" for="agq">Ask a question</label><input id="agq" maxlength="200" placeholder="Ask a question"><button type="submit">Send</button></form><div class="agnote">Sees only your own account. Cannot move money, change instructions or vote. Conversations are logged.</div></div><script>
-(function(){var KEY='pgs',L=document.getElementById('agl'),W=document.getElementById('agw'),T=document.getElementById('agt'),Q=document.getElementById('agq'),CH=document.getElementById('agc'),MARK=W.querySelector('.av').innerHTML;
-var S;try{S=JSON.parse(sessionStorage.getItem(KEY))}catch(e){}S=S||{o:0,m:[]};
-function save(){try{sessionStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function LK(h,t){return '<a class="dl" href="'+h+'">'+t+'</a>'}
-var A={
- bal:['Your capital account is $125,054.80 at the October 9 close. It excludes your tax reserve of $3,351.62, which is held separately. After the $5,000.00 redemption request that is awaiting approval, $120,054.80 is available to redeem. A deposit that has been received but not yet allocated is not part of your capital account until month-end processing.',LK('../deposits/','Open Deposits &amp; Redemptions')],
- dist:['Your October result is $2,690.18 to date, before the tax reserve. $672.55 of it is withheld to your tax reserve, which leaves $2,017.63 to distribute. Distributions are processed at month end, on Friday, October 30. Under your standing instruction, $1,000.00 is paid to RBC Chequing \u00b7\u00b7\u00b7\u00b7 4417 and the remaining $1,017.63 is reinvested in your capital account.',LK('../deposits/','Open Deposits &amp; Redemptions')],
- inst:['Your current instruction is a $1,000.00 monthly payout with the remainder reinvested. You can switch between reinvesting all, a payout target, a percentage reinvested, or a mix, in Standing instructions on Deposits &amp; Redemptions. A change takes effect at the next month-end processing. I cannot change it for you.',LK('../deposits/','Open Standing instructions')],
- stmt:['Your latest statement is September 2026, issued on October 2. Statements, your member agreement and tax slips are in Documents. Your 2026 tax slip is expected in February 2027.',LK('../documents/','Open Documents')],
- proxy:['You may delegate your vote to the Board or to another member you know. For a member you need their member number and a one-time proxy code that they generate; the code is valid for 72 hours. A member may hold at most 3 proxies, proxies cannot be passed on, and the Board has no limit. A member must accept; a Board proxy takes effect immediately and always votes with the Board’s published recommendation, which is shown on the vote. Your own vote overrides your proxy.',LK('../voting/','Open Assign proxy')],
- red:['Your redemption request of $5,000.00 to RBC Chequing \u00b7\u00b7\u00b7\u00b7 4417, submitted on October 6, is awaiting administrator approval. Once approved, we aim to pay it by the next business day, at the lower of the September 30 month-end value ($4,919.33 for this request) and today’s value ($5,000.00), so you would receive $4,919.33. You can cancel it before approval from Pending and history.',LK('../deposits/','Open Deposits &amp; Redemptions')],
-wire:['You can fund your account by wire from Deposits &amp; Redemptions: choose Deposit, then Wire transfer, enter the amount and confirm with your authenticator code to see the instructions. Your unique wire reference is PL-0087-W and it must be in the memo so the deposit is matched to you. Wires must come from an account in your own name, the minimum is $1,000.00, and the sender pays any bank wire fees. Wires are usually confirmed by the next business day once received and matched. Funds then show as Received, pending allocation until month-end processing on October 30, when your share of club NAV is calculated; until then the deposit does not take part in returns. Polarity will never email or change these instructions, so always confirm them in the portal. I cannot send a wire for you.',LK('../deposits/#wire','Open Wire transfer')],
- dep:['Deposits are usually confirmed by the next business day. Once received, funds show as Received, pending allocation. Your share of club NAV is calculated at month-end processing (next on October 30), so a deposit does not take part in returns until it is allocated. Redemptions are separate: once the administrator approves one, we aim to pay it by the next business day, at the lower of the last month-end value and today’s value of your share. If the club is up this month you receive the month-end value; if it is down you receive today’s value.',LK('../deposits/','Open Deposits &amp; Redemptions')],
- no:['I am not able to discuss the engine\u2019s logic, upcoming trades or other members. Current positioning and the full trade record are available to you on Performance.',LK('../performance/','Open Performance')],
- rsv:['Your share of the club tax reserve is $3,351.62 (3.52% of the club total of $95,270.42), including $672.55 withheld to date for October. It is 25% of each realised net gain, settled at month end; a net loss month releases reserve back, up to what has been withheld this year. It is not part of your capital account, which is $125,054.80 after the reserve. It earns nothing, is not invested and is excluded from performance. It is not sent to CRA, so you file your own return. It is paid on April 1, 2027 to RBC Chequing \u00b7\u00b7\u00b7\u00b7 4417, or earlier if you request release, which needs administrator approval. You can choose 20%, 25% or 30% in Settings. A tax adviser can tell you which rate suits you.',LK('../deposits/#reserve','Open Tax reserve')]};
-function pick(t){t=t.toLowerCase();
- if(/algorithm|engine|buying|next trade|strategy logic|signal|other member|who (is|are)|member (name|list)/.test(t))return A.no;
- if(/wire|swift|bank transfer|eft|send money|fund (my|the) account/.test(t))return A.wire;
- if(/deposit|allocat|pending allocation|when will my (money|funds)/.test(t))return A.dep;
- if(/reserve|withh|capital gain|early release/.test(t))return A.rsv;
- if(/balance|capital account|how much|available to redeem/.test(t))return A.bal;
- if(/redemption|redeem|withdraw/.test(t))return A.red;
- if(/proxy|proxies|delegate|my vote/.test(t))return PGPX.agent(A.proxy,LK);
- if(/statement|tax|document|agreement/.test(t))return A.stmt;
- if(/instruction|reinvest|target|payout mix/.test(t))return A.inst;
- if(/distribution|paid|payout|pay out/.test(t))return A.dist;return null}
-function row(c,h){var d=document.createElement('div');d.className='agm '+c;d.innerHTML=(c==='a'?'<span class="av">'+MARK+'</span>':'')+'<div class="agb">'+h+'</div>';T.appendChild(d);T.scrollTop=T.scrollHeight;return d}
-function setOpen(o,quiet){W.classList.toggle('open',o);L.setAttribute('aria-expanded',o);W.setAttribute('aria-hidden',!o);S.o=o?1:0;save();
- if(o){T.scrollTop=S.m.length?T.scrollHeight:0;if(!quiet)setTimeout(function(){Q.focus()},30)}else if(!quiet)L.focus()}
-function ask(t){t=t.trim();if(!t)return;S.m.push({c:'u',t:t});save();row('u',esc(t));CH.classList.add('min');
- var w=row('a','<span class="dots" aria-label="Preparing a reply"><i></i><i></i><i></i></span>');
- setTimeout(function(){var r=pick(t),h;
-  if(r)h=r[0]+'<br>'+r[1];else h='I do not have an answer to that. I can pass your question to the club administrator, who replies within one business day.<span class="hb2"><button class="hbtn" type="button" data-q="'+esc(t)+'">Send to administrator</button></span>';
-  w.querySelector('.agb').innerHTML=h;S.m.push({c:'a',h:h});save();T.scrollTop=T.scrollHeight},750)}
-function fill(q){var s=document.getElementById('sb'),m=document.getElementById('ms'),tp=document.getElementById('tp');if(!m)return false;s.value='Question from the Agent';m.value=q;if(tp)tp.selectedIndex=0;var f=document.getElementById('msgform');if(f)f.scrollIntoView({block:'start'});setTimeout(function(){m.focus({preventScroll:true})},50);return true}
-T.addEventListener('click',function(e){var b=e.target.closest('[data-q]');if(!b)return;var q=b.dataset.q;b.disabled=true;
- if(document.getElementById('ms')){setOpen(false,true);fill(q)}else{S.o=0;save();try{sessionStorage.setItem('pgq',q)}catch(x){}location.href='../contact/#msgform'}});
-CH.querySelectorAll('.agchip').forEach(function(c){c.addEventListener('click',function(){ask(c.textContent)})});
-document.getElementById('agf').addEventListener('submit',function(e){e.preventDefault();var v=Q.value;Q.value='';ask(v)});
-L.addEventListener('click',function(){setOpen(true)});document.getElementById('agx').addEventListener('click',function(){setOpen(false)});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&W.classList.contains('open'))setOpen(false)});
-document.querySelectorAll('[data-agent-open]').forEach(function(b){b.addEventListener('click',function(){setOpen(true)})});
-S.m.forEach(function(m){row(m.c,m.c==='u'?esc(m.t):m.h)});if(S.m.length)CH.classList.add('min');
-if(S.o){W.classList.add('noanim');setOpen(true,true);requestAnimationFrame(function(){requestAnimationFrame(function(){W.classList.remove('noanim')})})}
-var pq;try{pq=sessionStorage.getItem('pgq')}catch(e){}
-if(pq&&document.getElementById('ms')){sessionStorage.removeItem('pgq');setTimeout(function(){fill(pq)},60)}
-})();
-</script>
-<script>(function(){var h=document.documentElement,bs=document.querySelectorAll('.thmb');function cur(){return h.getAttribute('data-theme')==='light'?'light':'dark'}
+})();</script><script>(function(){var h=document.documentElement,bs=document.querySelectorAll('.thmb');function cur(){return h.getAttribute('data-theme')==='light'?'light':'dark'}
 function lab(){var n=cur()==='dark'?'light':'dark',t='Switch to '+n+' mode';bs.forEach(function(b){b.setAttribute('aria-label',t);b.title=t})}
 bs.forEach(function(b){b.addEventListener('click',function(){var n=cur()==='dark'?'light':'dark';PGTheme.set(n);lab();document.dispatchEvent(new Event('pgthemechange'))})});
 new MutationObserver(lab).observe(h,{attributes:true,attributeFilter:['data-theme']});lab()})()</script></body></html>
