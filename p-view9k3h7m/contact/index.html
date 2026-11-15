@@ -40,7 +40,7 @@ h1{font-weight:400;font-size:40px;line-height:1.15;margin:13px 0 34px;letter-spa
 .vote{border-left:3px solid var(--gold)}
 .vote p{margin:13px 0 13px;font-size:15px;font-weight:700;line-height:1.4}
 .vr{display:flex;align-items:center;gap:13px;font-size:13px;color:var(--mute)}
-.btn{background:var(--navy);color:#f8f4ef;border:1px solid var(--navy);border-radius:0;font:inherit;font-size:13px;padding:8px 21px;cursor:pointer}
+.btn{background:var(--navy);color:#f8f4ef;border:1px solid var(--navy);border-radius:0;font:inherit;font-size:13px;line-height:1.4;padding:8px 21px;cursor:pointer}
 .act{margin-top:8px}
 .act div{display:flex;justify-content:space-between;padding:13px 0;font-size:13px;border-bottom:1px solid var(--line)}
 .act div:last-child{border-bottom:0;padding-bottom:0}
@@ -53,7 +53,7 @@ h1{font-weight:400;font-size:40px;line-height:1.15;margin:13px 0 34px;letter-spa
  :root{--side:0px}
  .side{display:none}
  main{margin:0;padding:calc(34px + 34px + 21px + 21px + env(safe-area-inset-top)) max(21px,env(safe-area-inset-right)) calc(34px + env(safe-area-inset-bottom)) max(21px,env(safe-area-inset-left))}
- .grid{grid-template-columns:1fr}
+ .grid{grid-template-columns:minmax(0,1fr)}.col,.card{min-width:0}
  .big{font-size:40px}
  h1{font-size:34px;margin-bottom:21px}
  .chart svg,.ax{height:144px}
@@ -182,7 +182,7 @@ textarea.in{min-height:144px;resize:vertical;line-height:1.5}
 .seg button+button{border-left:1px solid rgba(14,31,60,.25)}
 .seg button[aria-pressed=true]{background:var(--navy);color:#f8f4ef}
 .seg button:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
-.seg.wide{display:flex}.seg.wide button{flex:1;padding:8px 5px}
+.seg.wide{display:flex}@media(max-width:600px){.seg{display:flex}.seg button{flex:1;padding:8px 5px}}.seg.wide button{flex:1;padding:8px 5px}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:21px}
 .sw{display:flex;justify-content:space-between;align-items:center;gap:21px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}
 .sw:last-child{border-bottom:0;padding-bottom:0}
@@ -199,8 +199,8 @@ textarea.in{min-height:144px;resize:vertical;line-height:1.5}
 .steps li:last-child::after{display:none}
 .steps b{display:block;font-weight:700}
 .steps span{color:var(--mute)}
-.tabs{display:flex;gap:21px;margin:0 0 21px;flex-wrap:wrap}
-.tabs button{all:unset;cursor:pointer;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(14,31,60,.382);padding:3px 0}
+.tabs{display:flex;gap:21px;margin:0 0 21px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}.tabs::-webkit-scrollbar{display:none}@media(min-width:601px){.tabs{flex-wrap:wrap;overflow:visible}}
+.tabs button{all:unset;cursor:pointer;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(14,31,60,.382);padding:3px 0;flex:none;white-space:nowrap}
 .tabs button[aria-pressed=true]{color:var(--ink);font-weight:700}
 @media(hover:hover) and (pointer:fine){.tabs button:hover{color:var(--ink)}.seg button:not([aria-pressed=true]):hover{color:var(--ink)}}
 .ft{margin-top:55px;padding-top:21px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:21px;flex-wrap:wrap;font-size:11px;letter-spacing:1px;color:rgba(14,31,60,.382)}
@@ -284,7 +284,7 @@ html[data-theme=dark]{color-scheme:dark;
 html[data-theme=dark],html[data-theme=dark] body{background:var(--bg);color:var(--ink)}
 html[data-theme=dark] .side{background:var(--side-bg);border-right:1px solid var(--hair)}
 html[data-theme=dark] .bar,html[data-theme=dark] .mm{background:var(--side-bg)}
-html[data-theme=dark] .bar{border-bottom:1px solid var(--hair)}
+html[data-theme=dark] .bar{box-shadow:inset 0 -1px 0 var(--hair)}
 html[data-theme=dark] .nav a[aria-current],html[data-theme=dark] .mm a[aria-current]{background:var(--raise)}
 html[data-theme=dark] .card{background:var(--card);border-color:var(--hair);box-shadow:none}
 html[data-theme=dark] .lbl,html[data-theme=dark] .delta,html[data-theme=dark] .ft{color:var(--mute)}
@@ -338,7 +338,7 @@ var K='pgv',S;try{S=JSON.parse(sessionStorage.getItem(K))}catch(e){}S=S||{};
 var LBL={for:'Raise to 12%',against:'Keep at 10%',abs:'Abstain'},BR={k:'against',label:'Keep at 10%',why:'The current limit is not constraining the book (largest position 7.4%), and a change can wait for evidence that it is.'};
 function save(){try{sessionStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function tally(){var b={for:13,against:8,abs:1},c=S.cast;if(c)b[c.own]++;return{b:b,total:b.for+b.against+b.abs}}
-return{get:function(){return S},set:function(o){for(var k in o)S[k]=o[k];save()},reset:function(){S={};save()},LBL:LBL,BR:BR,tally:tally,msgs:function(){return[]},over:function(){return''}}})();</script><style id="thmcss">.thmb{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink)}.thmb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}.thmb .tm{display:none}html[data-theme=light] .thmb .ts{display:none}html[data-theme=light] .thmb .tm{display:block}.thmb{width:44px;height:44px}.thmd{position:absolute;top:46px;right:11px;z-index:2}.thmm{display:none}@media(max-width:900px){.thmd{display:none}.thmm{display:flex;position:absolute;right:calc(max(11px,env(safe-area-inset-right)) + 54px);bottom:calc((var(--bar) - 44px)/2);color:#f8f4ef}.inbm{right:calc(max(11px,env(safe-area-inset-right)) + 98px)}}</style><style id="phc">input::placeholder,textarea::placeholder{color:rgba(14,31,60,.32)!important;opacity:1}html[data-theme=dark] input::placeholder,html[data-theme=dark] textarea::placeholder{color:rgba(248,244,239,.3)!important}</style><style id="mobfix">h1,h2,h3,.lbl,.tt,.ott{text-wrap:balance}.k,p,.delta,.note{text-wrap:pretty}.btn,.seg button{text-wrap:balance}@media(max-width:600px){.seg button{letter-spacing:.7px;font-size:10.5px;padding-left:4px;padding-right:4px;white-space:nowrap}.lbl{letter-spacing:1.5px}.kpi .lbl{letter-spacing:1px;white-space:nowrap;font-size:10px}.seg.wide button{display:flex;align-items:center;justify-content:center}}</style></head><body>
+return{get:function(){return S},set:function(o){for(var k in o)S[k]=o[k];save()},reset:function(){S={};save()},LBL:LBL,BR:BR,tally:tally,msgs:function(){return[]},over:function(){return''}}})();</script><style id="thmcss">.thmb{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink)}.thmb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}.thmb .tm{display:none}html[data-theme=light] .thmb .ts{display:none}html[data-theme=light] .thmb .tm{display:block}.thmb{width:44px;height:44px}.thmd{position:absolute;top:46px;right:11px;z-index:2}.thmm{display:none}@media(max-width:900px){.thmd{display:none}.thmm{display:flex;position:absolute;right:calc(max(11px,env(safe-area-inset-right)) + 54px);bottom:calc((var(--bar) - 44px)/2);color:#f8f4ef}.inbm{right:calc(max(11px,env(safe-area-inset-right)) + 98px)}}</style><style id="phc">input::placeholder,textarea::placeholder{color:rgba(14,31,60,.32)!important;opacity:1}html[data-theme=dark] input::placeholder,html[data-theme=dark] textarea::placeholder{color:rgba(248,244,239,.3)!important}</style><style id="mobfix">h1,h2,h3,.lbl,.tt,.ott{text-wrap:balance}.k{text-wrap:balance}p,.delta,.note{text-wrap:pretty}.btn,.seg button{text-wrap:balance}@media(max-width:600px){.seg button{letter-spacing:.7px;font-size:10.5px;padding-left:4px;padding-right:4px;white-space:nowrap}.lbl{letter-spacing:1.5px}.kpi .lbl{letter-spacing:1px;white-space:nowrap;font-size:10px}.seg.wide button{display:flex;align-items:center;justify-content:center}}</style></head><body>
 <a class="mk" href="../" aria-label="Polarity home"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M59.44 11.13 A40 40 0 1 0 59.44 88.87 Z" fill="#f8f4ef" transform="translate(-3.5,5.84)"/><path d="M59.44 11.13 A40 40 0 0 1 59.44 88.87 Z" fill="#b08d4f" transform="translate(3.5,-5.84)"/></svg>POLARITY</a>
 <header class="bar"><button class="inbtn inbm" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="inbp" aria-label="Inbox, 4 unread"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14"/><path d="M2.5 6 12 13.5 21.5 6"/></svg><span class="inbg" aria-hidden="true">4</span></button><button class="thmb thmm" type="button" aria-label="Switch to light mode" title="Switch to light mode"><svg class="ts" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg><svg class="tm" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg></button><button class="hb" id="mm-btn" type="button" aria-expanded="false" aria-controls="mm" aria-label="Open menu"><svg class="h" width="34" height="21" viewBox="0 0 34 21" aria-hidden="true"><rect width="34" height="3"/><rect y="9" width="34" height="3"/><rect y="18" width="34" height="3"/></svg><svg class="x" width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 2 24 24M24 2 2 24" stroke="currentColor" stroke-width="3" fill="none"/></svg></button></header>
 <nav class="mm" id="mm" aria-label="Member menu" tabindex="-1"><a href="../welcome/">Overview</a><a href="../performance/">Performance</a><a href="../deposits/">Deposits &amp; Redemptions</a><a href="../voting/">Voting</a><a href="../documents/">Documents</a><a href="../settings/">Settings</a><a href="../contact/" aria-current="page">Contact</a></nav>
