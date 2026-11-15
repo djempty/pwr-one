@@ -57,7 +57,7 @@ function detail(no){var d=D[no],dr=q('#drawer'),sh=parseFloat(d.share),capok=sh<
  dr.innerHTML=h;U.openDrawer()}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-md]');if(b)detail(b.getAttribute('data-md'))})};
 </script>
-<script src="/p-admin-r8v3k6/assets/admin.js?v=9"></script>
+<script src="/p-admin-r8v3k6/assets/admin.js?v=10"></script>
 <script>(function(){var h=document.documentElement,bs=document.querySelectorAll('.thmb');function cur(){return h.getAttribute('data-theme')==='light'?'light':'dark'}
 function lab(){var n=cur()==='dark'?'light':'dark',t='Switch to '+n+' mode';bs.forEach(function(b){b.setAttribute('aria-label',t);b.title=t})}
 bs.forEach(function(b){b.addEventListener('click',function(){var n=cur()==='dark'?'light':'dark';var t=n;h.setAttribute('data-theme',t);try{localStorage.setItem('pgadmin-theme',t)}catch(e){}lab();document.dispatchEvent(new Event('pgthemechange'))})});

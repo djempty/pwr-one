@@ -266,7 +266,7 @@ function render(p,U){
  var dep=p.dep.slice().sort(function(a,b){return dt(b[0])-dt(a[0])}),dc=dep.filter(function(d){return d[3]==='Confirmed'}),dp=dep.filter(function(d){return d[3]!=='Confirmed'});
  var dsum=dc.reduce(function(s,d){return s+d[2]},0),psum=dp.reduce(function(s,d){return s+d[2]},0),wdp=p.wd;
  h+=sec('deposits','Deposits',dc.length+' &middot; '+m0(dsum)+(psum?' &middot; '+m0(psum)+' pending':''),
-  tbl([['Date',0,1],['Method'],['Amount',1],['Status'],['Reference']],dep.map(function(d){return [esc(d[0])+', 2026',d[1]==='Wire'?'Wire':'EFT',(d[2]?'+':'')+m2(d[2]),stTag(d[3]),esc(d[4])+(d[5]?'<small>'+esc(d[5])+'</small>':'')]}),'No deposits.')
+  tbl([['Date',0,1],['Method'],['Amount',1],['Status'],['Reference']],dep.map(function(d){return [esc(d[0])+', 2026',d[1]==='Wire'?'Wire transfer':d[1]==='Interac'?'Interac e-Transfer':'Bank transfer (PAD)',(d[2]?'+':'')+m2(d[2]),stTag(d[3]),esc(d[4])+(d[5]?'<small>'+esc(d[5])+'</small>':'')]}),'No deposits.')
   +'<p class="note">Deposits to date '+m2(dsum)+(psum?' confirmed, '+m2(psum)+' pending allocation':'')+'. Redemptions paid to date $0.00'+(wdp.length?'; '+wdp.length+' open (below)':'')+'. '+(no==='PL-0087'?'Matches the member portal (Deposits &amp; Redemptions) figure for figure. ':'')+'Deposits pending allocation take no part in returns until month-end. Each deposit is checked against the $5,000 minimum and the 20% cap.</p>',0);
  /* 7 withdrawals */
  var wd=wdp.slice().sort(function(a,b){return dt(b[0])-dt(a[0])}),wsum=wd.reduce(function(s,w){return s+w[2]},0);

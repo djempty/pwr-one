@@ -40,7 +40,7 @@ window.PageModules.audit=function(U){var q=U.q,qa=U.qa;(function(){var a=[];try{
 var TOTAL=String(qa('#aTbl tbody tr').length);function f(){var a=q('#fAdm').value,r=q('#fRole').value,c=q('#fCat').value,t=q('#fQ').value.toLowerCase(),n=0;qa('#aTbl tbody tr').forEach(function(x){var ok=(!a||x.getAttribute('data-admin')===a)&&(!r||x.getAttribute('data-role')===r)&&(!c||x.getAttribute('data-cat')===c)&&(!t||x.textContent.toLowerCase().indexOf(t)>-1);x.hidden=!ok;if(ok)n++});q('#aCount').textContent='Showing '+n+' of '+TOTAL+' entries'}
 ['fAdm','fRole','fCat'].forEach(function(i){q('#'+i).addEventListener('change',f)});q('#fQ').addEventListener('input',f)};
 </script>
-<script src="/p-admin-r8v3k6/assets/admin.js?v=9"></script>
+<script src="/p-admin-r8v3k6/assets/admin.js?v=10"></script>
 <script>(function(){var h=document.documentElement,bs=document.querySelectorAll('.thmb');function cur(){return h.getAttribute('data-theme')==='light'?'light':'dark'}
 function lab(){var n=cur()==='dark'?'light':'dark',t='Switch to '+n+' mode';bs.forEach(function(b){b.setAttribute('aria-label',t);b.title=t})}
 bs.forEach(function(b){b.addEventListener('click',function(){var n=cur()==='dark'?'light':'dark';var t=n;h.setAttribute('data-theme',t);try{localStorage.setItem('pgadmin-theme',t)}catch(e){}lab();document.dispatchEvent(new Event('pgthemechange'))})});
