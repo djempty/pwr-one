@@ -317,3 +317,5 @@ a.btn{text-decoration:none}
 .rows small{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:2px}
 .rows>div>span:last-child small{text-align:right}
 .rows small.nm{display:inline;margin:0 0 0 5px}
+
+h1,h2,h3,.lbl,.tt,.ott{text-wrap:balance}.k,p,.delta,.note{text-wrap:pretty}.btn,.seg button{text-wrap:balance}@media(max-width:600px){.seg button{letter-spacing:.7px;font-size:10.5px;padding-left:4px;padding-right:4px;white-space:nowrap}.lbl{letter-spacing:1.5px}.kpi .lbl{letter-spacing:1px;white-space:nowrap;font-size:10px}.seg.wide button{display:flex;align-items:center;justify-content:center}}
