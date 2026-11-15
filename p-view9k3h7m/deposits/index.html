@@ -454,6 +454,12 @@ ef.addEventListener('submit',function(e){e.preventDefault();var v=parseFloat(doc
  if(v<=0){ed.textContent='Enter the amount you sent.';return}
  var t=document.querySelector('#hl tbody');if(t&&!document.getElementById('e-row')){var r=document.createElement('tr');r.id='e-row';r.setAttribute('data-s','pend');r.innerHTML='<td data-l="Date">Oct 11</td><td data-l="Type"><b>Interac e-Transfer, awaiting receipt</b></td><td data-l="Detail">Reference PL-0087<small>Matched by the administrator once received; allocated at Oct 30 processing</small></td><td class="r up" data-l="Amount">+$'+fmt(v)+'</td><td class="r" data-l="Status"><span class="tag gd">Awaiting receipt</span></td>';t.insertBefore(r,t.firstChild)}
  ed.textContent='Recorded. This e-Transfer now shows as awaiting receipt in Pending and history. Demo only; nothing is sent or stored.'});
+if(/[?&]state=new/.test(location.search)){['da','wa','ea'].forEach(function(i){var e=document.getElementById(i);if(e)e.value='$5,000'});
+ var rb=document.querySelector('[data-t=red]');if(rb)rb.style.display='none';
+ var k=document.querySelector('.kpis');if(k)k.style.display='none';
+ var w=document.getElementById('wire'),h2=w&&w.querySelector('h2');if(h2)h2.textContent='Make your first deposit';
+ if(w){var n=document.createElement('p');n.className='note';n.style.margin='0 0 21px';n.innerHTML='<span class="tag ok">Approved</span> Minimum $5,000. Your units and vote start when your first deposit is received.';w.querySelector('.h2r').after(n)}
+ document.getElementById('pad-new').hidden=false;document.getElementById('pad-ok').hidden=true}
 if(/[?&]pad=new/.test(location.search)){document.getElementById('pad-new').hidden=false;document.getElementById('pad-ok').hidden=true}
 pd.addEventListener('submit',function(e){e.preventDefault();var d=pd.querySelector('.demo'),v=parseFloat(document.getElementById('da').value.replace(/[^0-9.]/g,''))||0,c=[].slice.call(pd.querySelectorAll('.otp input')).map(function(x){return x.value}).join('');
  if(v<=0){d.textContent='Enter the amount to deposit.';return}
