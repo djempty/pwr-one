@@ -327,7 +327,7 @@ html[data-theme=dark] .inbh{border-bottom-color:var(--hair)}
 .wr:last-child{border-bottom:0}.wr span{color:var(--mute)}.wr b{font-weight:400;word-break:break-word;font-variant-numeric:tabular-nums}
 .wr.ref b{font-weight:700}
 .cp{all:unset;cursor:pointer;box-sizing:border-box;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 10px;border:1px solid rgba(14,31,60,.25);color:var(--navy)}
-.cp:hover,.cp.ok{border-color:var(--gold);color:var(--gold)}.cp:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.cp:hover,.cp.ok{border-color:var(--gold);color:var(--gold)}.wr b[data-copy]{cursor:pointer}@media(hover:hover){.wr b[data-copy]:hover{color:var(--gold)}}.cp:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .wref{border:1px solid var(--gold);padding:21px;text-align:center}
 .wrv{font-size:34px;letter-spacing:3px;font-weight:700;margin:8px 0;font-variant-numeric:tabular-nums;outline:0}
 .wn{margin:21px 0 0;padding-left:18px;font-size:12px;line-height:1.62;color:var(--mute)}.wn li+li{margin-top:5px}
@@ -447,6 +447,8 @@ sent.addEventListener('click',function(){var tb=document.querySelector('#hl tbod
  sent.disabled=true;sent.textContent='Marked as sent';wd.textContent='Thank you. This wire now shows as awaiting receipt in Pending and history. You will be notified when it is received and matched. Demo only; nothing is sent or stored.'});
 if(location.hash==='#wire'){document.querySelector('[data-dm=wire]').click()}
 var ef=document.getElementById('e-form'),ed=document.getElementById('e-demo');
+document.addEventListener('mouseover',function(e){var b=e.target.closest&&e.target.closest('.wr b[data-copy]');if(b&&!b.title)b.title='Click to copy'});
+document.addEventListener('click',function(e){var b=e.target.closest('.wr b[data-copy]');if(!b||!b.dataset.copy)return;var k=b.parentNode.querySelector('.cp');if(k)copy(b.dataset.copy,k)});
 document.getElementById('erows').addEventListener('click',function(e){var b=e.target.closest('.cp');if(!b)return;copy(b.parentNode.querySelector('b').dataset.copy,b)});
 ef.addEventListener('submit',function(e){e.preventDefault();var v=parseFloat(document.getElementById('ea').value.replace(/[^0-9.]/g,''))||0;
  if(v<=0){ed.textContent='Enter the amount you sent.';return}
