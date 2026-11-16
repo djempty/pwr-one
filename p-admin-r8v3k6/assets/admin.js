@@ -189,7 +189,7 @@ function votesOf(p){var out=[];
 
 /* activity seed, taken from the audit log: time, admin, action, target, members involved */
 var AUD=[['Oct 11, 16:31:40','Eric Savics','Matched incoming wire','AP-2048 &middot; PL-0142-W &rarr; PL-0142 &middot; +$25,000.00',['PL-0142']],
- ['Oct 11, 16:28:12','PL-0087 (member)','Generated wire instructions','PL-0087-W &middot; $25,000.00 CAD &middot; authenticator confirmed',['PL-0087']],
+ ['Oct 11, 16:28:12','PL-0087 (member)','Generated wire instructions','PL-0087-W &middot; $25,000.00 CAD &middot; passkey confirmed',['PL-0087']],
  ['Oct 11, 14:22:51','Mike Telford','Prepared deposit','AP-2043 &middot; PL-0062 &middot; +$10,000.00',['PL-0062']],
  ['Oct 11, 13:55:30','Mike Telford','Replied to secure message','MSG-3318 &middot; PL-0054',['PL-0054']],
  ['Oct 11, 11:12:09','Eric Savics','Reviewed KYC refresh','PL-0105',['PL-0105']],
@@ -256,7 +256,16 @@ function render(p,U){
  h+=sec('membership','Membership',ref.length+' introduced',
   '<div class="rows"><div><span>Introduced by</span><span>'+(p.by==='Founder'?'Founder (founding member)':who(p.by))+'</span></div><div><span>Admission approved</span><span>'+esc(p.appr)+'</span></div>'
   +'<div><span>Members they have introduced</span><span>'+(ref.length?ref.map(function(r){return who(r.no)}).join('<br>'):'None yet')+'</span></div>'
-  +'<div><span>Member Agreement</span><span>v2.1 &middot; signed '+esc(a2?'Jan 30, 2026':p.j)+(a2?'<small>Replaced v2.0 signed '+esc(p.j)+'</small>':'')+'</span></div></div>',1);
+  +'</div>',1);
+
+ /* security + agreements (members: passkey only) */
+ h+=sec('security','Security','Passkey (device)',
+  '<div class="rows"><div><span>Sign-in</span><span>Passkey (device)<small>Face ID, Touch ID or device unlock. No password, authenticator app or recovery codes.</small></span></div></div>'
+  +'<div class="acts" style="margin-top:13px"><button class="btn ghost" type="button" id="pfPasskey" data-cap="contact">Reset passkey after ID re-verification</button></div>'
+  +'<p class="note">Resetting a passkey is only done after the member has re-verified their identity. Recorded in the audit log. Sample only.</p>',0);
+  var onb=p.st==='Onboarding';h+=sec('agreements','Agreements',onb?'in progress':'5 of 5 accepted',
+  '<div class="rows">'+['Limited Partnership Agreement','Club Information Memorandum','Investment mandate','Risk acknowledgement','Privacy notice'].map(function(x){return '<div><span>'+x+'</span><span>'+(onb?'Awaiting acceptance':'Accepted &middot; '+esc(p.j)+(/\d{4}/.test(p.j)?'':', 2026'))+'</span></div>'}).join('')+'<div><span>E-signature</span><span>'+(onb?'Not yet signed':esc(p.n)+' &middot; '+esc(p.j)+(/\d{4}/.test(p.j)?'':', 2026'))+'</span></div></div>'
+  +'<p class="note">Each document is accepted with an &ldquo;I have read and accept this&rdquo; click at sign-up. Sample data.</p>',0);
  /* 5 voting */
  var vs=votesOf(p),cast=vs.filter(function(x){return x.cast}).length,elig=vs.filter(function(x){return !x.na}).length;
  h+=sec('voting','Voting history',elig+' votes &middot; '+cast+' cast',tbl([['Vote'],['Closed'],['Ballot'],['Result']],vs.map(function(x){
@@ -320,6 +329,9 @@ window.PageModules.profile=function(U){
   q('#pfFreeze').addEventListener('click',function(){if(this.getAttribute('aria-disabled')==='true')return;var fz=frozenSet().indexOf(p.no)>-1,S='<div class="sum"><b>'+p.no+' &middot; '+esc(p.n)+'</b><br>'+(fz?'Lift the freeze on withdrawals and bank changes':'Freeze withdrawals and bank changes')+'<span>Recorded in the audit log with your admin ID, role and device.</span></div>';
    U.modal({k:'High-risk action',title:(fz?'Unfreeze ':'Freeze ')+p.no+'?',summary:S,html:'<p class="note" style="margin-top:0">This is recorded against '+esc(U.me())+'. You will re-confirm with Face ID or Touch ID.</p>'+S,step:true,confirm:'Continue',
     onDone:function(){var f=frozenSet();if(fz)f=f.filter(function(x){return x!==p.no});else f.push(p.no);LSs('pgpx-frozen',f);logA(fz?'Unfroze account (Face ID)':'Froze account (Face ID)',p.no,'member');U.say((fz?'Unfrozen':'Frozen')+' (mock). Nothing was posted.');mount()}})});
+  var pk=q('#pfPasskey');if(pk)pk.addEventListener('click',function(){var S='<div class="sum">'+esc(p.n)+' &middot; '+p.no+'<span>Reset passkey after ID re-verification</span></div>';
+   U.modal({k:'High-risk action',title:'Reset passkey for '+p.no+'?',summary:S,html:'<p class="note" style="margin-top:0">Only after the member has re-verified their identity. This is recorded against '+esc(U.me())+'. You will re-confirm with Face ID or Touch ID.</p>'+S,step:true,confirm:'Continue',
+    onDone:function(){logA('Reset passkey after ID re-verification (Face ID)',p.no,'member');U.say('Passkey reset (mock). The member registers a new device at next sign-in. Nothing was posted.');paintAct()}})});
   window.AdminUI.applyRole()}
  mount();
  logA('Viewed contact details',p.no,'member');paintAct();
