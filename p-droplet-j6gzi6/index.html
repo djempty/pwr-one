@@ -6,9 +6,9 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>Droplet</title>
 <style>
-html,body{margin:0;height:100%;background:#000;overflow:hidden}
+html,body{margin:0;height:100%;background:#fafafa;overflow:hidden}
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
-#l{position:fixed;left:14px;bottom:12px;font:11px/1 system-ui,sans-serif;letter-spacing:.12em;color:rgba(160,190,210,.28);pointer-events:none;text-transform:uppercase}
+#l{position:fixed;left:14px;bottom:12px;font:11px/1 system-ui,sans-serif;letter-spacing:.12em;color:rgba(60,90,120,.35);pointer-events:none;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -27,7 +27,7 @@ uniform float uA[8];
 uniform vec3 uR0,uR1,uR2;
 uniform float uT;
 const float FL=0.75, CAMZ=4.0;
-const vec3 LK=vec3(-0.52,0.62,0.59);   // key light dir (towards light)
+const vec3 LK=normalize(vec3(-0.52,0.62,0.59));   // key light dir (towards light)
 const vec3 LF=vec3(0.75,-0.25,0.61);   // fill dir
 
 float h13(vec3 p){p=fract(p*.1031);p+=dot(p,p.zyx+31.32);return fract((p.x+p.y)*p.z);}
@@ -37,16 +37,6 @@ float vn(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
             mix(mix(h13(i+vec3(0,0,1)),h13(i+vec3(1,0,1)),f.x),mix(h13(i+vec3(0,1,1)),h13(i+vec3(1,1,1)),f.x),f.y),f.z);}
 float fbm(vec3 p){float a=.5,s=0.;for(int i=0;i<3;i++){s+=a*vn(p);p=p*2.03+7.1;a*=.5;}return s;}
 
-float stars(vec3 d,float sc,float thr,float rad){
- vec3 p=d*sc,c=floor(p);
- float r=h13(c);
- if(r<thr)return 0.;
- vec3 pos=c+.2+.6*h33(c+3.7);
- float dd=length(p-pos);
- float b=smoothstep(rad,0.,dd);
- return b*b*(.4+1.6*fract(r*37.));
-}
-
 float box(vec3 d,vec3 c,vec3 u,vec3 v,vec2 hs,float soft){
  float z=dot(d,c); if(z<.05)return 0.;
  vec2 q=vec2(dot(d,u),dot(d,v))/z;
@@ -54,48 +44,25 @@ float box(vec3 d,vec3 c,vec3 u,vec3 v,vec2 hs,float soft){
  return smoothstep(0.,soft,e.x)*smoothstep(0.,soft,e.y);
 }
 vec3 env(vec3 d){
- vec3 col=vec3(.005,.009,.022)+vec3(.008,.015,.03)*smoothstep(-.6,.8,d.y);
- // large soft nebula band (blue-white), bright core so lensing reads
- vec3 nb=normalize(vec3(.35,.78,.52));
- float bd=dot(d,nb);
- float fb=fbm(d*2.2+4.)*.8+.35;
- float band=exp(-bd*bd*14.)*fb;
- col+=band*(vec3(.25,.42,.9)*.5+vec3(.8,.9,1.)*.7*exp(-bd*bd*60.));
- col+=smoothstep(.5,.85,fbm(d*3.1+9.))*vec3(.25,.1,.4)*.25*exp(-bd*bd*3.);
- // distant planet with sunlit limb
- vec3 pc=normalize(vec3(-.42,-.5,-.76));float cr=.90,sr=sqrt(1.-cr*cr);
- float c=dot(d,pc);
- if(c>cr){
-  vec3 t=d-pc*c;float s=min(length(t)/sr,1.);
-  vec3 n=normalize(pc*sqrt(1.-s*s)+t/max(length(t),1e-4)*s);
-  vec3 sun=normalize(vec3(.75,.6,-.2));
-  float lit=smoothstep(-.15,.7,dot(n,sun));
-  vec3 base=mix(vec3(.03,.05,.1),vec3(.4,.6,.95),lit);
-  base*=.65+.35*fbm(n*5.);
-  float atm=pow(s,5.)*(.3+.9*lit);
-  float edge=smoothstep(cr,cr+.012,c);
-  col=mix(col+vec3(.25,.5,.95)*.5,base*1.3+vec3(.35,.7,1.)*atm*1.4,edge);
- } else {
-  float g=exp(-(cr-c)*60.);
-  col+=vec3(.25,.5,.95)*g*.5;
- }
- if(c>cr)col+=vec3(.25,.5,.95)*.5*smoothstep(cr,cr+.012,c)*0.;
- // sun glare behind
- vec3 sd=normalize(vec3(.75,.6,-.2));float sk=max(dot(d,sd),0.);
- col+=vec3(1.,.95,.85)*(smoothstep(.9985,.9992,sk)*40.+pow(sk,60.)*.5+pow(sk,4.)*.3);
- // stars
- float st=stars(d,38.,.5,.1)+stars(d,70.,.5,.12)*.8+stars(d,16.,.75,.08)*3.+stars(d,9.,.8,.09)*4.;
- col+=st*mix(vec3(.75,.85,1.),vec3(1.,.88,.7),h13(floor(d*38.)))*1.2;
- // softboxes (front hemisphere, mostly seen in reflection)
+ // bright white studio: soft gradient, faint horizon band, window + strip lights
+ vec3 col=mix(vec3(.89,.905,.93),vec3(.985,.988,.992),smoothstep(-.55,.35,d.y));
+ col-=vec3(.06,.055,.04)*exp(-pow((d.y+.22)/.07,2.))*smoothstep(-.9,.2,d.z*-1.+.3);
+ col*=1.-.07*smoothstep(.2,1.,-d.z*0.+abs(d.x));
+ col+=vec3(.03,.035,.05)*smoothstep(.3,1.,d.y);
  vec3 kc=normalize(LK);vec3 ku=normalize(cross(vec3(0,1,0),kc));vec3 kv=cross(kc,ku);
- col+=vec3(1.,.97,.92)*box(d,kc,ku,kv,vec2(.42,.3),.3)*9.;
- col+=vec3(1.,.97,.92)*pow(max(dot(d,kc),0.),30.)*.35;
+ col+=vec3(1.,.99,.96)*box(d,kc,ku,kv,vec2(.42,.34),.22)*1.1;
+ // window mullions
+ float mx=smoothstep(.015,.03,abs(dot(d,ku)/max(dot(d,kc),.05)))*smoothstep(.015,.03,abs(dot(d,kv)/max(dot(d,kc),.05)));
+ col-=vec3(.25,.24,.22)*box(d,kc,ku,kv,vec2(.42,.34),.22)*(1.-mx)*.9;
  vec3 fc=normalize(LF);vec3 fu=normalize(cross(vec3(0,1,0),fc));vec3 fv=cross(fc,fu);
- col+=vec3(.55,.72,1.)*box(d,fc,fu,fv,vec2(.15,.8),.1)*3.2;
- vec3 tc=normalize(vec3(.1,-.8,.55));vec3 tu=normalize(cross(vec3(0,0,1),tc));vec3 tv=cross(tc,tu);
- col+=vec3(.6,.7,.9)*box(d,tc,tu,tv,vec2(.9,.12),.1)*1.2;
+ col+=vec3(.9,.95,1.)*box(d,fc,fu,fv,vec2(.12,.75),.1)*.9;
+ vec3 tc=normalize(vec3(.05,.9,.2));vec3 tu=normalize(cross(vec3(0,0,1),tc));vec3 tv=cross(tc,tu);
+ col+=vec3(1.)*box(d,tc,tu,tv,vec2(.7,.3),.25)*.7;
+ // darker floor/edge so rims read
+ col*=mix(.9,1.,smoothstep(-1.,-.3,d.y));
  return col;
 }
+
 
 float Y(int i,vec3 q){
  float x=q.x,y=q.y,z=q.z,z2=z*z;
@@ -145,7 +112,24 @@ vec4 inside(vec3 pos,vec3 dir,float ior){
  return vec4(dir,L);
 }
 
-vec3 aces(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}
+// bubbles in ball-local frame (units of R): returns position (xyz), radius (w)
+vec4 bubble(int i,out float vis){
+ float fi=float(i);
+ float per=34.+h13(vec3(fi,1.,2.))*26.;
+ float ph=fract(uT/per+h13(vec3(fi,3.,5.)));
+ vec3 hh=h33(vec3(fi*1.7,7.3,9.1));float zc=hh.x*2.-1.,az=hh.y*6.2832;vec3 dir=vec3(sqrt(1.-zc*zc)*cos(az),sqrt(1.-zc*zc)*sin(az),zc);
+ float r0=pow(h13(vec3(fi*1.3,2.,8.)),.45)*.8;
+ float b0=.025+.06*pow(h13(vec3(fi,4.,6.)),2.);
+ float rr=r0+ph*.10+ .02*sin(uT*.3+fi);
+ float b=b0*(1.+ph*1.1);
+ vec3 q=dir*rr+.012*vec3(sin(uT*.4+fi*3.),cos(uT*.33+fi*5.),sin(uT*.27+fi));
+ vis=smoothstep(0.,.08,ph)*(1.-smoothstep(.9,1.,ph));
+ float lim=.97-b;float ql=length(q);if(ql>lim)q*=lim/ql;
+ return vec4(q,b*vis);
+}
+
+vec3 soft(vec3 c){vec3 k=vec3(.82);return mix(c,k+(1.-k)*tanh((c-k)/(1.-k)),step(k,c));}
+const vec3 AB=vec3(1.15,.42,.075);
 
 void main(){
  vec2 uv=(gl_FragCoord.xy-.5*uRes)/min(uRes.x,uRes.y);
@@ -153,6 +137,15 @@ void main(){
  vec3 rd=normalize(vec3(uv,-FL));
  float pw=1.6*(CAMZ/FL)/min(uRes.x,uRes.y);
  vec3 bg=env(rd);
+ // subtle blue transmitted shadow / caustic glow on the backdrop
+ {
+  float rs=uR*FL/(CAMZ-uC.z);
+  vec2 cs=uC.xy/(CAMZ-uC.z)*FL+vec2(.035,-.07)*rs;
+  float dd=length((uv-cs)/rs);
+  float sh=exp(-dd*dd*1.6);
+  bg*=mix(vec3(1.),vec3(.80,.90,.99),.55*sh);
+  bg+=vec3(.0,.02,.05)*exp(-pow((dd-.85)/.3,2.))*.5;
+ }
  vec3 oc=ro-uC;float bR=uR*1.3;
  float b=dot(oc,rd),c=dot(oc,oc)-bR*bR,disc=b*b-c;
  bool hit=false;vec3 p=ro;float hm=1e3;vec3 pm=ro;
@@ -174,56 +167,57 @@ void main(){
   vec3 n=nrm(p);
   float cosi=clamp(dot(-rd,n),0.,1.);
   float rim=1.-cosi;
-  float F=.02+.98*pow(rim,4.);
+  float F=.02+.98*pow(rim,5.);
   vec3 rr=reflect(rd,n);
   vec3 refl=env(rr);
-  // dispersion only near grazing
   float disp=.0012*rim*rim;
   vec3 iors=vec3(1.3330-disp,1.3330,1.3330+disp);
-  vec3 tr;float pl=0.;
+  vec3 tr;float pl=0.;vec3 d1=vec3(0);vec3 p1=vec3(0);
   for(int ch=0;ch<3;ch++){
    float ior=iors[ch];
    vec3 d0=refract(rd,n,1./ior);
-   vec4 r=inside(p-n*.012,d0,ior);
-   if(ch==1)pl=r.w;
-   vec3 ab=vec3(.55,.14,.05);
-   tr[ch]=env(r.xyz)[ch]*exp(-r.w*ab[ch]*.22);
+   vec3 pe=p-n*.012;
+   vec4 r=inside(pe,d0,ior);
+   if(ch==1){pl=r.w;d1=d0;p1=pe;}
+   tr[ch]=env(r.xyz)[ch]*exp(-r.w*AB[ch]);
   }
-  float thick=clamp(pl/(2.*uR),0.,1.);
-  // far-side caustic crescent opposite key light
-  vec2 ld=normalize(-LK.xy);
-  float sx=length(n.xy);
-  float al=max(dot(n.xy/max(sx,1e-3),ld),0.);
-  float cau=pow(al,3.)*exp(-pow((sx-.72)/.16,2.));
-  tr+=vec3(1.,.95,.85)*cau*.55*(1.-F);
-  // slight cyan in thick paths
-  tr*=mix(vec3(1.),vec3(.88,.98,1.04),thick*.6);
-  // bubbles: drifting micro-droplets seen through the body
-  float bub=0.;vec3 bcol=vec3(0.);
-  for(int i=0;i<4;i++){
-   float fi=float(i);
-   vec3 q=vec3(sin(uT*.21+fi*2.3),cos(uT*.17+fi*1.7),sin(uT*.13+fi*3.1))*(.18+.1*fi);
-   q=vec3(dot(vec3(uR0.x,uR1.x,uR2.x),q),dot(vec3(uR0.y,uR1.y,uR2.y),q),dot(vec3(uR0.z,uR1.z,uR2.z),q))*uR;
-   vec3 bp=uC+q;
-   vec2 bs=(bp.xy/(CAMZ-bp.z))*FL;
-   float rr2=(.02+.012*fract(fi*.37))*uR*FL/(CAMZ-bp.z);
-   float dd=length(uv-bs)/rr2;
-   if(dd<1.2){
-    float ring=smoothstep(.65,.97,dd)*(1.-smoothstep(.97,1.12,dd));
-    vec2 hl=(uv-bs)/rr2-vec2(-.3,.35);
-    float sp=smoothstep(.3,.0,length(hl));
-    bub+=ring*.18+sp*.5;
-    tr*=1.-.15*(1.-smoothstep(.2,1.,dd))*step(dd,1.);
+  tr+=vec3(.10,.24,.42)*pow(rim,2.2)*.7;
+  // inner glow: soft backlit transmission lightens thin regions
+  tr+=vec3(.02,.07,.16)*exp(-pl*1.2)*.5;
+  // bubbles: ray vs spheres along first interior segment
+  float tmax=min(pl,2.2*uR);
+  vec3 bi=vec3(0.);float bt=1e9;vec3 bn=vec3(0.);
+  mat3 RT=mat3(vec3(uR0.x,uR1.x,uR2.x),vec3(uR0.y,uR1.y,uR2.y),vec3(uR0.z,uR1.z,uR2.z));
+  for(int i=0;i<34;i++){
+   float vis;vec4 bb=bubble(i,vis);
+   if(bb.w<.004)continue;
+   vec3 cw=uC+RT*bb.xyz*uR;float rw=bb.w*uR;
+   vec3 oc2=p1-cw;float bq=dot(oc2,d1),cq=dot(oc2,oc2)-rw*rw,ds=bq*bq-cq;
+   if(ds>0.){
+    float ts=-bq-sqrt(ds);
+    if(ts>0.&&ts<tmax&&ts<bt){bt=ts;bn=normalize(p1+d1*ts-cw);}
    }
   }
-  tr+=vec3(.8,.9,1.)*bub*.5;
-  vec3 spec=vec3(1.,.97,.92)*pow(max(dot(rr,normalize(LK)),0.),700.)*14.;
-  spec+=vec3(.6,.75,1.)*pow(max(dot(rr,normalize(LF)),0.),500.)*5.;
-  vec3 dcol=refl*F+tr*(1.-F)+spec;
+  if(bt<1e8){
+   vec3 hp=p1+d1*bt;
+   float cc=abs(dot(d1,bn));float sn=sqrt(1.-cc*cc);
+   vec3 rf=reflect(d1,bn);
+   vec3 e=env(rf);
+   vec3 wcol=exp(-bt*AB);
+   float w=smoothstep(.35,.7,sn);
+   vec3 cen=vec3(.62,.68,.78)*(.5+.5*env(d1).g);
+   vec3 sil=mix(cen,vec3(.95,.97,1.)*(.35+.9*e),w)*mix(vec3(1.),wcol*1.3,.25);
+   sil*=1.-.7*smoothstep(.9,1.,sn);
+   sil+=vec3(1.)*pow(max(dot(rf,normalize(LK)),0.),40.)*.6;
+   tr=sil*exp(-bt*AB*.12);
+  }
+  vec3 spec=vec3(1.,.99,.96)*pow(max(dot(rr,normalize(LK)),0.),600.)*6.;
+  spec+=vec3(.9,.95,1.)*pow(max(dot(rr,normalize(LF)),0.),400.)*2.;
+  vec3 dcol=refl*(F+.035)+tr*(1.-F-.035)+spec;
+  dcol*=1.-.22*pow(rim,3.)*(1.-F);
   col=mix(bg,dcol,cov);
  }
- col=aces(col*1.15);
- col=pow(col,vec3(1./2.2));
+ col=soft(col);
  col+=(h13(vec3(gl_FragCoord.xy,uT))-.5)/255.;
  o=vec4(col,1.);
 }
@@ -265,7 +259,7 @@ function resize(){
 addEventListener('resize',resize);resize();
 
 // ---- physics ----
-var D=4,FL=0.75,R=1.12;
+var D=4,FL=0.75,R=1.45;
 var pos=[0,0,0],vel=[0,0,0];
 var amp=new Float32Array(8),av=new Float32Array(8);
 var om=[1.9,2.1,2.0,2.2,1.85,6.2,6.6,6.0],ze=[.11,.12,.12,.12,.13,.9,.95,1.0];
