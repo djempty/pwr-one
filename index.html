@@ -195,7 +195,7 @@ const smat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:
 scene.add(new THREE.Points(sg,smat));
 const comp=new EffectComposer(renderer);comp.addPass(new RenderPass(scene,cam));
 comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.9,0.618,0.0));
-let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
+const mx=0,my=0; // mouse parallax disabled
 addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight,false);comp.setSize(innerWidth,innerHeight);});
 const ease=x=>x*x*(3-2*x),win=(a,b,x)=>ease(Math.min(1,Math.max(0,(x-a)/(b-a))));
 const hdr=document.getElementById('header');
